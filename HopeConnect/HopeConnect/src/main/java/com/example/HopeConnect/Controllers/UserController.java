@@ -1,4 +1,4 @@
-package com.example.HopeConnect.Conrollers;
+package com.example.HopeConnect.Controllers;
 
 
 import com.example.HopeConnect.Models.Entity.User;
@@ -8,7 +8,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/users")
