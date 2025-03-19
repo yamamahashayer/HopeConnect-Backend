@@ -1,44 +1,47 @@
 package com.example.HopeConnect.Models.Entity;
 
-
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "users")
+@Table(name = "users") // Maps to the database table 'users'
 public class User {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id;
+    private Long id; // Primary Key
 
     @Column(nullable = false, length = 100)
-    private String name;
+    private String name; // User name
 
     @Column(nullable = false, unique = true, length = 150)
-    private String email;
+    private String email; // Unique email
 
     @Column(nullable = false, length = 255)
-    private String password;
+    private String password; // User password
 
-    @Column(length = 20)
-    private String phone;
+    @Column(nullable = false, length = 20)
+    private String phone; // Phone number
 
-    @Column(length = 50)
-    private String nationality;
+    @Column(nullable = false, length = 50)
+    private String nationality; // Nationality
 
-    @Column(length = 50)
-    private String country;
+    @Column(nullable = false, length = 50)
+    private String country; // Country
 
-    @Column(length = 50)
-    private String city;
+    @Column(nullable = false, length = 50)
+    private String city; // City
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private UserType userType;
+    private UserType userType; // User Type (ENUM: sponsor, donor, volunteer, admin)
+
+
+    @Column
+    private LocalDateTime lastLogin; // Timestamp of last login
 
     @Column(nullable = false, updatable = false)
-    private LocalDateTime createdAt = LocalDateTime.now();
+    private LocalDateTime createdAt = LocalDateTime.now(); // Auto-set creation date
 
     // Getters and Setters
     public Long getId() { return id; }
@@ -68,6 +71,8 @@ public class User {
     public UserType getUserType() { return userType; }
     public void setUserType(UserType userType) { this.userType = userType; }
 
+    public LocalDateTime getLastLogin() { return lastLogin; }
+    public void setLastLogin(LocalDateTime lastLogin) { this.lastLogin = lastLogin; }
+
     public LocalDateTime getCreatedAt() { return createdAt; }
 }
-
