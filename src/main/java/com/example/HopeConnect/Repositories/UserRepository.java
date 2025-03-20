@@ -1,14 +1,11 @@
 package com.example.HopeConnect.Repositories;
 
-
-
 import com.example.HopeConnect.Models.Entity.User;
+import com.example.HopeConnect.Models.Entity.UserType;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
-import com.example.HopeConnect.Models.Entity.UserType;
-import java.util.Optional;
-
 import java.util.List;
+import java.util.Optional;
 
 @Repository
 public interface UserRepository extends JpaRepository<User, Long> {

@@ -1,17 +1,15 @@
 package com.example.HopeConnect.Services;
 
 import com.example.HopeConnect.Models.Entity.User;
+import com.example.HopeConnect.Models.Entity.UserType;
 import com.example.HopeConnect.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
-import com.example.HopeConnect.Models.Entity.UserType;
-
 import java.util.List;
 import java.util.Optional;
 
-
 @Service
-public class UserService {
+public class UserServices {
 
     @Autowired
     private UserRepository userRepository;
