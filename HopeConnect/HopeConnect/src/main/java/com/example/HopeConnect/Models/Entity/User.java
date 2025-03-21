@@ -1,6 +1,5 @@
 package com.example.HopeConnect.Models.Entity;
 
-
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -8,6 +7,7 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 public class User {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -69,4 +69,3 @@ public class User {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
 }
-
