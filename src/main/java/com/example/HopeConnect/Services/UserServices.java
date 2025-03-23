@@ -9,6 +9,7 @@ import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+
 import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
@@ -69,7 +70,6 @@ public class UserServices {
         }
     }
 
-
     public ResponseEntity<?> updateUser(Long id, User updatedUser) {
         try {
             Optional<User> existingUser = userRepository.findById(id);
@@ -77,8 +77,14 @@ public class UserServices {
                 User user = existingUser.get();
                 user.setName(updatedUser.getName());
                 user.setEmail(updatedUser.getEmail());
+                user.setPassword(updatedUser.getPassword());
                 user.setPhone(updatedUser.getPhone());
-                // أضف هنا باقي الحقول التي تريد تحديثها
+                user.setNationality(updatedUser.getNationality());
+                user.setCountry(updatedUser.getCountry());
+                user.setCity(updatedUser.getCity());
+                user.setUserType(updatedUser.getUserType());
+                user.setLastLogin(updatedUser.getLastLogin());
+
 
                 User savedUser = userRepository.save(user);
                 return ResponseEntity.ok(savedUser);
@@ -90,6 +96,21 @@ public class UserServices {
             logger.error("Error while updating user with ID: " + id, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body("Error while updating user: " + e.getMessage());
+        }
+    }
+    public ResponseEntity<?> getUserByEmail(String email) {
+        try {
+            Optional<User> user = userRepository.findByEmail(email);
+            if (user.isPresent()) {
+                return ResponseEntity.ok(user.get());
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("User not found with email: " + email);
+            }
+        } catch (Exception e) {
+            logger.error("Error while fetching user by email: ", e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error while fetching user by email");
         }
     }
 

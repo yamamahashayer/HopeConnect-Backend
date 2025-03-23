@@ -1,4 +1,4 @@
-package com.example.HopeConnect.Conrollers;
+package com.example.HopeConnect.Controllers;
 
 import com.example.HopeConnect.Models.Entity.User;
 import com.example.HopeConnect.Services.UserServices;
@@ -17,7 +17,6 @@ public class UserController {
     @Autowired
     private UserServices userService;
 
-    // للحصول على جميع المستخدمين
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
@@ -27,7 +26,6 @@ public class UserController {
         return ResponseEntity.ok(users); // إرجاع جميع المستخدمين
     }
 
-    // للحصول على مستخدم واحد بناءً على الـ id
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         Optional<User> user = userService.getUserById(id);
@@ -38,7 +36,6 @@ public class UserController {
         }
     }
 
-    // لإضافة مستخدم جديد
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody User user) {
         try {
@@ -49,8 +46,6 @@ public class UserController {
         }
     }
 
-    // لحذف مستخدم بناءً على الـ id
-    // لحذف مستخدم بناءً على الـ id
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         return userService.deleteUser(id);
@@ -60,5 +55,12 @@ public class UserController {
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
         return userService.updateUser(id, user);
     }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
+        return userService.getUserByEmail(email);
+    }
+
+
 
 }
