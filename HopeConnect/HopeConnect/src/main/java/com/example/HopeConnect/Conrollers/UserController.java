@@ -1,6 +1,6 @@
 package com.example.HopeConnect.Conrollers;
 
-import com.example.HopeConnect.Models.Entity.User;
+import com.example.HopeConnect.Models.User;
 import com.example.HopeConnect.Services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
@@ -55,4 +55,10 @@ public class UserController {
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         return userService.deleteUser(id);
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
+        return userService.updateUser(id, user);
+    }
+
+
 }

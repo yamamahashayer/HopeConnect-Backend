@@ -1,6 +1,6 @@
 package com.example.HopeConnect.Services;
 
-import com.example.HopeConnect.Models.Entity.User;
+import com.example.HopeConnect.Models.User;
 import com.example.HopeConnect.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -40,6 +40,8 @@ public class UserServices {
         }
     }
 
+
+
     public User createUser(User user) {
         try {
             return userRepository.save(user);
@@ -66,6 +68,28 @@ public class UserServices {
             logger.error("Error while deleting user with ID: " + id, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
                     .body(Map.of("error", "Error while deleting user", "details", e.getMessage()));
+        }
+    }
+    public ResponseEntity<?> updateUser(Long id, User updatedUser) {
+        try {
+            Optional<User> existingUser = userRepository.findById(id);
+            if (existingUser.isPresent()) {
+                User user = existingUser.get();
+                user.setName(updatedUser.getName());
+                user.setEmail(updatedUser.getEmail());
+                user.setPhone(updatedUser.getPhone());
+                // أضف هنا باقي الحقول التي تريد تحديثها
+
+                User savedUser = userRepository.save(user);
+                return ResponseEntity.ok(savedUser);
+            } else {
+                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+                        .body("User not found with ID: " + id);
+            }
+        } catch (Exception e) {
+            logger.error("Error while updating user with ID: " + id, e);
+            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+                    .body("Error while updating user: " + e.getMessage());
         }
     }
 
