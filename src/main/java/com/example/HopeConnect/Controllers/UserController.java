@@ -1,13 +1,14 @@
 package com.example.HopeConnect.Controllers;
 
 import com.example.HopeConnect.Models.Entity.User;
-import com.example.HopeConnect.Models.Entity.UserType;
 import com.example.HopeConnect.Services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+
 import java.util.List;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/users")
@@ -17,25 +18,49 @@ public class UserController {
     private UserServices userService;
 
     @GetMapping
-    public List<User> getAllUsers() {
-        return userService.getAllUsers();
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        if (users.isEmpty()) {
+            return ResponseEntity.noContent().build(); // إذا لم تكن هناك بيانات
+        }
+        return ResponseEntity.ok(users); // إرجاع جميع المستخدمين
     }
 
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return userService.getUserById(id)
-                .map(ResponseEntity::ok)
-                .orElse(ResponseEntity.notFound().build());
+        Optional<User> user = userService.getUserById(id);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get()); // إرجاع المستخدم إذا تم العثور عليه
+        } else {
+            return ResponseEntity.notFound().build(); // إرجاع خطأ 404 إذا لم يتم العثور على المستخدم
+        }
     }
 
     @PostMapping
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user);
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        try {
+            User createdUser = userService.createUser(user);
+            return ResponseEntity.status(201).body(createdUser); // إرجاع المستخدم الذي تم إنشاؤه مع حالة 201
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error: " + e.getMessage()); // إرجاع رسالة الخطأ
+        }
     }
 
     @DeleteMapping("/{id}")
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id);
-        return ResponseEntity.noContent().build();
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        return userService.deleteUser(id);
     }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
+        return userService.updateUser(id, user);
+    }
+
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
+        return userService.getUserByEmail(email);
+    }
+
+
+
 }
