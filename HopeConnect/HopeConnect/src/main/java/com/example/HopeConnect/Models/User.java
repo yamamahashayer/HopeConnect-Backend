@@ -1,6 +1,6 @@
-package com.example.HopeConnect.Models.Entity;
+package com.example.HopeConnect.Models;
 
-
+import com.example.HopeConnect.Enumes.UserType;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Table(name = "users")
 public class User {
 
+    @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
@@ -69,4 +70,3 @@ public class User {
 
     public LocalDateTime getCreatedAt() { return createdAt; }
 }
-
