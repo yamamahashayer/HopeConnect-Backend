@@ -46,4 +46,18 @@ public class SponsorController {
         sponsorService.deleteSponsor(id);
         return ResponseEntity.noContent().build();
     }
+    @PutMapping("/{id}")
+    public ResponseEntity<Sponsor> updateSponsor(@PathVariable Long id, @RequestBody Sponsor sponsorDetails) {
+        return sponsorService.getSponsorById(id)
+                .map(sponsor -> {
+                    sponsor.setTotalSponsoredOrphans(sponsorDetails.getTotalSponsoredOrphans());
+                    sponsor.setTotalDonations(sponsorDetails.getTotalDonations());
+                    sponsor.setSponsorshipStartDate(sponsorDetails.getSponsorshipStartDate());
+                    sponsor.setSponsorStatus(sponsorDetails.getSponsorStatus());
+                    Sponsor updatedSponsor = sponsorService.saveSponsor(sponsor);  // Save updated sponsor
+                    return ResponseEntity.ok(updatedSponsor);
+                })
+                .orElseGet(() -> ResponseEntity.notFound().build());
+    }
+
 }

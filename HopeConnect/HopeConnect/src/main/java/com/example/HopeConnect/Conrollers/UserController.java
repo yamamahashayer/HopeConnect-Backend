@@ -3,12 +3,13 @@ package com.example.HopeConnect.Conrollers;
 import com.example.HopeConnect.Models.User;
 import com.example.HopeConnect.Services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 import java.util.Optional;
-
 
 @RestController
 @RequestMapping("/users")
@@ -50,14 +51,33 @@ public class UserController {
     }
 
     // لحذف مستخدم بناءً على الـ id
-    // لحذف مستخدم بناءً على الـ id
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         return userService.deleteUser(id);
     }
+
+    // لتحديث مستخدم بناءً على الـ id
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
         return userService.updateUser(id, user);
+    }
+
+    // **إضافة Endpoint الـ login**
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
+        // تحقق من البريد الإلكتروني وكلمة المرور
+        Optional<User> user = userService.getUserByEmailAndPassword(email, password);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(Map.of("message", "Login successful", "user", user.get()));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Invalid email or password"));
+        }
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signUp(@RequestBody User user) {
+        return userService.signUp(user);
     }
 
 
