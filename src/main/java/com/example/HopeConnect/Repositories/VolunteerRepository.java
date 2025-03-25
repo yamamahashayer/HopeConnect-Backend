@@ -11,6 +11,7 @@ import org.springframework.stereotype.Repository;
 @Repository
 public interface VolunteerRepository extends JpaRepository<Volunteer, Long> {
 
+
    Optional<Volunteer> findByEmail(String email);
    boolean existsByEmail(String email);
    List<Volunteer> findByStatus(Volunteer.Status status);

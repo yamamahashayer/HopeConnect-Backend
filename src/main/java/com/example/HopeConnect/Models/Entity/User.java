@@ -8,6 +8,7 @@ import java.time.LocalDateTime;
 @Table(name = "users") // Maps to the database table 'users'
 public class User {
 
+
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id; // Primary Key

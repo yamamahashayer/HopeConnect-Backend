@@ -7,6 +7,7 @@ import java.time.LocalDateTime;
 @PrimaryKeyJoinColumn(name = "id")
 @Table(name = "VOLUNTEER")
  public class Volunteer extends User {
+
     @Column(nullable = false, columnDefinition = "TEXT")
     private String skills;
 
