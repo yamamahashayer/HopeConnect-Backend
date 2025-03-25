@@ -1,24 +1,22 @@
-package com.example.HopeConnect.Conrollers;
+package com.example.HopeConnect.Controllers;
 
-import com.example.HopeConnect.Models.User;
+import com.example.HopeConnect.Models.Entity.User;
 import com.example.HopeConnect.Services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 import java.util.Optional;
+
 
 @RestController
 @RequestMapping("/users")
 public class UserController {
-/// /////////////////////
+
     @Autowired
     private UserServices userService;
 
-    // للحصول على جميع المستخدمين
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
@@ -28,7 +26,6 @@ public class UserController {
         return ResponseEntity.ok(users); // إرجاع جميع المستخدمين
     }
 
-    // للحصول على مستخدم واحد بناءً على الـ id
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         Optional<User> user = userService.getUserById(id);
@@ -39,7 +36,6 @@ public class UserController {
         }
     }
 
-    // لإضافة مستخدم جديد
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody User user) {
         try {
@@ -50,36 +46,21 @@ public class UserController {
         }
     }
 
-    // لحذف مستخدم بناءً على الـ id
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteUser(@PathVariable Long id) {
         return userService.deleteUser(id);
     }
 
-
-    // لتحديث مستخدم بناءً على الـ id
     @PutMapping("/{id}")
     public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
         return userService.updateUser(id, user);
     }
 
-    // **إضافة Endpoint الـ login**
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
-        // تحقق من البريد الإلكتروني وكلمة المرور
-        Optional<User> user = userService.getUserByEmailAndPassword(email, password);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(Map.of("message", "Login successful", "user", user.get()));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "Invalid email or password"));
-        }
+    @GetMapping("/email/{email}")
+    public ResponseEntity<?> getUserByEmail(@PathVariable String email) {
+        return userService.getUserByEmail(email);
     }
 
-    @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody User user) {
-        return userService.signUp(user);
-    }
 
 
 }
