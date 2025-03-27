@@ -1,63 +1,73 @@
 package com.example.HopeConnect.Models.Entity;
 
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
+
 @Entity
-@PrimaryKeyJoinColumn(name = "id")
-@Table(name = "VOLUNTEER")
- public class Volunteer extends User {
+@Table(name = "volunteer")
+public class Volunteer extends User {
 
-    @Column(nullable = false, columnDefinition = "TEXT")
-    private String skills;
+   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
+   @MapsId
+   @JoinColumn(name = "id")
+   private User user;
 
-    @Enumerated(EnumType.STRING)
-    @Column(nullable = false)
-    private Availability availability;
+   @Column(nullable = false, columnDefinition = "TEXT")
+   private String skills;
 
-    @Column(name = "experience_years")
-    private int experienceYears = 0;
+   @Enumerated(EnumType.STRING)
+   @Column(nullable = false)
+   private Availability availability;
 
-    @Column(name = "preferred_activities", columnDefinition = "TEXT")
-    private String preferredActivities;
+   @Column(name = "experience_years")
+   private int experienceYears = 0;
 
-    @Column(length = 100)
-    private String location;
+   @Column(name = "preferred_activities", columnDefinition = "TEXT")
+   private String preferredActivities;
 
-    @Enumerated(EnumType.STRING)
-    private Status status = Status.PENDING;
+   @Column(length = 100)
+   private String location;
 
-    @Column(name = "registered_at")
-    private LocalDateTime registeredAt = LocalDateTime.now();
+   @Enumerated(EnumType.STRING)
+   private Status status = Status.PENDING;
 
-    public enum Availability {
-        FULL_TIME, PART_TIME, FLEXIBLE
-    }
+   @Column(name = "registered_at", updatable = false)
+   private LocalDateTime registeredAt;
 
-    public enum Status {
-        ACTIVE, INACTIVE, PENDING
-    }
+   @PrePersist
+   protected void onCreate() {
+      this.registeredAt = LocalDateTime.now();
+   }
 
-    // Getters and Setters
-    public String getSkills() { return skills; }
-    public void setSkills(String skills) { this.skills = skills; }
+   public enum Availability {
+      FULL_TIME, PART_TIME, FLEXIBLE
+   }
 
-    public Availability getAvailability() { return availability; }
-    public void setAvailability(Availability availability) { this.availability = availability; }
+   public enum Status {
+      ACTIVE, INACTIVE, PENDING
+   }
 
-    public int getExperienceYears() { return experienceYears; }
-    public void setExperienceYears(int experienceYears) { this.experienceYears = experienceYears; }
+   // Getters and Setters
+   public User getUser() { return user; }
+   public void setUser(User user) { this.user = user; }
 
-    public String getPreferredActivities() { return preferredActivities; }
-    public void setPreferredActivities(String preferredActivities) { this.preferredActivities = preferredActivities; }
+   public String getSkills() { return skills; }
+   public void setSkills(String skills) { this.skills = skills; }
 
-    public String getLocation() { return location; }
-    public void setLocation(String location) { this.location = location; }
+   public Availability getAvailability() { return availability; }
+   public void setAvailability(Availability availability) { this.availability = availability; }
 
-    public Status getStatus() { return status; }
-    public void setStatus(Status status) { this.status = status; }
+   public int getExperienceYears() { return experienceYears; }
+   public void setExperienceYears(int experienceYears) { this.experienceYears = experienceYears; }
 
-    public LocalDateTime getRegisteredAt() { return registeredAt; }
-    public void setRegisteredAt(LocalDateTime registeredAt) { this.registeredAt = registeredAt; }
+   public String getPreferredActivities() { return preferredActivities; }
+   public void setPreferredActivities(String preferredActivities) { this.preferredActivities = preferredActivities; }
 
+   public String getLocation() { return location; }
+   public void setLocation(String location) { this.location = location; }
+
+   public Status getStatus() { return status; }
+   public void setStatus(Status status) { this.status = status; }
+
+   public LocalDateTime getRegisteredAt() { return registeredAt; }
 }

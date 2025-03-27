@@ -13,7 +13,6 @@ import java.util.Optional;
 @RequestMapping("/volunteers")
 public class VolunteerController {
 
-
     @Autowired
     private VolunteerService volunteerService;
 
@@ -24,20 +23,20 @@ public class VolunteerController {
     }
 
     @GetMapping("/{id}")
-    public ResponseEntity<?> getVolunteerById(@PathVariable Long id) {
-        Optional<Volunteer> volunteer = volunteerService.getVolunteerById(id);
-        return volunteer.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-    @GetMapping("/email/{email}")
-    public ResponseEntity<Volunteer> getVolunteerByEmail(@PathVariable String email) {
-        Optional<Volunteer> volunteer = volunteerService.getVolunteerByEmail(email);
-        return volunteer.map(ResponseEntity::ok)
+    public ResponseEntity<Volunteer> getVolunteerById(@PathVariable Long id) {
+        return volunteerService.getVolunteerById(id)
+                .map(ResponseEntity::ok)
                 .orElseGet(() -> ResponseEntity.notFound().build());
     }
 
 
 
+//    @GetMapping("/email/{email}")
+//    public ResponseEntity<?> getVolunteerByEmail(@PathVariable String email) {
+//       // Optional<Volunteer> volunteer = volunteerService.getVolunteerByEmail(email);
+//      //  return volunteer.map(ResponseEntity::ok)
+//          //      .orElseGet(() -> ResponseEntity.status(404).body("Volunteer not found by email"));
+//    }
 
     @GetMapping("/filter")
     public ResponseEntity<List<Volunteer>> filterVolunteers(
@@ -61,27 +60,24 @@ public class VolunteerController {
             result = volunteerService.getAllVolunteers();
         }
 
-        return result.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(result);
+        return result.isEmpty() ? ResponseEntity.status(204).body(null) : ResponseEntity.ok(result);
     }
 
     @PostMapping
-    public ResponseEntity<Volunteer> createVolunteer(@RequestBody Volunteer volunteer) {
-        return ResponseEntity.status(201).body(volunteerService.createVolunteer(volunteer));
+    public ResponseEntity<?> createVolunteer(@RequestBody Volunteer volunteer) {
+        String response = volunteerService.createVolunteer(volunteer);
+        return response.contains("Error") ? ResponseEntity.status(400).body(response) : ResponseEntity.status(201).body(response);
     }
 
     @PutMapping("/{id}")
     public ResponseEntity<?> updateVolunteer(@PathVariable Long id, @RequestBody Volunteer volunteer) {
-        try {
-            Volunteer updated = volunteerService.updateVolunteer(id, volunteer);
-            return ResponseEntity.ok(updated);
-        } catch (RuntimeException e) {
-            return ResponseEntity.status(404).body(e.getMessage());
-        }
+        String response = volunteerService.updateVolunteer(id, volunteer);
+        return response.contains("Error") ? ResponseEntity.status(404).body(response) : ResponseEntity.ok(response);
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<?> deleteVolunteer(@PathVariable Long id) {
-        volunteerService.deleteVolunteer(id);
-        return ResponseEntity.ok("Volunteer deleted successfully");
+        String response = volunteerService.deleteVolunteer(id);
+        return response.contains("Error") ? ResponseEntity.status(404).body(response) : ResponseEntity.ok(response);
     }
 }

@@ -1,19 +1,21 @@
 package com.example.HopeConnect.Services;
+
 import com.example.HopeConnect.Models.Entity.Volunteer;
 import com.example.HopeConnect.Repositories.VolunteerRepository;
+import com.example.HopeConnect.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
-
-
 import org.springframework.stereotype.Service;
 import java.util.Optional;
 import java.util.List;
+
 @Service
-
-
 public class VolunteerService {
 
     @Autowired
     private VolunteerRepository volunteerRepository;
+
+    @Autowired
+    private UserRepository userRepository;
 
     public List<Volunteer> getAllVolunteers() {
         return volunteerRepository.findAll();
@@ -23,9 +25,7 @@ public class VolunteerService {
         return volunteerRepository.findById(id);
     }
 
-    public Optional<Volunteer> getVolunteerByEmail(String email) {
-        return volunteerRepository.findByEmail(email);
-    }
+
 
     public List<Volunteer> getVolunteersByStatus(Volunteer.Status status) {
         return volunteerRepository.findByStatus(status);
@@ -47,11 +47,15 @@ public class VolunteerService {
         return volunteerRepository.findByStatusAndAvailability(status, availability);
     }
 
-    public Volunteer createVolunteer(Volunteer volunteer) {
-        return volunteerRepository.save(volunteer);
+    public String createVolunteer(Volunteer volunteer) {
+        if (volunteer.getUser() == null || volunteer.getUser().getId() == null) {
+            return "Error: Volunteer must be linked to an existing User.";
+        }
+        volunteerRepository.save(volunteer);
+        return "Volunteer created successfully.";
     }
 
-    public Volunteer updateVolunteer(Long id, Volunteer updatedVolunteer) {
+    public String updateVolunteer(Long id, Volunteer updatedVolunteer) {
         return volunteerRepository.findById(id).map(existing -> {
             existing.setSkills(updatedVolunteer.getSkills());
             existing.setAvailability(updatedVolunteer.getAvailability());
@@ -59,12 +63,24 @@ public class VolunteerService {
             existing.setPreferredActivities(updatedVolunteer.getPreferredActivities());
             existing.setLocation(updatedVolunteer.getLocation());
             existing.setStatus(updatedVolunteer.getStatus());
-            return volunteerRepository.save(existing);
-        }).orElseThrow(() -> new RuntimeException("Volunteer not found"));
+
+            // تحديث بيانات المستخدم أيضًا
+            existing.getUser().setName(updatedVolunteer.getUser().getName());
+            existing.getUser().setEmail(updatedVolunteer.getUser().getEmail());
+            existing.getUser().setPhone(updatedVolunteer.getUser().getPhone());
+
+            volunteerRepository.save(existing);
+            return "Volunteer updated successfully.";
+        }).orElse("Error: Volunteer not found.");
     }
 
-    public void deleteVolunteer(Long id) {
-        volunteerRepository.deleteById(id);
+    public String deleteVolunteer(Long id) {
+        Optional<Volunteer> volunteer = volunteerRepository.findById(id);
+        if (volunteer.isPresent()) {
+            userRepository.deleteById(volunteer.get().getUser().getId());  // حذف المستخدم أيضًا
+            volunteerRepository.deleteById(id);
+            return "Volunteer deleted successfully.";
+        }
+        return "Error: Volunteer not found.";
     }
-
 }
