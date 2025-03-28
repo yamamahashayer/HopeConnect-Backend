@@ -66,5 +66,12 @@ public class Volunteer {
    public VolunteerStatus getStatus() { return status; }
    public void setStatus(VolunteerStatus status) { this.status = status; }
 
-   public LocalDateTime getRegisteredAt() { return registeredAt; }
+   public LocalDateTime getRegisteredAt() {
+      return registeredAt;
+   }
+
+   public void setRegisteredAt(LocalDateTime registeredAt) {
+      this.registeredAt = registeredAt;
+   }
+
 }
