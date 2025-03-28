@@ -1,7 +1,7 @@
 package com.example.HopeConnect.Services;
 
-import com.example.HopeConnect.Models.User;
 import com.example.HopeConnect.Enumes.UserType;
+import com.example.HopeConnect.Models.User;
 import com.example.HopeConnect.Models.Volunteer;
 import com.example.HopeConnect.Repositories.VolunteerRepository;
 import com.example.HopeConnect.Repositories.UserRepository;

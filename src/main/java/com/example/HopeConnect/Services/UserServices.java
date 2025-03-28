@@ -27,10 +27,10 @@ public class UserServices {
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
-    private JavaMailSender mailSender;
+   // private JavaMailSender mailSender;
 
     // وظيفة لتسجيل الدخول
-    public ResponseEntity<Map<String, Object>> login(String email, String password) {
+   /* public ResponseEntity<Map<String, Object>> login(String email, String password) {
         try {
             Optional<User> userOpt = userRepository.findByEmail(email);
             if (userOpt.isPresent()) {
@@ -62,7 +62,7 @@ public class UserServices {
             logger.error("Error while fetching user by email and password: ", e);
             throw new RuntimeException("Error while fetching user by email and password");
         }
-    }
+    }*/
 
 
     // الحصول على جميع المستخدمين
