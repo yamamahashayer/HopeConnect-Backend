@@ -3,16 +3,15 @@ package com.example.HopeConnect.Models.Entity;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+
 @Entity
 @Inheritance(strategy = InheritanceType.JOINED)
-@Table(name = "users") // Maps to the database table 'users'
+@Table(name = "users")
 public class User {
-
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Long id; // Primary Key
-
+    private Long id;
     @Column(nullable = false, length = 100)
     private String name; // User name
 

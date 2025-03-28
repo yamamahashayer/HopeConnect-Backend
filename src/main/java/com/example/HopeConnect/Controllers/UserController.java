@@ -39,7 +39,7 @@ public class UserController {
     @PostMapping
     public ResponseEntity<?> createUser(@RequestBody User user) {
         try {
-            User createdUser = userService.createUser(user);
+            String createdUser = userService.createUser(user);
             return ResponseEntity.status(201).body(createdUser); // إرجاع المستخدم الذي تم إنشاؤه مع حالة 201
         } catch (Exception e) {
             return ResponseEntity.status(500).body("Error: " + e.getMessage()); // إرجاع رسالة الخطأ

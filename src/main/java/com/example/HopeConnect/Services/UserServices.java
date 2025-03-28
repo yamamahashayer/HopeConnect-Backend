@@ -41,14 +41,24 @@ public class UserServices {
         }
     }
 
-    public User createUser(User user) {
+    public String createUser(User user) {
         try {
-            return userRepository.save(user);
+            // التحقق مما إذا كان البريد الإلكتروني مسجلاً بالفعل
+            Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+
+            if (existingUser.isPresent()) {
+                return "Error: Email already exists. Please use a different email.";
+            }
+
+            // حفظ المستخدم الجديد
+            user = userRepository.save(user);
+            return "User created successfully with ID: " + user.getId();
         } catch (Exception e) {
-            logger.error("Error while creating user: ", e);
-            throw new RuntimeException("Error while creating user: " + e.getMessage());
+            logger.error("Error while creating user: {}", e.getMessage(), e);
+            return "Error: " + e.getMessage();
         }
     }
+
 
     public ResponseEntity<Map<String, Object>> deleteUser(Long id) {
         try {

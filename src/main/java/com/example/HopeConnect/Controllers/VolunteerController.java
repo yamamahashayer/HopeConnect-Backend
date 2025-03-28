@@ -7,7 +7,6 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Optional;
 
 @RestController
 @RequestMapping("/volunteers")
@@ -20,47 +19,6 @@ public class VolunteerController {
     public ResponseEntity<List<Volunteer>> getAllVolunteers() {
         List<Volunteer> list = volunteerService.getAllVolunteers();
         return list.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(list);
-    }
-
-    @GetMapping("/{id}")
-    public ResponseEntity<Volunteer> getVolunteerById(@PathVariable Long id) {
-        return volunteerService.getVolunteerById(id)
-                .map(ResponseEntity::ok)
-                .orElseGet(() -> ResponseEntity.notFound().build());
-    }
-
-
-
-//    @GetMapping("/email/{email}")
-//    public ResponseEntity<?> getVolunteerByEmail(@PathVariable String email) {
-//       // Optional<Volunteer> volunteer = volunteerService.getVolunteerByEmail(email);
-//      //  return volunteer.map(ResponseEntity::ok)
-//          //      .orElseGet(() -> ResponseEntity.status(404).body("Volunteer not found by email"));
-//    }
-
-    @GetMapping("/filter")
-    public ResponseEntity<List<Volunteer>> filterVolunteers(
-            @RequestParam(required = false) Volunteer.Status status,
-            @RequestParam(required = false) Volunteer.Availability availability,
-            @RequestParam(required = false) String city
-    ) {
-        List<Volunteer> result;
-
-        if (status != null && city != null) {
-            result = volunteerService.getVolunteersByStatusAndCity(status, city);
-        } else if (status != null && availability != null) {
-            result = volunteerService.getVolunteersByStatusAndAvailability(status, availability);
-        } else if (availability != null) {
-            result = volunteerService.getVolunteersByAvailability(availability);
-        } else if (city != null) {
-            result = volunteerService.getVolunteersByCity(city);
-        } else if (status != null) {
-            result = volunteerService.getVolunteersByStatus(status);
-        } else {
-            result = volunteerService.getAllVolunteers();
-        }
-
-        return result.isEmpty() ? ResponseEntity.status(204).body(null) : ResponseEntity.ok(result);
     }
 
     @PostMapping

@@ -4,12 +4,15 @@ import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
 @Entity
-@Table(name = "volunteer")
-public class Volunteer extends User {
+public class Volunteer {
+   @Id
+   @GeneratedValue(strategy = GenerationType.IDENTITY)
+   private Long id;
 
-   @OneToOne(cascade = CascadeType.ALL, fetch = FetchType.LAZY)
-   @MapsId
-   @JoinColumn(name = "id")
+
+
+   @OneToOne
+   @JoinColumn(name = "user_id", nullable = false, unique = true)
    private User user;
 
    @Column(nullable = false, columnDefinition = "TEXT")
@@ -48,6 +51,9 @@ public class Volunteer extends User {
    }
 
    // Getters and Setters
+   public Long getId() { return id; }
+   public void setId(Long id) { this.id = id; }
+
    public User getUser() { return user; }
    public void setUser(User user) { this.user = user; }
 
