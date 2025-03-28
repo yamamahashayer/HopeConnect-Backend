@@ -1,40 +1,84 @@
-package com.example.HopeConnect.Controllers; // Defines the package for this class
+package com.example.HopeConnect.Controllers;
 
-import com.example.HopeConnect.Models.User; // Imports the User entity
-import com.example.HopeConnect.Services.UserServices; // Imports the user service layer
-import org.springframework.beans.factory.annotation.Autowired; // Enables dependency injection
-import org.springframework.http.ResponseEntity; // Handles HTTP responses
-import org.springframework.web.bind.annotation.*; // Imports REST API annotations
+import com.example.HopeConnect.Models.User;
+import com.example.HopeConnect.Services.UserServices;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
+import java.util.Optional;
 
-@RestController // Marks this class as a REST API controller
-@RequestMapping("/users") // Base URL path for all endpoints in this controller
+@RestController
+@RequestMapping("/users")
 public class UserController {
 
-    @Autowired // Automatically injects the UserServices instance
-    private UserServices userService;  //bean
+    @Autowired
+    private UserServices userService;
 
-    @GetMapping // Handles GET requests to "/users"
-    public List<User> getAllUsers() {
-        return userService.getAllUsers(); // Calls service to fetch all users
+    // للحصول على جميع المستخدمين
+    @GetMapping
+    public ResponseEntity<List<User>> getAllUsers() {
+        List<User> users = userService.getAllUsers();
+        if (users.isEmpty()) {
+            return ResponseEntity.noContent().build(); // إذا لم تكن هناك بيانات
+        }
+        return ResponseEntity.ok(users); // إرجاع جميع المستخدمين
     }
 
-    @GetMapping("/{id}") // Handles GET requests to "/users/{id}"
+    // للحصول على مستخدم واحد بناءً على الـ id
+    @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
-        return userService.getUserById(id) // Fetches user by ID
-                .map(ResponseEntity::ok) // Returns 200 OK if found
-                .orElse(ResponseEntity.notFound().build()); // Returns 404 if not found
+        Optional<User> user = userService.getUserById(id);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(user.get()); // إرجاع المستخدم إذا تم العثور عليه
+        } else {
+            return ResponseEntity.notFound().build(); // إرجاع خطأ 404 إذا لم يتم العثور على المستخدم
+        }
     }
 
-    @PostMapping // Handles POST requests to "/users"
-    public User createUser(@RequestBody User user) {
-        return userService.createUser(user); // Calls service to create a new user
+    // لإضافة مستخدم جديد
+    @PostMapping
+    public ResponseEntity<?> createUser(@RequestBody User user) {
+        try {
+            User createdUser = userService.createUser(user);
+            return ResponseEntity.status(201).body(createdUser); // إرجاع المستخدم الذي تم إنشاؤه مع حالة 201
+        } catch (Exception e) {
+            return ResponseEntity.status(500).body("Error: " + e.getMessage()); // إرجاع رسالة الخطأ
+        }
     }
 
-    @DeleteMapping("/{id}") // Handles DELETE requests to "/users/{id}"
-    public ResponseEntity<Void> deleteUser(@PathVariable Long id) {
-        userService.deleteUser(id); // Calls service to delete the user by ID
-        return ResponseEntity.noContent().build(); // Returns 204 No Content response
+    // لحذف مستخدم بناءً على الـ id
+    @DeleteMapping("/{id}")
+    public ResponseEntity<?> deleteUser(@PathVariable Long id) {
+        return userService.deleteUser(id);
     }
+
+    // لتحديث مستخدم بناءً على الـ id
+    @PutMapping("/{id}")
+    public ResponseEntity<?> updateUser(@PathVariable Long id, @RequestBody User user) {
+        return userService.updateUser(id, user);
+    }
+
+    // **إضافة Endpoint الـ login**
+    @PostMapping("/login")
+    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
+        // تحقق من البريد الإلكتروني وكلمة المرور
+        Optional<User> user = userService.getUserByEmailAndPassword(email, password);
+        if (user.isPresent()) {
+            return ResponseEntity.ok(Map.of("message", "Login successful", "user", user.get()));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+                    .body(Map.of("error", "Invalid email or password"));
+        }
+    }
+
+    @PostMapping("/signup")
+    public ResponseEntity<?> signUp(@RequestBody User user) {
+        return userService.signUp(user);
+    }
+
+
 }
