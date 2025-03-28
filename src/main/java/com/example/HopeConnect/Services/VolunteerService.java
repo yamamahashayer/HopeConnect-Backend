@@ -1,15 +1,21 @@
 package com.example.HopeConnect.Services;
 
+import com.example.HopeConnect.Enumes.VolunteerStatus;
+import com.example.HopeConnect.Enumes.VolunteerAvailability;
+
 import com.example.HopeConnect.Enumes.UserType;
 import com.example.HopeConnect.Models.User;
 import com.example.HopeConnect.Models.Volunteer;
 import com.example.HopeConnect.Repositories.VolunteerRepository;
 import com.example.HopeConnect.Repositories.UserRepository;
+
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 
+import java.time.LocalDateTime;
 import java.util.Optional;
 import java.util.List;
 
@@ -23,27 +29,68 @@ public class VolunteerService {
 
     @Autowired
     private UserRepository userRepository;
+
+    // ✅ تحسين البحث عن جميع المتطوعين
+    @Transactional(readOnly = true)
     public List<Volunteer> getAllVolunteers() {
         return volunteerRepository.findAll();
     }
+
+    // ✅ البحث عن متطوع باستخدام ID مع @Transactional لتحسين الأداء
+    @Transactional(readOnly = true)
     public Optional<Volunteer> getVolunteerById(Long id) {
         return volunteerRepository.findById(id);
     }
+
+    // ✅ تحديث بيانات المتطوع مع التأكد من صحة المدخلات
     public String updateVolunteer(Long id, Volunteer updatedVolunteer) {
         return volunteerRepository.findById(id).map(existing -> {
             try {
-                existing.setSkills(updatedVolunteer.getSkills());
-                existing.setAvailability(updatedVolunteer.getAvailability());
-                existing.setExperienceYears(updatedVolunteer.getExperienceYears());
-                existing.setPreferredActivities(updatedVolunteer.getPreferredActivities());
-                existing.setLocation(updatedVolunteer.getLocation());
-                existing.setStatus(updatedVolunteer.getStatus());
+                if (updatedVolunteer.getSkills() != null && !updatedVolunteer.getSkills().isEmpty()) {
+                    existing.setSkills(updatedVolunteer.getSkills());
+                }
 
+                if (updatedVolunteer.getAvailability() != null) {
+                    existing.setAvailability(updatedVolunteer.getAvailability());
+                }
+
+                if (updatedVolunteer.getExperienceYears() >= 0) {
+                    existing.setExperienceYears(updatedVolunteer.getExperienceYears());
+                }
+
+                if (updatedVolunteer.getPreferredActivities() != null && !updatedVolunteer.getPreferredActivities().isEmpty()) {
+                    existing.setPreferredActivities(updatedVolunteer.getPreferredActivities());
+                }
+
+                if (updatedVolunteer.getLocation() != null && !updatedVolunteer.getLocation().isEmpty()) {
+                    existing.setLocation(updatedVolunteer.getLocation());
+                }
+
+                if (updatedVolunteer.getStatus() != null) {
+                    existing.setStatus(updatedVolunteer.getStatus());
+                }
+
+                // ✅ تحديث معلومات المستخدم المرتبط
                 User user = existing.getUser();
-                user.setName(updatedVolunteer.getUser().getName());
-                user.setEmail(updatedVolunteer.getUser().getEmail());
-                user.setPhone(updatedVolunteer.getUser().getPhone());
-                user.setCity(updatedVolunteer.getUser().getCity());
+                if (updatedVolunteer.getUser() != null) {
+                    User updatedUser = updatedVolunteer.getUser();
+
+                    if (updatedUser.getName() != null && !updatedUser.getName().isEmpty()) {
+                        user.setName(updatedUser.getName());
+                    }
+
+                    if (updatedUser.getEmail() != null && !updatedUser.getEmail().isEmpty()) {
+                        user.setEmail(updatedUser.getEmail());
+                    }
+
+                    if (updatedUser.getPhone() != null && !updatedUser.getPhone().isEmpty()) {
+                        user.setPhone(updatedUser.getPhone());
+                    }
+
+                    if (updatedUser.getCity() != null && !updatedUser.getCity().isEmpty()) {
+                        user.setCity(updatedUser.getCity());
+                    }
+                }
 
                 userRepository.save(user);
                 volunteerRepository.save(existing);
@@ -56,6 +103,7 @@ public class VolunteerService {
         }).orElse("Error: Volunteer not found.");
     }
 
+    // ✅ حذف المتطوع مع التحقق من وجوده مسبقًا
     public String deleteVolunteer(Long id) {
         try {
             Optional<Volunteer> volunteerOpt = volunteerRepository.findById(id);
@@ -63,70 +111,58 @@ public class VolunteerService {
             if (volunteerOpt.isEmpty()) {
                 return "Error: Volunteer with ID " + id + " not found.";
             }
-            volunteerRepository.deleteById(id);
 
+            volunteerRepository.deleteById(id);
             return "Volunteer with ID " + id + " has been successfully deleted.";
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
     }
 
-
-    public List<Volunteer> getVolunteersByStatus(Volunteer.Status status) {
+    // ✅ البحث عن المتطوعين حسب الحالة (ACTIVE, PENDING, INACTIVE)
+    @Transactional(readOnly = true)
+    public List<Volunteer> getVolunteersByStatus(VolunteerStatus status) {
         return volunteerRepository.findByStatus(status);
     }
 
-    public List<Volunteer> getVolunteersByAvailability(Volunteer.Availability availability) {
+    // ✅ البحث عن المتطوعين حسب التوافر (FULL_TIME, PART_TIME, FLEXIBLE)
+    @Transactional(readOnly = true)
+    public List<Volunteer> getVolunteersByAvailability(VolunteerAvailability availability) {
         return volunteerRepository.findByAvailability(availability);
     }
 
+    // ✅ إنشاء متطوع جديد والتحقق من البيانات
     public String createVolunteer(Volunteer volunteer) {
         try {
-            if (volunteer.getUser() == null) {
+            if (volunteer.getUser() == null || volunteer.getUser().getId() == null) {
                 return "Error: Volunteer must be linked to an existing User.";
             }
 
-            User user = volunteer.getUser();
+            Optional<User> existingUserOpt = userRepository.findById(volunteer.getUser().getId());
 
-            Optional<User> existingUserOpt = userRepository.findByEmail(user.getEmail());
-
-            if (existingUserOpt.isPresent()) {
-                User existingUser = existingUserOpt.get();
-                existingUser.setName(user.getName());
-                existingUser.setPassword(user.getPassword());
-                existingUser.setPhone(user.getPhone());
-                existingUser.setNationality(user.getNationality());
-                existingUser.setCountry(user.getCountry());
-                existingUser.setCity(user.getCity());
-                existingUser.setUserType(UserType.VOLUNTEER);
-
-                user = userRepository.save(existingUser);
-            } else {
-                user.setUserType(UserType.VOLUNTEER);
-                user = userRepository.save(user);
+            if (existingUserOpt.isEmpty()) {
+                return "Error: User does not exist.";
             }
 
-            if (user.getId() == null) {
-                return "Error: User ID is null after saving.";
-            }
+            User user = existingUserOpt.get();
 
-            Optional<Volunteer> existingVolunteer = volunteerRepository.findByUser(user);
-
-            if (existingVolunteer.isPresent()) {
+            // ✅ التحقق مما إذا كان المستخدم مسجلاً كمتطوع بالفعل
+            if (volunteerRepository.findByUser(user).isPresent()) {
                 return "Error: User is already registered as a volunteer.";
             }
+
+            // ✅ تحديث نوع المستخدم إلى VOLUNTEER
+            user.setUserType(UserType.VOLUNTEER);
+            userRepository.save(user);
+
+            // ✅ تعيين الوقت عند إنشاء المتطوع لأول مرة
             volunteer.setUser(user);
+            volunteer.setRegisteredAt(LocalDateTime.now());
             Volunteer savedVolunteer = volunteerRepository.save(volunteer);
-            if (savedVolunteer.getId() == null) {
-                return "Error: Volunteer was not saved successfully.";
-            }
 
             return "Volunteer created successfully with ID: " + savedVolunteer.getId();
         } catch (Exception e) {
             return "Error: " + e.getMessage();
         }
     }
-
-
-
 }
