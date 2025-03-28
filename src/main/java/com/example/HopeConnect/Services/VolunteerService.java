@@ -23,19 +23,12 @@ public class VolunteerService {
 
     @Autowired
     private UserRepository userRepository;
-
-    // إرجاع جميع المتطوعين
     public List<Volunteer> getAllVolunteers() {
         return volunteerRepository.findAll();
     }
-
-    // البحث عن متطوع باستخدام ID
     public Optional<Volunteer> getVolunteerById(Long id) {
         return volunteerRepository.findById(id);
     }
-
-
-    // تحديث بيانات متطوع
     public String updateVolunteer(Long id, Volunteer updatedVolunteer) {
         return volunteerRepository.findById(id).map(existing -> {
             try {
@@ -46,7 +39,6 @@ public class VolunteerService {
                 existing.setLocation(updatedVolunteer.getLocation());
                 existing.setStatus(updatedVolunteer.getStatus());
 
-                // تحديث بيانات المستخدم أيضًا
                 User user = existing.getUser();
                 user.setName(updatedVolunteer.getUser().getName());
                 user.setEmail(updatedVolunteer.getUser().getEmail());
@@ -64,116 +56,76 @@ public class VolunteerService {
         }).orElse("Error: Volunteer not found.");
     }
 
-    // حذف متطوع
     public String deleteVolunteer(Long id) {
         try {
-            Optional<Volunteer> volunteer = volunteerRepository.findById(id);
-            if (volunteer.isPresent()) {
-                User user = volunteer.get().getUser();
-                volunteerRepository.deleteById(id);
-                userRepository.deleteById(user.getId()); // حذف المستخدم المرتبط
-                return "Volunteer deleted successfully.";
+            Optional<Volunteer> volunteerOpt = volunteerRepository.findById(id);
+
+            if (volunteerOpt.isEmpty()) {
+                return "Error: Volunteer with ID " + id + " not found.";
             }
-            return "Error: Volunteer not found.";
+            volunteerRepository.deleteById(id);
+
+            return "Volunteer with ID " + id + " has been successfully deleted.";
         } catch (Exception e) {
-            logger.error("Error deleting volunteer: {}", e.getMessage(), e);
             return "Error: " + e.getMessage();
         }
     }
 
-    // البحث عن متطوعين حسب الحالة (ACTIVE, PENDING, etc.)
+
     public List<Volunteer> getVolunteersByStatus(Volunteer.Status status) {
         return volunteerRepository.findByStatus(status);
     }
 
-
-
-    // البحث عن متطوعين حسب التوافر (FULL_TIME, PART_TIME, etc.)
     public List<Volunteer> getVolunteersByAvailability(Volunteer.Availability availability) {
         return volunteerRepository.findByAvailability(availability);
     }
 
-
-
-    // البحث عن متطوعين حسب الحالة والتوافر
-    public List<Volunteer> getVolunteersByStatusAndAvailability(Volunteer.Status status, Volunteer.Availability availability) {
-        return volunteerRepository.findByStatusAndAvailability(status, availability);
-    }
-
-
-
-
-
-
     public String createVolunteer(Volunteer volunteer) {
         try {
             if (volunteer.getUser() == null) {
-                logger.error("❌ Error: Volunteer must be linked to an existing User.");
                 return "Error: Volunteer must be linked to an existing User.";
             }
 
-            // استخراج بيانات المستخدم
             User user = volunteer.getUser();
-            logger.info("📌 Received User: " + user);
 
-            // التحقق مما إذا كان المستخدم موجودًا بالفعل عبر البريد الإلكتروني
-            Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+            Optional<User> existingUserOpt = userRepository.findByEmail(user.getEmail());
 
-            if (existingUser.isEmpty()) {
+            if (existingUserOpt.isPresent()) {
+                User existingUser = existingUserOpt.get();
+                existingUser.setName(user.getName());
+                existingUser.setPassword(user.getPassword());
+                existingUser.setPhone(user.getPhone());
+                existingUser.setNationality(user.getNationality());
+                existingUser.setCountry(user.getCountry());
+                existingUser.setCity(user.getCity());
+                existingUser.setUserType(UserType.VOLUNTEER);
+
+                user = userRepository.save(existingUser);
+            } else {
                 user.setUserType(UserType.VOLUNTEER);
                 user = userRepository.save(user);
-                logger.info("✅ New User Created: " + user);
-            } else {
-                user = existingUser.get();
-                logger.info("🔄 Existing User Found: " + user);
             }
 
-            // التأكد من أن `user_id` ليس فارغًا
             if (user.getId() == null) {
-                logger.error("❌ Error: User ID is null after saving.");
                 return "Error: User ID is null after saving.";
             }
 
-            // تعيين `User` في `Volunteer`
+            Optional<Volunteer> existingVolunteer = volunteerRepository.findByUser(user);
+
+            if (existingVolunteer.isPresent()) {
+                return "Error: User is already registered as a volunteer.";
+            }
             volunteer.setUser(user);
-            logger.info("📌 Final Volunteer Data before Save: " + volunteer);
-
-            // حفظ `Volunteer`
             Volunteer savedVolunteer = volunteerRepository.save(volunteer);
-            logger.info("✅ Saved Volunteer: " + savedVolunteer);
-
             if (savedVolunteer.getId() == null) {
-                logger.error("❌ Error: Volunteer was not saved successfully.");
                 return "Error: Volunteer was not saved successfully.";
             }
 
             return "Volunteer created successfully with ID: " + savedVolunteer.getId();
         } catch (Exception e) {
-            logger.error("❌ Error creating volunteer: {}", e.getMessage(), e);
             return "Error: " + e.getMessage();
         }
     }
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
-
 
 
 
