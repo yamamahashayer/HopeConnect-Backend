@@ -10,7 +10,7 @@ import java.util.Optional;
 
 @Repository
 public interface OrphanageRepository extends JpaRepository<Orphanage, Long> {
-    List<Orphanage> findByCity(String city);
     List<Orphanage> findByStatus(OrphanageStatus status);
     Optional<Orphanage> findByManager(User manager);
+    Optional<Orphanage> findByEmail(String email);
 }
