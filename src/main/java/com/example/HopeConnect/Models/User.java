@@ -4,7 +4,10 @@ import com.example.HopeConnect.Enumes.UserType;
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
 
+
 @Entity
+
+@Inheritance(strategy = InheritanceType.JOINED)
 @Table(name = "users")
 public class User {
 

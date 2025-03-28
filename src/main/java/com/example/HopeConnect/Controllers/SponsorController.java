@@ -1,4 +1,4 @@
-package com.example.HopeConnect.Conrollers;
+package com.example.HopeConnect.Controllers;
 
 import com.example.HopeConnect.Models.Sponsor;
 import com.example.HopeConnect.Services.SponsorService;
