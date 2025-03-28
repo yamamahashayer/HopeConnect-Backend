@@ -2,7 +2,8 @@ package com.example.HopeConnect.Models;
 
 import jakarta.persistence.*;
 import java.time.LocalDateTime;
-
+import com.example.HopeConnect.Enumes.VolunteerStatus;
+import com.example.HopeConnect.Enumes.VolunteerAvailability;
 @Entity
 public class Volunteer {
    @Id
@@ -18,7 +19,7 @@ public class Volunteer {
 
    @Enumerated(EnumType.STRING)
    @Column(nullable = false)
-   private Availability availability;
+   private VolunteerAvailability availability;
 
    @Column(name = "experience_years")
    private int experienceYears = 0;
@@ -30,7 +31,7 @@ public class Volunteer {
    private String location;
 
    @Enumerated(EnumType.STRING)
-   private Status status = Status.PENDING;
+   private VolunteerStatus status = VolunteerStatus.PENDING;
 
    @Column(name = "registered_at", updatable = false)
    private LocalDateTime registeredAt;
@@ -38,14 +39,6 @@ public class Volunteer {
    @PrePersist
    protected void onCreate() {
       this.registeredAt = LocalDateTime.now();
-   }
-
-   public enum Availability {
-      FULL_TIME, PART_TIME, FLEXIBLE
-   }
-
-   public enum Status {
-      ACTIVE, INACTIVE, PENDING
    }
 
    // Getters and Setters
@@ -58,8 +51,8 @@ public class Volunteer {
    public String getSkills() { return skills; }
    public void setSkills(String skills) { this.skills = skills; }
 
-   public Availability getAvailability() { return availability; }
-   public void setAvailability(Availability availability) { this.availability = availability; }
+   public VolunteerAvailability getAvailability() { return availability; }
+   public void setAvailability(VolunteerAvailability availability) { this.availability = availability; }
 
    public int getExperienceYears() { return experienceYears; }
    public void setExperienceYears(int experienceYears) { this.experienceYears = experienceYears; }
@@ -70,8 +63,8 @@ public class Volunteer {
    public String getLocation() { return location; }
    public void setLocation(String location) { this.location = location; }
 
-   public Status getStatus() { return status; }
-   public void setStatus(Status status) { this.status = status; }
+   public VolunteerStatus getStatus() { return status; }
+   public void setStatus(VolunteerStatus status) { this.status = status; }
 
    public LocalDateTime getRegisteredAt() { return registeredAt; }
 }

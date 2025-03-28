@@ -1,11 +1,14 @@
 package com.example.HopeConnect.Services;
 
+import com.example.HopeConnect.Enumes.VolunteerStatus;
 import com.example.HopeConnect.Models.User;
 import com.example.HopeConnect.Enumes.UserType;
 import com.example.HopeConnect.Models.Volunteer;
 import com.example.HopeConnect.Repositories.VolunteerRepository;
 import com.example.HopeConnect.Repositories.UserRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import com.example.HopeConnect.Enumes.VolunteerAvailability;
+
 import org.springframework.stereotype.Service;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -72,11 +75,11 @@ public class VolunteerService {
     }
 
 
-    public List<Volunteer> getVolunteersByStatus(Volunteer.Status status) {
+    public List<Volunteer> getVolunteersByStatus(VolunteerStatus status) {
         return volunteerRepository.findByStatus(status);
     }
 
-    public List<Volunteer> getVolunteersByAvailability(Volunteer.Availability availability) {
+    public List<Volunteer> getVolunteersByAvailability(VolunteerAvailability availability) {
         return volunteerRepository.findByAvailability(availability);
     }
 
