@@ -48,10 +48,15 @@ public class OrphanageController {
     }
 
     @PostMapping("/new")
-    public ResponseEntity<?> createOrphanage(@RequestBody Orphanage orphanage) {
-        Orphanage savedOrphanage = orphanageService.createOrphanage(orphanage);
-        return ResponseEntity.status(HttpStatus.CREATED).body(savedOrphanage);
+    public ResponseEntity<?> createOrphanage(@RequestBody Orphanage orphanage, @RequestParam Long managerId) {
+        try {
+            Orphanage savedOrphanage = orphanageService.createOrphanage(orphanage, managerId);
+            return ResponseEntity.status(HttpStatus.CREATED).body(savedOrphanage);
+        } catch (Exception e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body(e.getMessage());
+        }
     }
+
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteOrphanage(@PathVariable Long id) {

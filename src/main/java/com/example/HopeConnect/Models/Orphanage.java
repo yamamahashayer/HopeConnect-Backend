@@ -2,6 +2,7 @@ package com.example.HopeConnect.Models;
 
 import com.example.HopeConnect.Enumes.OrphanageStatus;
 import jakarta.persistence.*;
+
 import java.time.LocalDateTime;
 
 @Entity
@@ -38,7 +39,11 @@ public class Orphanage {
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
-    private OrphanageStatus status;  // الآن يستخدم Enum المنفصل
+    private OrphanageStatus status;
+
+    @OneToOne
+    @JoinColumn(name = "manager_id", nullable = false, unique = true)
+    private User manager;
 
     @Column(nullable = false, updatable = false)
     private LocalDateTime createdAt;
@@ -91,6 +96,9 @@ public class Orphanage {
 
     public OrphanageStatus getStatus() { return status; }
     public void setStatus(OrphanageStatus status) { this.status = status; }
+
+    public User getManager() { return manager; }
+    public void setManager(User manager) { this.manager = manager; }
 
     public LocalDateTime getCreatedAt() { return createdAt; }
     public LocalDateTime getUpdatedAt() { return updatedAt; }
