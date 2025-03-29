@@ -2,7 +2,6 @@ package com.example.HopeConnect.Models;
 
 import com.example.HopeConnect.Enumes.OrphanageStatus;
 import jakarta.persistence.*;
-
 import java.time.LocalDateTime;
 
 @Entity
@@ -41,6 +40,7 @@ public class Orphanage {
     @Column(nullable = false)
     private OrphanageStatus status;
 
+    // العلاقة بين دار الأيتام والمدير (مدير واحد لكل دار أيتام)
     @OneToOne
     @JoinColumn(name = "manager_id", nullable = false, unique = true)
     private User manager;
@@ -61,12 +61,40 @@ public class Orphanage {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // حساب عدد الأيتام المتبقين حتى الامتلاء
-    public int orphanCount() {
-        return capacity - currentOrphans;
+    // ✅ التحقق من عدم تجاوز `currentOrphans` الحد الأقصى (`capacity`)
+    public void setCurrentOrphans(int currentOrphans) {
+        if (currentOrphans > this.capacity) {
+            throw new IllegalArgumentException("Current orphans cannot exceed capacity!");
+        }
+        this.currentOrphans = currentOrphans;
     }
 
-    // Getters and Setters
+    // ✅ حساب عدد الأماكن المتاحة للأيتام حتى الامتلاء
+    public int orphanCount() {
+        return Math.max(capacity - currentOrphans, 0);
+    }
+
+    // ✅ تحسين `toString()` لتسهيل التصحيح أثناء التشغيل
+    @Override
+    public String toString() {
+        return "Orphanage{" +
+                "id=" + id +
+                ", name='" + name + '\'' +
+                ", address='" + address + '\'' +
+                ", city='" + city + '\'' +
+                ", phone='" + phone + '\'' +
+                ", email='" + email + '\'' +
+                ", contactPerson='" + contactPerson + '\'' +
+                ", capacity=" + capacity +
+                ", currentOrphans=" + currentOrphans +
+                ", status=" + status +
+                ", manager=" + (manager != null ? manager.getName() : "No Manager") +
+                ", createdAt=" + createdAt +
+                ", updatedAt=" + updatedAt +
+                '}';
+    }
+
+    // ✅ Getters and Setters
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
@@ -92,7 +120,6 @@ public class Orphanage {
     public void setCapacity(int capacity) { this.capacity = capacity; }
 
     public int getCurrentOrphans() { return currentOrphans; }
-    public void setCurrentOrphans(int currentOrphans) { this.currentOrphans = currentOrphans; }
 
     public OrphanageStatus getStatus() { return status; }
     public void setStatus(OrphanageStatus status) { this.status = status; }
