@@ -34,11 +34,6 @@ public class OrphanageService {
         return orphanageRepository.findById(id).map(this::convertToDTO);
     }
 
-    public List<OrphanageDTO> getOrphanagesByCity(String city) {
-        return orphanageRepository.findByCity(city).stream()
-                .map(this::convertToDTO)
-                .collect(Collectors.toList());
-    }
 
     public List<OrphanageDTO> getOrphanagesByStatus(OrphanageStatus status) {
         return orphanageRepository.findByStatus(status).stream()
@@ -48,10 +43,19 @@ public class OrphanageService {
     public Optional<OrphanageDTO> getOrphanageByEmail(String email) {
         return orphanageRepository.findByEmail(email).map(this::convertToDTO);
     }
+    public Optional<OrphanageDTO> getOrphanageByManager(Long managerId) {
+        Optional<User> manager = userRepository.findById(managerId);
+
+        if (manager.isEmpty()) {
+            throw new RuntimeException("Error: Manager with ID " + managerId + " not found.");
+        }
+
+        return orphanageRepository.findByManager(manager.get()).map(this::convertToDTO);
+    }
+
 
 
     public OrphanageDTO createOrphanage(OrphanageDTO orphanageDTO, Long managerId) {
-        // التحقق مما إذا كان البريد الإلكتروني مستخدمًا بالفعل
         Optional<Orphanage> existingOrphanage = orphanageRepository.findByEmail(orphanageDTO.getEmail());
         if (existingOrphanage.isPresent()) {
             throw new RuntimeException("Error: An orphanage with this email already exists.");
@@ -83,6 +87,8 @@ public class OrphanageService {
             return "Error: Orphanage not found.";
         }
     }
+
+
 
     private OrphanageDTO convertToDTO(Orphanage orphanage) {
         ManagerDTO managerDTO = new ManagerDTO(
@@ -122,4 +128,6 @@ public class OrphanageService {
         orphanage.setStatus(orphanageDTO.getStatus());
         return orphanage;
     }
+
+
 }
