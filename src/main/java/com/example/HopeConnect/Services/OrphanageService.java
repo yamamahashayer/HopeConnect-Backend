@@ -45,16 +45,24 @@ public class OrphanageService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+    public Optional<OrphanageDTO> getOrphanageByEmail(String email) {
+        return orphanageRepository.findByEmail(email).map(this::convertToDTO);
+    }
+
 
     public OrphanageDTO createOrphanage(OrphanageDTO orphanageDTO, Long managerId) {
-        Optional<User> userOpt = userRepository.findById(managerId);
+        // التحقق مما إذا كان البريد الإلكتروني مستخدمًا بالفعل
+        Optional<Orphanage> existingOrphanage = orphanageRepository.findByEmail(orphanageDTO.getEmail());
+        if (existingOrphanage.isPresent()) {
+            throw new RuntimeException("Error: An orphanage with this email already exists.");
+        }
 
+        Optional<User> userOpt = userRepository.findById(managerId);
         if (userOpt.isEmpty()) {
             throw new RuntimeException("Error: Manager ID " + managerId + " does not exist.");
         }
 
         User manager = userOpt.get();
-
         if (manager.getUserType() != UserType.ORPHANAGE_MANAGER) {
             throw new RuntimeException("Error: User ID " + managerId + " is not an orphanage manager.");
         }
@@ -65,6 +73,7 @@ public class OrphanageService {
 
         return convertToDTO(orphanage);
     }
+
 
     public String deleteOrphanage(Long id) {
         if (orphanageRepository.existsById(id)) {
