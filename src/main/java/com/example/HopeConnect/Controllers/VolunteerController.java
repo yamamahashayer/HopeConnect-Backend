@@ -1,5 +1,7 @@
 package com.example.HopeConnect.Controllers;
 
+import com.example.HopeConnect.Enumes.VolunteerAvailability;
+import com.example.HopeConnect.Enumes.VolunteerStatus;
 import com.example.HopeConnect.Models.User;
 import com.example.HopeConnect.Models.Volunteer;
 import com.example.HopeConnect.Repositories.UserRepository;
@@ -9,6 +11,8 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import com.example.HopeConnect.Enumes.VolunteerStatus;
+import com.example.HopeConnect.Enumes.VolunteerAvailability;
 
 import java.util.List;
 import java.util.Optional;
@@ -80,11 +84,11 @@ public class VolunteerController {
             Volunteer volunteer = new Volunteer();
             volunteer.setUser(user);
             volunteer.setSkills("Not specified");
-            volunteer.setAvailability(Volunteer.Availability.FLEXIBLE);
+            volunteer.setAvailability(VolunteerAvailability.FLEXIBLE);
             volunteer.setExperienceYears(0);
             volunteer.setPreferredActivities("Not specified");
             volunteer.setLocation("Not specified");
-            volunteer.setStatus(Volunteer.Status.PENDING);
+            volunteer.setStatus(VolunteerStatus.PENDING);
 
             // حفظ المتطوع الجديد
             volunteerRepository.save(volunteer);
@@ -96,14 +100,33 @@ public class VolunteerController {
     }
 
     @GetMapping("/status")
-    public ResponseEntity<List<Volunteer>> getVolunteersByStatus(@RequestParam Volunteer.Status status) {
-        List<Volunteer> volunteers = volunteerService.getVolunteersByStatus(status);
-        return volunteers.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(volunteers);
+    public ResponseEntity<?> getVolunteersByStatus(@RequestParam String status) {
+        try {
+            VolunteerStatus volunteerStatus = VolunteerStatus.valueOf(status.toUpperCase());
+
+            List<Volunteer> volunteers = volunteerService.getVolunteersByStatus(volunteerStatus);
+            return volunteers.isEmpty()
+                    ? ResponseEntity.status(HttpStatus.NO_CONTENT).body("No volunteers found with status: " + status)
+                    : ResponseEntity.ok(volunteers);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid status value: " + status);
+        }
     }
+
     @GetMapping("/availability")
-    public ResponseEntity<List<Volunteer>> getVolunteersByAvailability(@RequestParam Volunteer.Availability availability) {
-        List<Volunteer> volunteers = volunteerService.getVolunteersByAvailability(availability);
-        return volunteers.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(volunteers);
+    public ResponseEntity<?> getVolunteersByAvailability(@RequestParam String availability) {
+        try {
+            VolunteerAvailability volunteerAvailability = VolunteerAvailability.valueOf(availability.toUpperCase());
+
+            List<Volunteer> volunteers = volunteerService.getVolunteersByAvailability(volunteerAvailability);
+            return volunteers.isEmpty()
+                    ? ResponseEntity.status(HttpStatus.NO_CONTENT).body("No volunteers found with availability: " + availability)
+                    : ResponseEntity.ok(volunteers);
+        } catch (IllegalArgumentException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Invalid availability value: " + availability);
+        }
     }
+
+
 
 }
