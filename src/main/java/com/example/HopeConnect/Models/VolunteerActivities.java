@@ -3,8 +3,15 @@ package com.example.HopeConnect.Models;
 import com.example.HopeConnect.Enumes.VolunteerActivityStatus;
 import com.example.HopeConnect.Enumes.VolunteerActivityType;
 import com.example.HopeConnect.Enumes.VolunteerAvailability;
+import com.example.HopeConnect.Models.OrphanProject;
+
 import jakarta.persistence.*;
+import lombok.Getter;
+import lombok.Setter;
+
 import java.time.LocalDateTime;
+@Getter
+@Setter
 
 @Entity
 @Table(name = "volunteer_activities")
@@ -23,9 +30,9 @@ public class VolunteerActivities {
     private Orphanage orphanage;
 
 
-    //    @ManyToOne
-    //    @JoinColumn(name = "project_id")
-    //    private OrphanageProject project;
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private OrphanProject project;
 
 
     @Enumerated(EnumType.STRING)
@@ -68,37 +75,5 @@ public class VolunteerActivities {
         this.updatedAt = LocalDateTime.now();
     }
 
-    // Getters & Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
-    public Volunteer getVolunteer() { return volunteer; }
-    public void setVolunteer(Volunteer volunteer) { this.volunteer = volunteer; }
-
-    public Orphanage getOrphanage() { return orphanage; }
-    public void setOrphanage(Orphanage orphanage) { this.orphanage = orphanage; }
-
-    public VolunteerActivityType getServiceType() { return serviceType; }
-    public void setServiceType(VolunteerActivityType serviceType) { this.serviceType = serviceType; }
-
-    public String getDescription() { return description; }
-    public void setDescription(String description) { this.description = description; }
-
-    public VolunteerAvailability getAvailability() { return availability; }
-    public void setAvailability(VolunteerAvailability availability) { this.availability = availability; }
-
-    public VolunteerActivityStatus getStatus() { return status; }
-    public void setStatus(VolunteerActivityStatus status) { this.status = status; }
-
-    public LocalDateTime getStartDate() { return startDate; }
-    public void setStartDate(LocalDateTime startDate) { this.startDate = startDate; }
-
-    public LocalDateTime getEndDate() { return endDate; }
-    public void setEndDate(LocalDateTime endDate) { this.endDate = endDate; }
-
-    public String getNotes() { return notes; }
-    public void setNotes(String notes) { this.notes = notes; }
-
-    public LocalDateTime getCreatedAt() { return createdAt; }
-    public LocalDateTime getUpdatedAt() { return updatedAt; }
 }
