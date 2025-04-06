@@ -1,5 +1,6 @@
 package com.example.HopeConnect.Services;
 
+import com.example.HopeConnect.DTO.VolunteerDTO;
 import com.example.HopeConnect.Enumes.VolunteerStatus;
 import com.example.HopeConnect.Enumes.VolunteerAvailability;
 
@@ -14,6 +15,7 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
+import com.example.HopeConnect.DTO.VolunteerRegistrationDTO;
 
 import java.time.LocalDateTime;
 import java.util.Optional;
@@ -30,19 +32,14 @@ public class VolunteerService {
     @Autowired
     private UserRepository userRepository;
 
-    // ✅ تحسين البحث عن جميع المتطوعين
-    @Transactional(readOnly = true)
-    public List<Volunteer> getAllVolunteers() {
-        return volunteerRepository.findAll();
-    }
 
-    // ✅ البحث عن متطوع باستخدام ID مع @Transactional لتحسين الأداء
+
+
     @Transactional(readOnly = true)
     public Optional<Volunteer> getVolunteerById(Long id) {
         return volunteerRepository.findById(id);
     }
 
-    // ✅ تحديث بيانات المتطوع مع التأكد من صحة المدخلات
     public String updateVolunteer(Long id, Volunteer updatedVolunteer) {
         return volunteerRepository.findById(id).map(existing -> {
             try {
@@ -103,7 +100,6 @@ public class VolunteerService {
         }).orElse("Error: Volunteer not found.");
     }
 
-    // ✅ حذف المتطوع مع التحقق من وجوده مسبقًا
     public String deleteVolunteer(Long id) {
         try {
             Optional<Volunteer> volunteerOpt = volunteerRepository.findById(id);
@@ -119,50 +115,79 @@ public class VolunteerService {
         }
     }
 
-    // ✅ البحث عن المتطوعين حسب الحالة (ACTIVE, PENDING, INACTIVE)
     @Transactional(readOnly = true)
     public List<Volunteer> getVolunteersByStatus(VolunteerStatus status) {
         return volunteerRepository.findByStatus(status);
     }
 
-    // ✅ البحث عن المتطوعين حسب التوافر (FULL_TIME, PART_TIME, FLEXIBLE)
     @Transactional(readOnly = true)
     public List<Volunteer> getVolunteersByAvailability(VolunteerAvailability availability) {
         return volunteerRepository.findByAvailability(availability);
     }
 
-    // ✅ إنشاء متطوع جديد والتحقق من البيانات
-    public String createVolunteer(Volunteer volunteer) {
+
+    public String registerVolunteerWithUser(VolunteerRegistrationDTO dto) {
         try {
-            if (volunteer.getUser() == null || volunteer.getUser().getId() == null) {
-                return "Error: Volunteer must be linked to an existing User.";
-            }
+            // جلب كائن المستخدم من DTO
+            User user = dto.getUser();
 
-            Optional<User> existingUserOpt = userRepository.findById(volunteer.getUser().getId());
-
-            if (existingUserOpt.isEmpty()) {
-                return "Error: User does not exist.";
-            }
-
-            User user = existingUserOpt.get();
-
-            // ✅ التحقق مما إذا كان المستخدم مسجلاً كمتطوع بالفعل
-            if (volunteerRepository.findByUser(user).isPresent()) {
-                return "Error: User is already registered as a volunteer.";
-            }
-
-            // ✅ تحديث نوع المستخدم إلى VOLUNTEER
+            // تعيين نوع المستخدم كـ VOLUNTEER
             user.setUserType(UserType.VOLUNTEER);
             userRepository.save(user);
 
-            // ✅ تعيين الوقت عند إنشاء المتطوع لأول مرة
+            // إنشاء المتطوع وربطه بالمستخدم
+            Volunteer volunteer = new Volunteer();
             volunteer.setUser(user);
+            volunteer.setSkills(dto.getSkills());
+            volunteer.setAvailability(dto.getAvailability());
+            volunteer.setExperienceYears(dto.getExperienceYears());
+            volunteer.setPreferredActivities(dto.getPreferredActivities());
+            volunteer.setLocation(dto.getLocation());
+            volunteer.setStatus(dto.getStatus());
             volunteer.setRegisteredAt(LocalDateTime.now());
-            Volunteer savedVolunteer = volunteerRepository.save(volunteer);
 
-            return "Volunteer created successfully with ID: " + savedVolunteer.getId();
+            volunteerRepository.save(volunteer);
+
+            return "Volunteer with user registered successfully. Volunteer ID: " + volunteer.getId();
         } catch (Exception e) {
-            return "Error: " + e.getMessage();
+            return "Error registering volunteer with user: " + e.getMessage();
         }
     }
+
+
+
+
+
+
+
+    public VolunteerDTO convertToDTO(Volunteer volunteer) {
+        User user = volunteer.getUser();
+
+        return new VolunteerDTO(
+
+                user.getId(),
+                volunteer.getId(),
+
+                user != null ? user.getName() : "N/A",
+                user != null ? user.getEmail() : "N/A",
+                user != null ? user.getPhone() : "N/A",
+                user != null ? user.getCity() : "N/A",
+                volunteer.getAvailability() != null ? volunteer.getAvailability() : VolunteerAvailability.FLEXIBLE,
+                volunteer.getExperienceYears(),
+                volunteer.getPreferredActivities() != null ? volunteer.getPreferredActivities() : "Not specified",
+                volunteer.getSkills() != null ? volunteer.getSkills() : "Not specified",
+                volunteer.getLocation() != null ? volunteer.getLocation() : "Not specified",
+                volunteer.getStatus() != null ? volunteer.getStatus() : VolunteerStatus.PENDING,
+                volunteer.getRegisteredAt()
+        );
+    }
+    public List<VolunteerDTO> getAllVolunteers() {
+        return volunteerRepository.findAll().stream()
+                .filter(v -> v.getUser() != null)
+                .map(this::convertToDTO)
+                .toList();
+    }
+
+
+
 }

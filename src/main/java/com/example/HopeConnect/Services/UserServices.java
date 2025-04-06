@@ -1,7 +1,7 @@
 package com.example.HopeConnect.Services;
 
 import com.example.HopeConnect.Models.User;
-import com.example.HopeConnect.Repositories.UserRepository;
+import com.example.HopeConnect.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
@@ -95,20 +95,49 @@ public class UserServices {
         }
     }
 
-    // حذف مستخدم بواسطة الـ ID
+    @Autowired
+    private VolunteerRepository volunteerRepository;
+    @Autowired
+    private OrphanageRepository orphanageRepository ;
+
+
+//    @Autowired
+//    private SponsorRepository sponsorRepository;
+//
+//    @Autowired
+//    private DonorRepository donorRepository;
+
+
     public ResponseEntity<Map<String, Object>> deleteUser(Long id) {
         try {
-            Optional<User> user = userRepository.findById(id);
-            if (user.isPresent()) {
-                userRepository.deleteById(id);
-                Map<String, Object> response = new HashMap<>();
-                response.put("message", "User deleted successfully");
-                response.put("userId", id);
-                return ResponseEntity.ok(response);
-            } else {
+            Optional<User> userOpt = userRepository.findById(id);
+            if (userOpt.isEmpty()) {
                 return ResponseEntity.status(HttpStatus.NOT_FOUND)
                         .body(Map.of("error", "User not found", "userId", id));
             }
+
+            User user = userOpt.get();
+
+
+            volunteerRepository.findByUser(user).ifPresent(volunteerRepository::delete);
+
+//            // 🧹 حذف الداعم إن وجد
+//            sponsorRepository.findByUser(user).ifPresent(sponsorRepository::delete);
+//
+//            // 🧹 حذف المتبرع إن وجد
+//            donorRepository.findByUser(user).ifPresent(donorRepository::delete);
+
+            orphanageRepository.findByManager(user).ifPresent(orphanageRepository::delete);
+
+
+
+            // 🧹 أخيرًا حذف المستخدم نفسه
+            userRepository.deleteById(id);
+
+            return ResponseEntity.ok(
+                    Map.of("message", "User deleted successfully", "userId", id)
+            );
+
         } catch (Exception e) {
             logger.error("Error while deleting user with ID: " + id, e);
             return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)

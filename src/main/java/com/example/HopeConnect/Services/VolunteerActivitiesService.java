@@ -2,14 +2,17 @@ package com.example.HopeConnect.Services;
 
 import com.example.HopeConnect.DTO.VolunteerActivitiesDTO;
 import com.example.HopeConnect.Enumes.VolunteerActivityStatus;
+import com.example.HopeConnect.Models.OrphanProject;
 import com.example.HopeConnect.Models.VolunteerActivities;
 import com.example.HopeConnect.Models.Volunteer;
 import com.example.HopeConnect.Models.Orphanage;
+import com.example.HopeConnect.Repositories.OrphanProjectRepository;
 import com.example.HopeConnect.Repositories.VolunteerActivitiesRepository;
 import com.example.HopeConnect.Repositories.VolunteerRepository;
 import com.example.HopeConnect.Repositories.OrphanageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
+
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -26,49 +29,38 @@ public class VolunteerActivitiesService {
     @Autowired
     private OrphanageRepository orphanageRepository;
 
-    /**
-     * Get all volunteer activities.
-     */
+    @Autowired
+    private OrphanProjectRepository orphanProjectRepository;
+
     public List<VolunteerActivitiesDTO> getAllActivities() {
         return volunteerActivitiesRepository.findAll().stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get a volunteer activity by ID.
-     */
     public Optional<VolunteerActivitiesDTO> getActivityById(Long id) {
         return volunteerActivitiesRepository.findById(id).map(this::convertToDTO);
     }
 
-    /**
-     * Get all activities for a specific volunteer.
-     */
     public List<VolunteerActivitiesDTO> getActivitiesByVolunteerId(Long volunteerId) {
         return volunteerActivitiesRepository.findByVolunteerId(volunteerId).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Get all activities for a specific orphanage.
-     */
     public List<VolunteerActivitiesDTO> getActivitiesByOrphanageId(Long orphanageId) {
         return volunteerActivitiesRepository.findByOrphanageId(orphanageId).stream()
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
 
-    /**
-     * Create a new volunteer activity.
-     */
     public VolunteerActivitiesDTO createActivity(VolunteerActivitiesDTO dto) {
         Volunteer volunteer = volunteerRepository.findById(dto.getVolunteerId())
                 .orElseThrow(() -> new RuntimeException("Error: Volunteer not found"));
 
-        Orphanage orphanage = (dto.getOrphanageId() != null) ?
-                orphanageRepository.findById(dto.getOrphanageId()).orElse(null) : null;
+        Orphanage orphanage = (dto.getOrphanageId() != null)
+                ? orphanageRepository.findById(dto.getOrphanageId()).orElse(null)
+                : null;
 
         VolunteerActivities activity = convertToEntity(dto);
         activity.setVolunteer(volunteer);
@@ -77,9 +69,6 @@ public class VolunteerActivitiesService {
         return convertToDTO(volunteerActivitiesRepository.save(activity));
     }
 
-    /**
-     * Update an existing volunteer activity.
-     */
     public VolunteerActivitiesDTO updateActivity(Long id, VolunteerActivitiesDTO dto) {
         VolunteerActivities activity = volunteerActivitiesRepository.findById(id)
                 .orElseThrow(() -> new RuntimeException("Error: Activity not found"));
@@ -92,12 +81,15 @@ public class VolunteerActivitiesService {
         activity.setEndDate(dto.getEndDate());
         activity.setNotes(dto.getNotes());
 
+        if (dto.getProjectId() != null) {
+            OrphanProject project = orphanProjectRepository.findById(dto.getProjectId().intValue())
+                    .orElseThrow(() -> new RuntimeException("Error: Project not found"));
+            activity.setProject(project);
+        }
+
         return convertToDTO(volunteerActivitiesRepository.save(activity));
     }
 
-    /**
-     * Delete a volunteer activity by ID.
-     */
     public String deleteActivity(Long id) {
         if (volunteerActivitiesRepository.existsById(id)) {
             volunteerActivitiesRepository.deleteById(id);
@@ -107,11 +99,8 @@ public class VolunteerActivitiesService {
         }
     }
 
-    /**
-     * Convert `VolunteerActivities` entity to `VolunteerActivitiesDTO`.
-     */
     private VolunteerActivitiesDTO convertToDTO(VolunteerActivities activity) {
-        return new VolunteerActivitiesDTO(
+        VolunteerActivitiesDTO dto = new VolunteerActivitiesDTO(
                 activity.getId(),
                 activity.getVolunteer().getId(),
                 (activity.getOrphanage() != null) ? activity.getOrphanage().getId() : null,
@@ -121,13 +110,12 @@ public class VolunteerActivitiesService {
                 activity.getStatus(),
                 activity.getStartDate(),
                 activity.getEndDate(),
-                activity.getNotes()
+                activity.getNotes(),
+                (activity.getProject() != null) ? activity.getProject().getId().longValue() : null
         );
+        return dto;
     }
 
-    /**
-     * Convert `VolunteerActivitiesDTO` to `VolunteerActivities` entity.
-     */
     private VolunteerActivities convertToEntity(VolunteerActivitiesDTO dto) {
         VolunteerActivities activity = new VolunteerActivities();
         activity.setServiceType(dto.getServiceType());
@@ -137,6 +125,11 @@ public class VolunteerActivitiesService {
         activity.setStartDate(dto.getStartDate());
         activity.setEndDate(dto.getEndDate());
         activity.setNotes(dto.getNotes());
+
+        if (dto.getProjectId() != null) {
+            orphanProjectRepository.findById(dto.getProjectId().intValue()).ifPresent(activity::setProject);
+        }
+
         return activity;
     }
 }
