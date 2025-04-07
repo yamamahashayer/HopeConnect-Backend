@@ -3,16 +3,14 @@ package com.example.HopeConnect.Models;
 import com.example.HopeConnect.Enumes.VolunteerActivityStatus;
 import com.example.HopeConnect.Enumes.VolunteerActivityType;
 import com.example.HopeConnect.Enumes.VolunteerAvailability;
-import com.example.HopeConnect.Models.OrphanProject;
-
 import jakarta.persistence.*;
 import lombok.Getter;
 import lombok.Setter;
 
 import java.time.LocalDateTime;
+
 @Getter
 @Setter
-
 @Entity
 @Table(name = "volunteer_activities")
 public class VolunteerActivities {
@@ -29,11 +27,9 @@ public class VolunteerActivities {
     @JoinColumn(name = "orphanage_id")
     private Orphanage orphanage;
 
-
     @ManyToOne
     @JoinColumn(name = "project_id")
     private OrphanProject project;
-
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
@@ -74,6 +70,4 @@ public class VolunteerActivities {
     protected void onUpdate() {
         this.updatedAt = LocalDateTime.now();
     }
-
-
 }

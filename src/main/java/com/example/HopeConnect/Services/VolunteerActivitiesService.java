@@ -13,6 +13,7 @@ import com.example.HopeConnect.Repositories.OrphanageRepository;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 import java.util.stream.Collectors;
@@ -53,6 +54,13 @@ public class VolunteerActivitiesService {
                 .map(this::convertToDTO)
                 .collect(Collectors.toList());
     }
+    public List<VolunteerActivitiesDTO> getActivitiesByProjectId(Long projectId) {
+        return volunteerActivitiesRepository.findByProjectId(projectId)
+                .stream()
+                .map(this::convertToDTO)
+                .toList();
+    }
+
 
     public VolunteerActivitiesDTO createActivity(VolunteerActivitiesDTO dto) {
         Volunteer volunteer = volunteerRepository.findById(dto.getVolunteerId())
@@ -62,9 +70,24 @@ public class VolunteerActivitiesService {
                 ? orphanageRepository.findById(dto.getOrphanageId()).orElse(null)
                 : null;
 
+        OrphanProject project = (dto.getProjectId() != null)
+                ? orphanProjectRepository.findById(dto.getProjectId().intValue()).orElse(null)
+                : null;
+
+        // ✅ التحقق من التعارض الزمني
+        List<VolunteerActivities> existingActivities = volunteerActivitiesRepository.findByVolunteerId(dto.getVolunteerId());
+        for (VolunteerActivities existing : existingActivities) {
+            boolean overlap = dto.getStartDate().isBefore(existing.getEndDate() != null ? existing.getEndDate() : existing.getStartDate())
+                    && dto.getEndDate().isAfter(existing.getStartDate());
+            if (overlap) {
+                throw new RuntimeException("Error: Volunteer already has an overlapping activity.");
+            }
+        }
+
         VolunteerActivities activity = convertToEntity(dto);
         activity.setVolunteer(volunteer);
         activity.setOrphanage(orphanage);
+        activity.setProject(project);
 
         return convertToDTO(volunteerActivitiesRepository.save(activity));
     }
@@ -100,10 +123,10 @@ public class VolunteerActivitiesService {
     }
 
     private VolunteerActivitiesDTO convertToDTO(VolunteerActivities activity) {
-        VolunteerActivitiesDTO dto = new VolunteerActivitiesDTO(
+        return new VolunteerActivitiesDTO(
                 activity.getId(),
                 activity.getVolunteer().getId(),
-                (activity.getOrphanage() != null) ? activity.getOrphanage().getId() : null,
+                activity.getOrphanage() != null ? activity.getOrphanage().getId() : null,
                 activity.getServiceType(),
                 activity.getDescription(),
                 activity.getAvailability(),
@@ -111,9 +134,8 @@ public class VolunteerActivitiesService {
                 activity.getStartDate(),
                 activity.getEndDate(),
                 activity.getNotes(),
-                (activity.getProject() != null) ? activity.getProject().getId().longValue() : null
+                activity.getProject() != null ? activity.getProject().getId().longValue() : null
         );
-        return dto;
     }
 
     private VolunteerActivities convertToEntity(VolunteerActivitiesDTO dto) {
@@ -125,11 +147,6 @@ public class VolunteerActivitiesService {
         activity.setStartDate(dto.getStartDate());
         activity.setEndDate(dto.getEndDate());
         activity.setNotes(dto.getNotes());
-
-        if (dto.getProjectId() != null) {
-            orphanProjectRepository.findById(dto.getProjectId().intValue()).ifPresent(activity::setProject);
-        }
-
         return activity;
     }
 }

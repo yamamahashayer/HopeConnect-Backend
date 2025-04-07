@@ -13,6 +13,7 @@ import java.time.LocalDateTime;
 @Getter
 @Setter
 @NoArgsConstructor
+@AllArgsConstructor
 @Builder
 public class VolunteerActivitiesDTO {
 
@@ -42,38 +43,10 @@ public class VolunteerActivitiesDTO {
     @Future(message = "Start date must be in the future.")
     private LocalDateTime startDate;
 
-    private LocalDateTime endDate; // Optional
+    private LocalDateTime endDate;
 
     @Size(max = 500, message = "Notes must be under 500 characters.")
     private String notes;
 
-    // ✅ مضاف حديثًا لربط النشاط بالمشروع
-    private Long projectId;
-
-    // ✅ Constructor كامل (إذا استخدمت new ...)
-    public VolunteerActivitiesDTO(
-            Long id,
-            Long volunteerId,
-            Long orphanageId,
-            VolunteerActivityType serviceType,
-            String description,
-            VolunteerAvailability availability,
-            VolunteerActivityStatus status,
-            LocalDateTime startDate,
-            LocalDateTime endDate,
-            String notes,
-            Long projectId
-    ) {
-        this.id = id;
-        this.volunteerId = volunteerId;
-        this.orphanageId = orphanageId;
-        this.serviceType = serviceType;
-        this.description = description;
-        this.availability = availability;
-        this.status = status;
-        this.startDate = startDate;
-        this.endDate = endDate;
-        this.notes = notes;
-        this.projectId = projectId;
-    }
+    private Long projectId; // ✅ ربط المشروع
 }
