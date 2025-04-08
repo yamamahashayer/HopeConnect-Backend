@@ -19,13 +19,11 @@ public class VolunteerActivitiesController {
         this.volunteerActivitiesService = volunteerActivitiesService;
     }
 
-
     @GetMapping("/all")
     public ResponseEntity<List<VolunteerActivitiesDTO>> getAllActivities() {
         List<VolunteerActivitiesDTO> activities = volunteerActivitiesService.getAllActivities();
         return activities.isEmpty() ? ResponseEntity.noContent().build() : ResponseEntity.ok(activities);
     }
-
 
     @GetMapping("/{id}")
     public ResponseEntity<Object> getActivityById(@PathVariable Long id) {
@@ -39,8 +37,6 @@ public class VolunteerActivitiesController {
         }
     }
 
-
-
     @GetMapping("/volunteer/{volunteerId}")
     public ResponseEntity<?> getActivitiesByVolunteer(@PathVariable Long volunteerId) {
         List<VolunteerActivitiesDTO> activities = volunteerActivitiesService.getActivitiesByVolunteerId(volunteerId);
@@ -50,8 +46,6 @@ public class VolunteerActivitiesController {
                 : ResponseEntity.ok(activities);
     }
 
-
-
     @GetMapping("/orphanage/{orphanageId}")
     public ResponseEntity<?> getActivitiesByOrphanage(@PathVariable Long orphanageId) {
         List<VolunteerActivitiesDTO> activities = volunteerActivitiesService.getActivitiesByOrphanageId(orphanageId);
@@ -60,6 +54,14 @@ public class VolunteerActivitiesController {
                 : ResponseEntity.ok(activities);
     }
 
+    @GetMapping("/project/{projectId}")
+    public ResponseEntity<?> getActivitiesByProject(@PathVariable Long projectId) {
+        List<VolunteerActivitiesDTO> activities = volunteerActivitiesService.getActivitiesByProjectId(projectId);
+        return activities.isEmpty()
+                ? ResponseEntity.status(HttpStatus.NO_CONTENT)
+                .body("No activities found for project ID: " + projectId)
+                : ResponseEntity.ok(activities);
+    }
 
     @PostMapping("/new")
     public ResponseEntity<?> createActivity(@RequestBody VolunteerActivitiesDTO activityDTO) {
@@ -71,7 +73,6 @@ public class VolunteerActivitiesController {
         }
     }
 
-
     @PutMapping("/update/{id}")
     public ResponseEntity<?> updateActivity(@PathVariable Long id, @RequestBody VolunteerActivitiesDTO activityDTO) {
         try {
@@ -81,7 +82,6 @@ public class VolunteerActivitiesController {
             return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Error: " + e.getMessage());
         }
     }
-
 
     @DeleteMapping("/delete/{id}")
     public ResponseEntity<?> deleteActivity(@PathVariable Long id) {
