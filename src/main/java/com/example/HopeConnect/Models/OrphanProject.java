@@ -18,7 +18,7 @@ public class OrphanProject {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
-    private Integer id;
+    private Long id;
 
     @Column(nullable = false, length = 255)
     private String name;
@@ -66,6 +66,11 @@ public class OrphanProject {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
+
+
+    @ManyToOne
+    @JoinColumn(name = "orphanage_id", nullable = false,unique = true) // هذا هو ال foreign key
+    private Orphanage orphanage;
 
     public enum DonationType {
         ONE_TIME, MONTHLY
