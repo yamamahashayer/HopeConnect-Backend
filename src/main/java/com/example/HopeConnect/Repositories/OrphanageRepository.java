@@ -13,4 +13,5 @@ public interface OrphanageRepository extends JpaRepository<Orphanage, Long> {
     List<Orphanage> findByStatus(OrphanageStatus status);
     Optional<Orphanage> findByManager(User manager);
     Optional<Orphanage> findByEmail(String email);
+    Optional<Orphanage> findById(Long id);
 }

@@ -18,15 +18,15 @@ public class OrphanProjectService {
         return repository.findAll();
     }
 
-    public Optional<OrphanProject> getProjectById(Integer id) {
-        return repository.findById(id);
+    public Optional<OrphanProject> getProjectById(Long id) {
+        return repository.findById(Math.toIntExact(id));
     }
 
     public OrphanProject saveProject(OrphanProject project) {
         return repository.save(project);
     }
 
-    public void deleteProject(Integer id) {
-        repository.deleteById(id);
+    public void deleteProject(Long id) {
+        repository.deleteById(Math.toIntExact(id));
     }
 }
