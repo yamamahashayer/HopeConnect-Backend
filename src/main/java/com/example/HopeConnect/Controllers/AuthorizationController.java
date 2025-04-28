@@ -1,5 +1,6 @@
 package com.example.HopeConnect.Controllers;
 
+import com.example.HopeConnect.Config.JWTService;
 import com.example.HopeConnect.Models.User;
 import com.example.HopeConnect.Services.UserServices;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -14,13 +15,16 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/auth")
-public class AuthController {
+public class AuthorizationController {
 
     @Autowired
     private UserServices userService;
 
     @Autowired
     private BCryptPasswordEncoder passwordEncoder;
+    @Autowired
+    private JWTService jwtService;
+
 
 
     @PostMapping("/signup")
@@ -50,35 +54,31 @@ public class AuthController {
         }
     }
 
-
     @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
-        try {
-            Optional<User> userOpt = userService.findByEmail(email);
-            if (userOpt.isEmpty()) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("error", "Invalid email or password"));
-            }
+    public ResponseEntity<?> login(@RequestBody User loginRequest) {
+        Optional<User> user = userService.login(loginRequest.getEmail(), loginRequest.getPassword());
 
-            User user = userOpt.get();
+        if (user.isEmpty()) {
+            return ResponseEntity.status(HttpStatus.NOT_FOUND).body("Email not found");
+        }
 
-            if (!passwordEncoder.matches(password, user.getPassword())) {
-                return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                        .body(Map.of("error", "Invalid email or password"));
-            }
+        if (userService.checkPassword(loginRequest.getPassword(), user.get().getPassword())) {
+            // ✅ توليد التوكن باستخدام JWTService
+            String token = jwtService.generateToken(user.get().getEmail(), user.get().getUserType().toString());
 
+            // ✅ إرجاع التوكن ضمن الاستجابة
             Map<String, Object> response = new HashMap<>();
             response.put("message", "Login successful");
-            response.put("userId", user.getId());
-            response.put("userType", user.getUserType());
-            response.put("userName", user.getName());
-            response.put("email", user.getEmail());
+            response.put("token", token);
+            response.put("userType", user.get().getUserType().toString());
+            response.put("userName", user.get().getName());
+            response.put("userId", user.get().getId());
+            response.put("email", user.get().getEmail());
 
             return ResponseEntity.ok(response);
-
-        } catch (Exception e) {
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Login failed: " + e.getMessage()));
+        } else {
+            return ResponseEntity.status(HttpStatus.UNAUTHORIZED).body("Incorrect password");
         }
     }
+
 }
