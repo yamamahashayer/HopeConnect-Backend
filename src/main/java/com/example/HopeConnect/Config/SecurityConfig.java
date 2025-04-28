@@ -9,9 +9,10 @@ import org.springframework.security.config.annotation.web.builders.HttpSecurity;
 import org.springframework.security.config.annotation.web.configuration.EnableWebSecurity;
 import org.springframework.security.config.http.SessionCreationPolicy;
 import org.springframework.security.crypto.bcrypt.BCryptPasswordEncoder;
-import org.springframework.security.crypto.password.PasswordEncoder;
 import org.springframework.security.web.SecurityFilterChain;
 import org.springframework.security.web.authentication.UsernamePasswordAuthenticationFilter;
+import org.springframework.security.authorization.AuthorizationDecision;
+import org.springframework.security.core.Authentication;
 
 @Configuration
 @EnableWebSecurity
@@ -21,14 +22,32 @@ public class SecurityConfig {
     public SecurityFilterChain securityFilterChain(HttpSecurity http) throws Exception {
         return http
                 .csrf(csrf -> csrf.disable())
-                .authorizeHttpRequests(auth -> auth
-//                        .requestMatchers("/auth/login", "/auth/signup").permitAll()
-//                        .anyRequest().authenticated()
-                                .anyRequest().permitAll()
-                )
-                .sessionManagement(session -> session
-                        .sessionCreationPolicy(SessionCreationPolicy.STATELESS))
+                .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(new JwtAuthenticationFilter(), UsernamePasswordAuthenticationFilter.class)
+                .authorizeHttpRequests(auth -> auth
+                        //.requestMatchers("/auth/login", "/auth/signup").permitAll()
+                                .anyRequest().permitAll()
+
+//                        .requestMatchers("/admin/**").access((authentication, context) -> {
+//                            Authentication authResult = authentication.get();
+//                            String userType = (String) authResult.getPrincipal();
+//                            return new AuthorizationDecision(userType.equals("ADMIN"));
+//                        })
+//
+//                        .requestMatchers("/volunteers/**").access((authentication, context) -> {
+//                            Authentication authResult = authentication.get();
+//                            String userType = (String) authResult.getPrincipal();
+//                            return new AuthorizationDecision(userType.equals("VOLUNTEER"));
+//                        })
+//
+//                        .requestMatchers("/sponsor/**").access((authentication, context) -> {
+//                            Authentication authResult = authentication.get();
+//                            String userType = (String) authResult.getPrincipal();
+//                            return new AuthorizationDecision(userType.equals("SPONSOR"));
+//                        })
+
+                    //   .anyRequest().authenticated()
+                )
                 .build();
     }
 
