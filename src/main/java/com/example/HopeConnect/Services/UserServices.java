@@ -29,32 +29,7 @@ public class UserServices {
     @Autowired
     private JavaMailSender mailSender;
 
-    // وظيفة لتسجيل الدخول
-    public ResponseEntity<Map<String, Object>> login(String email, String password) {
-        try {
-            Optional<User> userOpt = userRepository.findByEmail(email);
-            if (userOpt.isPresent()) {
-                User user = userOpt.get();
-                // التحقق من كلمة المرور
-                if (passwordEncoder.matches(password, user.getPassword())) {
-                    Map<String, Object> response = new HashMap<>();
-                    response.put("message", "Login successfullllll");
-                    response.put("user", user);
-                    return ResponseEntity.ok(response);
-                } else {
-                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                            .body(Map.of("error", "Invalid password"));
-                }
-            } else {
-                return ResponseEntity.status(HttpStatus.NOT_FOUND)
-                        .body(Map.of("error", "User not found"));
-            }
-        } catch (Exception e) {
-            logger.error("Error during login process: ", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "An error occurred during login"));
-        }
-    }
+
     public Optional<User> getUserByEmailAndPassword(String email, String password) {
         try {
             return userRepository.findByEmailAndPassword(email, password);  // هذا يفترض أنك لديك دالة في الـ Repository للبحث عن الـ User
@@ -62,6 +37,9 @@ public class UserServices {
             logger.error("Error while fetching user by email and password: ", e);
             throw new RuntimeException("Error while fetching user by email and password");
         }
+    }
+    public Optional<User> findByEmail(String email) {
+        return userRepository.findByEmail(email);
     }
 
 
@@ -169,28 +147,52 @@ public class UserServices {
         }
     }
 
-    public ResponseEntity<Map<String, Object>> signUp(User user) {
-        try {
-            // تحقق من وجود المستخدم بواسطة البريد الإلكتروني
-            Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
-            if (existingUser.isPresent()) {
-                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
-                        .body(Map.of("error", "Email already exists"));
-            }
-
-            user.setPassword(passwordEncoder.encode(user.getPassword()));
-
-            User createdUser = userRepository.save(user);
-            Map<String, Object> response = new HashMap<>();
-            response.put("message", "User created successfully");
-            response.put("user", createdUser);
-            return ResponseEntity.status(HttpStatus.CREATED).body(response);
-        } catch (Exception e) {
-            logger.error("Error while signing up user: ", e);
-            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
-                    .body(Map.of("error", "Error while creating user"));
-        }
-    }
-
-
+//    public ResponseEntity<Map<String, Object>> signUp(User user) {
+//        try {
+//            // تحقق من وجود المستخدم بواسطة البريد الإلكتروني
+//            Optional<User> existingUser = userRepository.findByEmail(user.getEmail());
+//            if (existingUser.isPresent()) {
+//                return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+//                        .body(Map.of("error", "Email already exists"));
+//            }
+//
+//            user.setPassword(passwordEncoder.encode(user.getPassword()));
+//
+//            User createdUser = userRepository.save(user);
+//            Map<String, Object> response = new HashMap<>();
+//            response.put("message", "User created successfully");
+//            response.put("user", createdUser);
+//            return ResponseEntity.status(HttpStatus.CREATED).body(response);
+//        } catch (Exception e) {
+//            logger.error("Error while signing up user: ", e);
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(Map.of("error", "Error while creating user"));
+//        }
+//    }
+//
+//    public ResponseEntity<Map<String, Object>> login(String email, String password) {
+//        try {
+//            Optional<User> userOpt = userRepository.findByEmail(email);
+//            if (userOpt.isPresent()) {
+//                User user = userOpt.get();
+//                // التحقق من كلمة المرور
+//                if (passwordEncoder.matches(password, user.getPassword())) {
+//                    Map<String, Object> response = new HashMap<>();
+//                    response.put("message", "Login successfullllll");
+//                    response.put("user", user);
+//                    return ResponseEntity.ok(response);
+//                } else {
+//                    return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                            .body(Map.of("error", "Invalid password"));
+//                }
+//            } else {
+//                return ResponseEntity.status(HttpStatus.NOT_FOUND)
+//                        .body(Map.of("error", "User not found"));
+//            }
+//        } catch (Exception e) {
+//            logger.error("Error during login process: ", e);
+//            return ResponseEntity.status(HttpStatus.INTERNAL_SERVER_ERROR)
+//                    .body(Map.of("error", "An error occurred during login"));
+//        }
+//    }
 }
