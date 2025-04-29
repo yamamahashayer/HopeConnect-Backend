@@ -1,0 +1,120 @@
+[33mc3a9c90[m[33m ([m[1;36mHEAD[m[33m -> [m[1;32mtasneem-branch[m[33m, [m[1;31morigin/tasneem-branch[m[33m)[m Your commit message
+[33m9cb9b44[m add external api
+[33m64ee71f[m[33m ([m[1;31morigin/main[m[33m, [m[1;31morigin/HEAD[m[33m)[m Merge pull request #26 from yamamahashayer/Yamamah
+[33m53c932e[m Merge branch 'main' into Yamamah
+[33m11c5b24[m authcontroller 3
+[33md6cc451[m authcontroller 2
+[33m99542b8[m authcontroller 2
+[33m038c35f[m authcontroller class +delete from user
+[33m1fc7158[m Update SecurityConfig.java
+[33md8a416b[m Merge pull request #25 from yamamahashayer/Yamamah
+[33me7c6bd5[m Merge pull request #24 from yamamahashayer/Yamamah
+[33m8ac39b3[m Resolved merge conflicts and completed merge
+[33mf6b9fd9[m حفظ التعديلات قبل الدمج
+[33ma71b94a[m Merge pull request #23 from yamamahashayer/Diala
+[33m489d680[m connect project with orphanage
+[33md865953[m Resolve conflict: remove auto-generated build file during merge
+[33m12f5dec[m Remove auto-generated build files before merging
+[33m6609031[m[33m ([m[1;31morigin/Diala[m[33m)[m Merge pull request #22 from yamamahashayer/Yamamah
+[33m9e79c12[m[33m ([m[1;31morigin/Yamamah[m[33m)[m VolunteerActivities connection
+[33m2e8f202[m Refactor volunteer +user
+[33m5634914[m Merge pull request #21 from yamamahashayer/Yamamah
+[33m6946415[m change port
+[33md4c95fb[m donation done  + project
+[33mc1cb33b[m get main code - Diala
+[33m546abb2[m Merge pull request #20 from yamamahashayer/Diala
+[33ma6e191b[m Merge branch 'tasneem-branch' Merge branch 'tasneem-branch' into main# especially if it merges an updated upstream into a topic branch. Merge branch 'tasneem-branch' into main# especially if it merges an updated upstream into a topic branch. ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       .git/MERGE_MSG[+] [unix] (01:26 30/03/2025)                                                                      4,1 AllMerge branch 'tasneem-branch' Merge branch 'tasneem-branch' into main# especially if it merges an updated upstream into a topic branch. ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       ~                                                                                                                       .git/MERGE_MSG[+] [unix] (01:26 30/03/2025)                                                                      4,1 All
+[33m58b9000[m Delete olved merge conflicts between Yamamah and main
+[33m7bf137c[m Merge pull request #18 from yamamahashayer/Yamamah
+[33m6b34298[m Volunteer files
+[33mec34993[m Orphanage files 1:4
+[33mf6b5416[m Orphanage files 1:3
+[33m2ebd0d2[m Orphanage files 1:2
+[33m29adcc3[m Orphanage files 1:1
+[33md6b070b[m Merge remote-tracking branch 'origin/Yamamah' into Yamamah
+[33mcdab2cd[m Orphanage files 1:0
+[33mae86123[m Merge pull request #17 from yamamahashayer/Yamamah
+[33m84ed6c7[m Merge pull request #16 from yamamahashayer/Yamamah
+[33ma5fb385[m Refactor: service,model
+[33m797bf12[m donation codes
+[33m850ca3e[m Refactor: Separate enums into dedicated files
+[33m2cd797f[m Merge pull request #15 from yamamahashayer/Yamamah
+[33md658f58[m Merge branch 'main' into Yamamah
+[33m659566d[m Merge pull request #14 from yamamahashayer/Diala
+[33m801e7ea[m رفع الكود إلى برانش ديالا
+[33m038b110[m Resolved merge conflicts between Yamamah and main
+[33m530a22c[m pom file
+[33m738fec1[m edit volunteer files 3
+[33m6b11df7[m edit volunteer files 2
+[33mf2ad02e[m حذف جميع الملفات من فرع tasneem-branch
+[33md0ae31e[m حذف جميع الملفات من فرع تسنيم
+[33m89e1535[m edit volunteer files
+[33m3efb4a1[m edit main 4
+[33m5707b87[m edit main 3
+[33m0e25806[m edit main 2
+[33md2acadd[m edit main
+[33ma7f467c[m Delete .idea directory
+[33m184308a[m Delete HopeConnect-Backend-tasneem-branch/.idea directory
+[33m21f7bf2[m Merge pull request #11 from yamamahashayer/tasneem-branch
+[33m2418b50[m حذف المجلد src المكرر
+[33m5a7793b[m hhh
+[33m14fbeae[m Add project files
+[33m903ee69[m Reset tasneem-branch
+[33m436c179[m edittt2
+[33m403704e[m Merge pull request #10 from yamamahashayer/tasneem-branch
+[33m05aaee3[m Removed all files from tasneem-branch
+[33mbbcc0b0[m edittttlast
+[33mf9245ea[m Restored files from commit 6b7885d
+[33mb7af7eb[m Merge pull request #9 from yamamahashayer/tasneem-branch
+[33m7af64dd[m Merge branch 'main' into tasneem-branch
+[33m6b7885d[m اضافة تعديلات جديدة
+[33mee83544[m add volunteer files
+[33m398de58[m Merge remote-tracking branch 'origin/Yamamah' into Yamamah
+[33mcba75a3[m Merge branch 'main' into Yamamah
+[33m103bb6a[m Stop tracking compiled files in target/
+[33m14d1de7[m Resolved conflict after stash pop
+[33m3e2e6ae[m Update application.properties
+[33mb2b4106[m Update application.properties
+[33mb3909d5[m Update UserServices.java
+[33m0e598f9[m Update misc.xml
+[33m8d08074[m Update HopeConnect.iml
+[33mc85fb87[m Inheritance
+[33mbe4b839[m volunteer files
+[33m077d3dc[m edit
+[33m236ade8[m Merge remote-tracking branch 'origin/main'
+[33me2c54c9[m update on user
+[33m7bf63b5[m update "put user"
+[33m7f4c54d[m Update application.properties
+[33mcd5e9f9[m رفع الكود مع التعديلات إلى tasneem-branch
+[33m3a71bd0[m Update UserController.java
+[33mc58d88c[m Merge pull request #8 from yamamahashayer/Yamamah
+[33me2e5ed8[m Merge branch 'main' into Yamamah
+[33m77e718f[m edit user files 3
+[33m65baaee[m Update UserRepository.java
+[33m7284f3b[m Delete src/main/java/com/example/HopeConnect/Services/UserService.java
+[33me34843c[m Update UserServices.java
+[33mb776ec6[m edit user files
+[33m91ee32a[m edit user files 2
+[33m1f26105[m Merge pull request #7 from yamamahashayer/USER FILES
+[33m9f34f62[m Merge pull request #6 from yamamahashayer/tasneem-branch
+[33mcb09d2f[m Add and update application.properties
+[33ma6dda4a[m delete files
+[33m9da26de[m Merge pull request #5 from yamamahashayer/Yamamah
+[33meab46a3[m test add file
+[33m9c58de2[m My updates on Yamamah branch
+[33mf1e6e21[m Merge pull request #4 from yamamahashayer/Diala
+[33m5b905e0[m AAAAA
+[33m9179e55[m Merge pull request #3 from yamamahashayer/Diala
+[33mb27abae[m HHHHHH
+[33m13fb49c[m ffHHf
+[33m5805d2b[m Merge pull request #2 from yamamahashayer/Diala
+[33m3c4b2f1[m My latest updates
+[33m592cf1a[m test file
+[33m83bf8be[m test file
+[33m8039103[m sec commite
+[33mad447ca[m add files
+[33m6b20ea0[m fff
+[33m672682a[m Merge pull request #1 from yamamahashayer/tasneem-branch
+[33m38c0a57[m Merge main into tasneem-branch
+[33m576e378[m Initial commit
+[33mc5deee3[m Initial commit
