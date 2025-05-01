@@ -63,22 +63,22 @@ public class UserController {
     }
 
     // **إضافة Endpoint الـ login**
-    @PostMapping("/login")
-    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
-        // تحقق من البريد الإلكتروني وكلمة المرور
-        Optional<User> user = userService.getUserByEmailAndPassword(email, password);
-        if (user.isPresent()) {
-            return ResponseEntity.ok(Map.of("message", "Login successful", "user", user.get()));
-        } else {
-            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
-                    .body(Map.of("error", "Invalid email or password"));
-        }
-    }
-
-    @PostMapping("/signup")
-    public ResponseEntity<?> signUp(@RequestBody User user) {
-        return userService.signUp(user);
-    }
+//    @PostMapping("/login")
+//    public ResponseEntity<?> login(@RequestParam String email, @RequestParam String password) {
+//        // تحقق من البريد الإلكتروني وكلمة المرور
+//        Optional<User> user = userService.getUserByEmailAndPassword(email, password);
+//        if (user.isPresent()) {
+//            return ResponseEntity.ok(Map.of("message", "Login successful", "user", user.get()));
+//        } else {
+//            return ResponseEntity.status(HttpStatus.UNAUTHORIZED)
+//                    .body(Map.of("error", "Invalid email or password"));
+//        }
+//    }
+//
+//    @PostMapping("/signup")
+//    public ResponseEntity<?> signUp(@RequestBody User user) {
+//        return userService.signUp(user);
+//    }
 
 
 }
