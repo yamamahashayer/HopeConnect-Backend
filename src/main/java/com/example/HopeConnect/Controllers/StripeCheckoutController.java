@@ -1,4 +1,5 @@
 package com.example.HopeConnect.Controllers;
+
 import com.example.HopeConnect.Services.StripeCheckoutService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.*;
@@ -11,9 +12,7 @@ public class StripeCheckoutController {
     private StripeCheckoutService stripeCheckoutService;
 
     @PostMapping("/create-checkout-session")
-    public String createCheckoutSession(@RequestParam Long amount) throws Exception {
+    public String createCheckoutSession(@RequestParam Double amount) throws Exception {
         return stripeCheckoutService.createCheckoutSession(amount);
     }
 }
-
-
