@@ -132,7 +132,6 @@ public class UserServices {
         }
     }
 
-    // تحديث مستخدم
     public ResponseEntity<?> updateUser(Long id, User updatedUser) {
         try {
             Optional<User> existingUser = userRepository.findById(id);
@@ -141,7 +140,6 @@ public class UserServices {
                 user.setName(updatedUser.getName());
                 user.setEmail(updatedUser.getEmail());
                 user.setPhone(updatedUser.getPhone());
-                // أضف هنا باقي الحقول التي تريد تحديثها
 
                 User savedUser = userRepository.save(user);
                 return ResponseEntity.ok(savedUser);
