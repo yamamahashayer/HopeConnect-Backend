@@ -14,10 +14,11 @@ import java.util.Map;
 @Service
 public class JWTService {
 
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256); // مفتاح سري قوي
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // مدة الصلاحية: 10 ساعات
+    private static final String SECRET = "mysecretkeyforhopeconnectmysecretkey";
+    private static final Key SECRET_KEY = Keys.hmacShaKeyFor(SECRET.getBytes());
 
-    // توليد التوكن
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10;
+
     public String generateToken(String email, String userType) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userType", userType);
@@ -32,7 +33,8 @@ public class JWTService {
     }
 
     private Claims extractAllClaims(String token) {
-        return Jwts.parserBuilder()
+        return Jwts
+                .parserBuilder()
                 .setSigningKey(SECRET_KEY)
                 .build()
                 .parseClaimsJws(token)
@@ -50,5 +52,4 @@ public class JWTService {
     public boolean isTokenValid(String token) {
         return !extractAllClaims(token).getExpiration().before(new Date());
     }
-
 }

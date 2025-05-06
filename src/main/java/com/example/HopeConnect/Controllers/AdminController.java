@@ -1,0 +1,50 @@
+package com.example.HopeConnect.Controllers;
+
+import com.example.HopeConnect.Models.User;
+import com.example.HopeConnect.Repositories.*;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.ResponseEntity;
+import org.springframework.web.bind.annotation.*;
+
+import java.util.HashMap;
+import java.util.List;
+import java.util.Map;
+
+@RestController
+@RequestMapping("/admin")
+public class AdminController {
+
+    @Autowired
+    private UserRepository userRepository;
+    @Autowired
+    private VolunteerRepository volunteerRepository;
+
+    @Autowired
+    private DonorRepository donorRepository;
+
+    @Autowired
+    private OrphanageRepository orphanageRepository;
+
+    @Autowired
+    private OrphanRepository orphanRepository;
+
+    @Autowired
+    private OrphanProjectRepository orphanProjectRepository;
+
+    @Autowired
+    private DonationRepository donationRepository;
+
+    @GetMapping("/dashboard")
+    public ResponseEntity<Map<String, Object>> getDashboardStats() {
+        Map<String, Object> stats = new HashMap<>();
+        stats.put("volunteerCount", volunteerRepository.count());
+        stats.put("donorCount", donorRepository.count());
+        stats.put("orphanageCount", orphanageRepository.count());
+        stats.put("orphanCount", orphanRepository.count());
+        stats.put("projectCount", orphanProjectRepository.count());
+       // stats.put("totalDonations", donationRepository.sumAllDonations());
+
+        return ResponseEntity.ok(stats);
+    }
+
+}
