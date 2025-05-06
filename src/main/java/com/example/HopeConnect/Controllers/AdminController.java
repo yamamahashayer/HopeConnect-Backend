@@ -7,6 +7,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.List;
 import java.util.Map;
 
@@ -36,15 +37,20 @@ public class AdminController {
 
     @GetMapping("/dashboard")
     public ResponseEntity<Map<String, Object>> getDashboardStats() {
-        Map<String, Object> stats = new HashMap<>();
-        stats.put("volunteerCount", volunteerRepository.count());
-        stats.put("donorCount", donorRepository.count());
-        stats.put("orphanageCount", orphanageRepository.count());
-        stats.put("orphanCount", orphanRepository.count());
-        stats.put("projectCount", orphanProjectRepository.count());
-       // stats.put("totalDonations", donationRepository.sumAllDonations());
+        Map<String, Object> stats = new LinkedHashMap<>();
+
+
+        stats.put("Total Projects", orphanProjectRepository.count());
+        stats.put("Registered Donors", donorRepository.count());
+        stats.put("Active Volunteers", volunteerRepository.count());
+        stats.put("Available Orphanages", orphanageRepository.count());
+        stats.put("Total Orphans", orphanRepository.count());
+
+
+
 
         return ResponseEntity.ok(stats);
     }
+
 
 }
