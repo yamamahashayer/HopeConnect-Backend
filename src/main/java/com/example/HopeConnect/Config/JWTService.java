@@ -14,8 +14,8 @@ import java.util.Map;
 @Service
 public class JWTService {
 
-    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256); // مفتاح سري قوي
-    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10; // مدة الصلاحية: 10 ساعات
+    private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
+    private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10;
 
     // توليد التوكن
     public String generateToken(String email, String userType) {
