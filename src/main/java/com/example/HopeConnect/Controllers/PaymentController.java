@@ -1,6 +1,7 @@
 package com.example.HopeConnect.Controllers;
 
 import com.example.HopeConnect.Models.Payment;
+import com.example.HopeConnect.Models.PaymentRequest;
 import com.example.HopeConnect.Repositories.PaymentRepository;
 import com.example.HopeConnect.Services.StripeCheckoutService;
 import com.stripe.Stripe;
@@ -26,8 +27,10 @@ public class PaymentController {
     }
 
     @PostMapping("/create-checkout-session")
-    public String createCheckoutSession(@RequestParam("amount") long amount) {
+    public String createCheckoutSession(@RequestBody PaymentRequest paymentRequest) {
         try {
+            long amount = paymentRequest.getAmount();
+
             Payment payment = new Payment();
             payment.setAmount(amount);
             payment.setPaymentStatus("pending");
@@ -42,6 +45,7 @@ public class PaymentController {
             return "Error creating checkout session";
         }
     }
+
 
     @GetMapping("/payment-success")
     public String paymentSuccess(@RequestParam("session_id") String sessionId) {
