@@ -3,8 +3,12 @@ package com.example.HopeConnect.Controllers;
 import com.example.HopeConnect.Models.Payment;
 import com.example.HopeConnect.Repositories.PaymentRepository;
 import com.example.HopeConnect.Services.StripeCheckoutService;
+import com.stripe.Stripe;
+import com.stripe.model.checkout.Session;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
+
+import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/payment")
@@ -24,30 +28,43 @@ public class PaymentController {
     @PostMapping("/create-checkout-session")
     public String createCheckoutSession(@RequestParam("amount") long amount) {
         try {
-            // 1. Create the payment record
             Payment payment = new Payment();
             payment.setAmount(amount);
             payment.setPaymentStatus("pending");
             paymentRepository.save(payment);
 
-            // 2. Convert amount to cents
             long amountInCents = amount * 100;
-
-            // 3. Call service with payment record
             String checkoutUrl = stripeCheckoutService.createCheckoutSession(amountInCents, payment);
 
             return checkoutUrl;
-
         } catch (Exception e) {
             e.printStackTrace();
             return "Error creating checkout session";
         }
     }
-    // ✅ Success & Cancel URLs (Stripe redirects here)
+
     @GetMapping("/payment-success")
     public String paymentSuccess(@RequestParam("session_id") String sessionId) {
-        // مبدئياً فقط رسالة نجاح — لاحقاً ممكن تعمل تحقق من الجلسة باستخدام الـ sessionId لو بدك
-        return "Thank you for your donation! Your payment was successful. Session ID: " + sessionId;
+        try {
+            Stripe.apiKey = stripeApiKey;
+            Session session = Session.retrieve(sessionId);
+
+            String customerEmail = session.getCustomerDetails() != null ? session.getCustomerDetails().getEmail() : null;
+
+            Optional<Payment> optionalPayment = paymentRepository.findByStripeSessionId(sessionId);
+            if (optionalPayment.isPresent()) {
+                Payment payment = optionalPayment.get();
+                payment.setPaymentStatus("completed");
+                payment.setCustomerEmail(customerEmail);
+                paymentRepository.save(payment);
+            }
+
+            return "Thank you for your donation! Your payment was successful. Session ID: " + sessionId + ", Email: " + customerEmail;
+
+        } catch (Exception e) {
+            e.printStackTrace();
+            return "Error retrieving payment details.";
+        }
     }
 
     @GetMapping("/payment-cancel")

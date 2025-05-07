@@ -21,14 +21,13 @@ public class StripeCheckoutService {
     }
 
     public String createCheckoutSession(long amountInCents, Payment paymentRecord) throws Exception {
-        // Set Stripe API Key
         Stripe.apiKey = stripeApiKey;
 
-        // Build the Checkout Session Params
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
                 .setSuccessUrl("http://localhost:8090/api/payment/payment-success?session_id={CHECKOUT_SESSION_ID}")
                 .setCancelUrl("http://localhost:8090/api/payment/payment-cancel")
+                .setBillingAddressCollection(SessionCreateParams.BillingAddressCollection.AUTO)
                 .addLineItem(
                         SessionCreateParams.LineItem.builder()
                                 .setQuantity(1L)
@@ -47,10 +46,8 @@ public class StripeCheckoutService {
                 )
                 .build();
 
-        // Create Session
         Session session = Session.create(params);
 
-        // Save Stripe Session ID into DB
         paymentRecord.setStripeSessionId(session.getId());
         paymentRepository.save(paymentRecord);
 

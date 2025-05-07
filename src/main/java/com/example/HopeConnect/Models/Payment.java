@@ -17,8 +17,16 @@ public class Payment {
     private long amount;
     private String paymentStatus;
     private String stripeSessionId;
+    private String customerEmail;
 
-    // Getters and setters
+    public String getCustomerEmail() {
+        return customerEmail;
+    }
+
+    public void setCustomerEmail(String customerEmail) {
+        this.customerEmail = customerEmail;
+    }
+
     public Long getId() {
         return id;
     }
