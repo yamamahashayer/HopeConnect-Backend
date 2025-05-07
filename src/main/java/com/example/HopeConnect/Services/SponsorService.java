@@ -33,4 +33,21 @@ public class SponsorService {
         sponsorRepository.deleteById(id);
     }
 
+
+
+    @Autowired
+    private NotificationService notificationService;
+
+    public Sponsor createSponsor(Sponsor sponsor) {
+        Sponsor savedSponsor = sponsorRepository.save(sponsor);
+
+        notificationService.sendEmailNotification(
+                savedSponsor.getUser().getEmail(),
+                "تم تفعيل الكفالة",
+                "شكراً لرعايتك ليتيم. سنوافيك بالتحديثات حول حالته."
+        );
+
+        return savedSponsor;
+    }
+
 }
