@@ -30,21 +30,22 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                                .requestMatchers(
-                                        "/auth/login", "/auth/signup"
-                                ).permitAll()
+                                .anyRequest().permitAll()
+                                /*               .requestMatchers(
+                                                       "/auth/login", "/auth/signup"
+                                               ).pmitAll()
 
-                        .requestMatchers("/volunteers/**","/admin/**").access((authentication, context) -> {
-                            Authentication authResult = authentication.get();
-                            String userType = (String) authResult.getPrincipal();
-                            return new AuthorizationDecision(userType.equals("VOLUNTEER") || userType.equals("ADMIN"));
-                        })
+                                 /*      .requestMatchers("/volunteers/**","/admin/**").access((authentication, context) -> {
+                                           Authentication authResult = authentication.get();
+                                           String userType = (String) authResult.getPrincipal();
+                                           return new AuthorizationDecision(userType.equals("VOLUNTEER") || userType.equals("ADMIN"));
+                                       })
 
-                        .requestMatchers("/admin/**","/users/**").access((authentication, context) -> {
-                            Authentication authResult = authentication.get();
-                            String userType = (String) authResult.getPrincipal();
-                            return new AuthorizationDecision(userType.equals("ADMIN"));
-                        })
+                                       .requestMatchers("/admin/**","/users/**").access((authentication, context) -> {
+                                           Authentication authResult = authentication.get();
+                                           String userType = (String) authResult.getPrincipal();
+                                           return new AuthorizationDecision(userType.equals("ADMIN"));
+                                       })*/
 
 
 
@@ -65,7 +66,7 @@ public class SecurityConfig {
 //                            return new AuthorizationDecision(userType.equals("ORPHANAGE_MANAGER")|| userType.equals("ADMIN"));
 //                        })
 
-                        .anyRequest().authenticated()
+                      //  .anyRequest().authenticated()
                 )
                 .build();
     }

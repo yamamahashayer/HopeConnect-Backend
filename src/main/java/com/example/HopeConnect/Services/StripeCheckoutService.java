@@ -1,5 +1,7 @@
 package com.example.HopeConnect.Services;
 
+import com.example.HopeConnect.Models.Payment;
+import com.example.HopeConnect.Repositories.PaymentRepository;
 import com.stripe.Stripe;
 import com.stripe.model.checkout.Session;
 import com.stripe.param.checkout.SessionCreateParams;
@@ -12,35 +14,45 @@ public class StripeCheckoutService {
     @Value("${stripe.api.key}")
     private String stripeApiKey;
 
-    public String createCheckoutSession(Double amountInDollars) throws Exception {
+    private final PaymentRepository paymentRepository;
+
+    public StripeCheckoutService(PaymentRepository paymentRepository) {
+        this.paymentRepository = paymentRepository;
+    }
+
+    public String createCheckoutSession(long amountInCents, Payment paymentRecord) throws Exception {
+        // Set Stripe API Key
         Stripe.apiKey = stripeApiKey;
 
-        Long amountInCents = Math.round(amountInDollars * 100);
+        // Build the Checkout Session Params
+        SessionCreateParams params = SessionCreateParams.builder()
+                .setMode(SessionCreateParams.Mode.PAYMENT)
+                .setSuccessUrl("http://localhost:8090/api/payment/payment-success?session_id={CHECKOUT_SESSION_ID}")
+                .setCancelUrl("http://localhost:8090/api/payment/payment-cancel")
+                .addLineItem(
+                        SessionCreateParams.LineItem.builder()
+                                .setQuantity(1L)
+                                .setPriceData(
+                                        SessionCreateParams.LineItem.PriceData.builder()
+                                                .setCurrency("usd")
+                                                .setUnitAmount(amountInCents)
+                                                .setProductData(
+                                                        SessionCreateParams.LineItem.PriceData.ProductData.builder()
+                                                                .setName("Donation to HopeConnect")
+                                                                .build()
+                                                )
+                                                .build()
+                                )
+                                .build()
+                )
+                .build();
 
-        SessionCreateParams params =
-                SessionCreateParams.builder()
-                        .setMode(SessionCreateParams.Mode.PAYMENT)
-                        .setSuccessUrl("https://yourdomain.com/success")
-                        .setCancelUrl("https://yourdomain.com/cancel")
-                        .addLineItem(
-                                SessionCreateParams.LineItem.builder()
-                                        .setQuantity(1L)
-                                        .setPriceData(
-                                                SessionCreateParams.LineItem.PriceData.builder()
-                                                        .setCurrency("usd")
-                                                        .setUnitAmount(amountInCents)
-                                                        .setProductData(
-                                                                SessionCreateParams.LineItem.PriceData.ProductData.builder()
-                                                                        .setName("Donation to HopeConnect")
-                                                                        .build()
-                                                        )
-                                                        .build()
-                                        )
-                                        .build()
-                        )
-                        .build();
-
+        // Create Session
         Session session = Session.create(params);
+
+        // Save Stripe Session ID into DB
+        paymentRecord.setStripeSessionId(session.getId());
+        paymentRepository.save(paymentRecord);
 
         return session.getUrl();
     }
