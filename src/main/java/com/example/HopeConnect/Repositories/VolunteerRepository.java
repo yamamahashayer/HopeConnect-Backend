@@ -18,5 +18,6 @@ public interface VolunteerRepository extends JpaRepository<Volunteer, Long> {
    List<Volunteer> findByStatus(VolunteerStatus status);
    List<Volunteer> findByAvailability(VolunteerAvailability availability);
    Optional<Volunteer> findByUser(User user);
+   Optional<Volunteer> findByUserId(Long userId);
 }
 
