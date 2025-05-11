@@ -28,5 +28,19 @@ public class ReviewController {
         }
     }
 
+    @GetMapping("/all")
+    public List<ReviewDTO> getAllReviews() {
+        return reviewService.getAllReviews();
+    }
+    @DeleteMapping("/delete/{id}")
+    public String deleteReview(@PathVariable Long id) {
+        reviewService.deleteReviewById(id);
+        return "Review with ID " + id + " has been deleted successfully.";
+    }
+    @GetMapping("/user/{email}")
+    public List<ReviewDTO> getUserReviews(@PathVariable String email) {
+        return reviewService.getUserReviewsByEmail(email);
+    }
+
 }
 

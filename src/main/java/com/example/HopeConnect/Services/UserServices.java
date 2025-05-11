@@ -1,6 +1,7 @@
 package com.example.HopeConnect.Services;
 
 import com.example.HopeConnect.Models.User;
+import com.example.HopeConnect.Models.Volunteer;
 import com.example.HopeConnect.Repositories.*;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.HttpStatus;
@@ -28,6 +29,7 @@ public class UserServices {
     private BCryptPasswordEncoder passwordEncoder;
     @Autowired
     private JavaMailSender mailSender;
+
 
 
     public Optional<User> getUserByEmailAndPassword(String email, String password) {
