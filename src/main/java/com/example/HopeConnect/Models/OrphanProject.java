@@ -20,6 +20,11 @@ public class OrphanProject {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @ManyToOne
+    @JoinColumn(name = "orphanage_id", referencedColumnName = "id")
+    private Orphanage orphanage;
+
+
     @Column(nullable = false, length = 255)
     private String name;
 
@@ -68,9 +73,7 @@ public class OrphanProject {
     }
 
 
-    @ManyToOne
-    @JoinColumn(name = "orphanage_id", nullable = false,unique = true) // هذا هو ال foreign key
-    private Orphanage orphanage;
+
 
     public enum DonationType {
         ONE_TIME, MONTHLY
