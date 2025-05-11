@@ -24,12 +24,13 @@ public class VolunteerActivities {
     private Volunteer volunteer;
 
     @ManyToOne
+    @JoinColumn(name = "project_id")
+    private OrphanProject project;
+
+    @ManyToOne
     @JoinColumn(name = "orphanage_id")
     private Orphanage orphanage;
 
-    @ManyToOne
-    @JoinColumn(name = "project_id")
-    private OrphanProject project;
 
     @Enumerated(EnumType.STRING)
     @Column(nullable = false)
