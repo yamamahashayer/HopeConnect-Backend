@@ -11,6 +11,12 @@ public class Donation {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+
+    @ManyToOne
+    @JoinColumn(name = "emergency_campaign_id", nullable = true)
+    private EmergencyCampaign emergencyCampaign;
+
+
     @ManyToOne
     @JoinColumn(name = "donor_id", nullable = false)
     private Donor donor;

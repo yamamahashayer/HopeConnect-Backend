@@ -34,5 +34,21 @@ public class OrphanService {
         orphanRepository.deleteById(id);
     }
 
+  /*  @Autowired
+    private NotificationService notificationService;
+
+    public Orphan updateOrphan(Orphan orphan) {
+        Orphan updatedOrphan = orphanRepository.save(orphan);
+
+        if ("Guaranteed".equals(updatedOrphan.getStatus())) {
+            notificationService.sendEmailNotification(
+                    updatedOrphan.getSponsor().getUser().getEmail(),
+                    "تم كفالة اليتيم",
+                    "تم ربطك بهذا اليتيم بنجاح، شكراً لك ❤️"
+            );
+        }
+
+        return updatedOrphan;
+    }*/
 
 }

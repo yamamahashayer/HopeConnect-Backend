@@ -33,7 +33,9 @@ public class VolunteerService {
     private UserRepository userRepository;
 
 
-
+    public Optional<Volunteer> getVolunteerByUserId(Long userId) {
+        return volunteerRepository.findByUserId(userId);
+    }
 
     @Transactional(readOnly = true)
     public Optional<Volunteer> getVolunteerById(Long id) {
@@ -98,6 +100,7 @@ public class VolunteerService {
                 return "Error updating volunteer: " + e.getMessage();
             }
         }).orElse("Error: Volunteer not found.");
+
     }
 
     public String deleteVolunteer(Long id) {
