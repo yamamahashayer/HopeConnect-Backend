@@ -42,11 +42,11 @@ mvn clean install
 ```
 3. **Create The Database**:
 ```bash
-CREATE DATABASE hopeconnect_db;
+CREATE DATABASE advancesoft1;
 ```
 4. **Configure Database Connection**:
 ```yaml
-spring.datasource.url=jdbc:mysql://localhost:3306/hopeconnect_db
+spring.datasource.url=jdbc:mysql://localhost:3306/advancesoft1
 spring.datasource.username=your_mysql_username
 spring.datasource.password=your_mysql_password
 ```
@@ -82,11 +82,11 @@ mvn spring-boot:run
 
 <a name="API"></a>
 ## 📝 API Documentation
-- 🌐 Swagger UI: [http://localhost:8090/swagger-ui/index.html](http://localhost:8090/swagger-ui/index.html)
+- 🌐 Swagger UI:
 
 <a name="demo"></a>
 ## 📸 Demo
-- 🚀 [View Demo](https://drive.google.com/drive/folders/1deZO6aF5LGN1ZyNQpeAcqBsgOhbOTN6-?usp=sharing)
+- 🚀 [View Demo]
 
 <a name="contact"></a>
 ## 📱 Contact
