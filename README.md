@@ -86,11 +86,10 @@ mvn spring-boot:run
 - Create and manage donations (Money, Food, Clothes, Education).
 - Secure payments with Stripe integration.
 - Track donation status (Pending, Completed, Cancelled).
-- 
+  
 - ### 🌍 Sponsorship Management
 - Create sponsorship programs for orphans.
 - Track sponsorship status (Active, Expired).
-- Notify sponsors about renewals.
 
 ### 🔑 Authentication Management
 - Secure JWT-based authentication.
@@ -99,16 +98,11 @@ mvn spring-boot:run
 
 ### 📧 Email Notifications (SendGrid)
 - Real-time email notifications for donations, sponsorships, and activities.
-- Customizable email templates.
 
 ### 💳 Payment System (Stripe)
 - Secure payment processing via Stripe.
 - Create and manage payment sessions.
 - Track payment status (Pending, Completed, Failed).
-
-### 🔔 Notification System
-- Real-time notifications (Email and In-App).
-- Custom notifications for volunteers, donors, and sponsors.
 
 ### 📊 Reporting and Statistics
 - Admin dashboard with real-time statistics
@@ -121,7 +115,6 @@ mvn spring-boot:run
 ### 🚨 Emergency Campaigns
 - Launch emergency donation campaigns.
 - Notify donors and volunteers of urgent needs.
-- Track campaign progress and donations.
 
 ### 📍 Logistic Management
 - Manage orphanage locations and activity locations.
