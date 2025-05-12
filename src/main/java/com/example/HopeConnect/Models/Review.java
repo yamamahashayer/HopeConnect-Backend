@@ -1,26 +1,30 @@
 package com.example.HopeConnect.Models;
 
-import com.fasterxml.jackson.databind.BeanProperty;
+
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-// Review.java
+
 @Entity
 public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long targetId;
 
-    @ManyToOne
-    @JoinColumn(name = "reviewer_id")
-    private User reviewer;
-
-    private Long orphanageId;
-    private int rating;
     private String comment;
+    private int rating;
+
     private LocalDate reviewDate;
 
+    @ManyToOne
+    private User reviewer;
+
+    private Long targetId; // ID of orphanage
+
+    private Long orphanId; // ID of orphan (optional)
+    private Long projectId; // ID of project (optional)
+
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -29,20 +33,20 @@ public class Review {
         this.id = id;
     }
 
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
     public String getComment() {
         return comment;
     }
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public LocalDate getReviewDate() {
@@ -69,6 +73,19 @@ public class Review {
         this.targetId = targetId;
     }
 
+    public Long getOrphanId() {
+        return orphanId;
+    }
 
-    // Getters and Setters
+    public void setOrphanId(Long orphanId) {
+        this.orphanId = orphanId;
+    }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
+    }
 }

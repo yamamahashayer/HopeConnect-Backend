@@ -49,4 +49,9 @@ public class VolunteerActivitiesDTO {
     private String notes;
 
     private Long projectId; // ✅ ربط المشروع
+
+    // ✅ حل المشكلة → Getter يدوي مؤكد
+    public Long getOrphanageId() {
+        return orphanageId;
+    }
 }
