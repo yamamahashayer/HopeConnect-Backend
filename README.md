@@ -56,7 +56,7 @@ mvn spring-boot:run
 ```
 
 <a name="coref"></a>
-## 🚀 Main Features (Updated)
+## 🚀 Main Features 
 - 🌐 **User Management:** Secure user registration, login, and role-based access (Admin, Donor, Sponsor, Volunteer, Orphanage Manager).
 - 🏡 **Orphanage Management:** Manage orphanages, including adding, updating, listing, and assigning managers.
 - 👥 **Volunteer Activities Management:** Create, assign, and track volunteer activities with real-time status updates.
