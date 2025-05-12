@@ -38,42 +38,112 @@
 <a name="gs"></a>
 ## 🚀 Getting Started
 ### ⚙️ Running the project
-#### To get started with the project:
-##### 1. Clone the repository:
-> [![Github][Github]][wewe]
->
-> sh
-> git clone https://github.com/yamamahashayer/HopeConnect-Backend.git
-> 
-##### 2. Install Dependencies
-Make sure you have Maven installed. Run the following command to install the necessary dependencies:
->
-> sh
-> mvn clean install
-> 
-##### 3. Create The Database:
-* Make sure MySQL is installed and running on your local machine.
-* Create a new database for the project:
->
-> sh
-> CREATE DATABASE advancesoft1;
-> 
-* Update the application.properties or application.yml file in the src/main/resources directory with your MySQL database credentials (username and password).
->
-> sh
-> spring.datasource.url=jdbc:mysql://localhost:8090/advancesoft1
-> spring.datasource.username=your_mysql_username
-> spring.datasource.password=your_mysql_password
-> 
-##### 4. Run The Application:
->
-> sh
-> mvn spring-boot:run
-> 
-<br>
-<br>
-<br>
+#### 1. Clone the repository:
+```
+git clone https://github.com/yamamahashayer/HopeConnect-Backend.git
+```
+#### 2. Install Dependencies:
+```
+mvn clean install
+```
+#### 3. Create The Database:
+```
+CREATE DATABASE hopeconnect_db;
+```
+#### 4. Update Database Configuration:
+```
+spring.datasource.url=jdbc:mysql://localhost:3306/advancesoft1
+spring.datasource.username=your_mysql_username
+spring.datasource.password=your_mysql_password
+```
+#### 5. Run The Application:
+```
+mvn spring-boot:run
+```
 
+<a name="coref"></a>
+## 🚀 Main Features
+
+### 🌐 User Management
+- User registration, login, and profile management with JWT authentication.
+- Role-based access control: Donor, Sponsor, Volunteer, Orphanage Manager, Admin.
+
+### 🏡 Orphanage Management
+- Add, update, and delete orphanages.
+- Assign managers to orphanages.
+- List orphans in each orphanage.
+
+### 👥 Volunteer Activities Management
+- Create, update, and assign volunteer activities.
+- Track volunteer participation and hours.
+- Manage activity status (Active, Completed, Cancelled).
+
+### 🌐 Orphan Project Management
+- Create and manage orphan support projects (Education, Healthcare).
+- Track project progress, funding, and participation.
+
+### 💰 Donations Management
+- Create and manage donations (Money, Food, Clothes, Education).
+- Secure payments with Stripe integration.
+- Track donation status (Pending, Completed, Cancelled).
+- 
+- ### 🌍 Sponsorship Management
+- Create sponsorship programs for orphans.
+- Track sponsorship status (Active, Expired).
+- Notify sponsors about renewals.
+
+### 🔑 Authentication Management
+- Secure JWT-based authentication.
+- Password reset via email (SendGrid).
+- Role-based access control for secure APIs.
+
+### 📧 Email Notifications (SendGrid)
+- Real-time email notifications for donations, sponsorships, and activities.
+- Customizable email templates.
+
+### 💳 Payment System (Stripe)
+- Secure payment processing via Stripe.
+- Create and manage payment sessions.
+- Track payment status (Pending, Completed, Failed).
+
+### 🔔 Notification System
+- Real-time notifications (Email and In-App).
+- Custom notifications for volunteers, donors, and sponsors.
+
+### 📊 Reporting and Statistics
+- Admin dashboard with real-time statistics
+- Generate detailed reports for each section.
+
+### 📝 Review System
+- Allow users to review activities, projects, and services.
+- Admin can monitor and manage reviews.
+
+### 🚨 Emergency Campaigns
+- Launch emergency donation campaigns.
+- Notify donors and volunteers of urgent needs.
+- Track campaign progress and donations.
+
+### 📍 Logistic Management
+- Manage orphanage locations and activity locations.
+- Track deliveries and services provided.
+
+### 🛡️ Security and Privacy
+- JWT Authentication for secure user sessions.
+- Role-Based Access Control (RBAC).
+- Secure HTTPS connections for API requests.
+
+<a name="roles"></a>
+## 👥 Roles:
+- 👤 Donor: Can donate money, clothes, food.
+- 👥 Sponsor: Can sponsor orphans.
+- 👨‍⚕️ Volunteer: Can register for and participate in volunteer activities.
+- 🏡 Orphanage Manager: Manages orphanages and orphans.
+- 🔧 Admin: Manages the entire platform.
+
+
+
+<a name="contact"></a>
+## 📱 Contact
 
 
 
