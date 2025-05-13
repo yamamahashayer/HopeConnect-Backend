@@ -33,6 +33,9 @@ public class ReviewService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private OrphanageService orphanageService;
+
 
 
 
@@ -94,12 +97,10 @@ public class ReviewService {
         if (reviewDTO.getReviewerEmail() == null || reviewDTO.getReviewerEmail().isEmpty()) {
             throw new IllegalArgumentException("Reviewer email must not be null or empty.");
         }
-     //   if (reviewDTO.getTargetId() == null) {
-     //       throw new IllegalArgumentException("Target ID must not be null.");
-     //   }
-        if (reviewDTO.getTargetType() == null || reviewDTO.getTargetType().isEmpty()) {
-            throw new IllegalArgumentException("Target type must not be null or empty.");
+        if (reviewDTO.getOrphanageId() == null) {
+            throw new IllegalArgumentException("Orphanage ID must not be null.");
         }
+
     }
 
 
@@ -165,16 +166,25 @@ public class ReviewService {
 
 
     private Review createAndSaveReview(ReviewDTO reviewDTO, User reviewer) {
+        // Create a new Review entity
         Review review = new Review();
         review.setRating(reviewDTO.getRating());
         review.setComment(reviewDTO.getComment());
         review.setReviewer(reviewer);
-        review.setTargetId(reviewDTO.getOrphanageId());
+        review.setOrphanageId(reviewDTO.getOrphanageId());
         review.setReviewDate(LocalDate.now());
 
+        // Validate that the orphanage exists before saving
+        String orphanageName = getOrphanageNameById(reviewDTO.getOrphanageId());
+        if (orphanageName.equals("Unknown Orphanage")) {
+            throw new IllegalArgumentException("Orphanage with ID " + reviewDTO.getOrphanageId() + " does not exist.");
+        }
 
+        // Save the review
         return reviewRepository.save(review);
     }
+
+    // Helper method to get Orphanage Name
 
     private ReviewDTO convertToDTO(Review review) {
         ReviewDTO dto = new ReviewDTO();
@@ -182,13 +192,23 @@ public class ReviewService {
         dto.setRating(review.getRating());
         dto.setComment(review.getComment());
         dto.setReviewerId(review.getReviewer().getId());
-        dto.setOrphanageId(review.getTargetId());
+        dto.setOrphanageId(review.getOrphanageId());
         dto.setReviewDate(review.getReviewDate().toString());
 
         dto.setReviewerName(review.getReviewer().getName());
         dto.setReviewerType(review.getReviewer().getUserType().name());
         dto.setReviewerEmail(review.getReviewer().getEmail());
 
+        String orphanageName = getOrphanageNameById(review.getOrphanageId());
+        dto.setOrphanageName(orphanageName);
+
         return dto;
     }
+
+    private String getOrphanageNameById(Long orphanageId) {
+        return orphanageService.findById(orphanageId)
+                .map(orphanage -> orphanage.getName())
+                .orElse("Unknown Orphanage");
+    }
+
 }

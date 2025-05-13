@@ -12,6 +12,6 @@ import java.util.List;
 public interface ReviewRepository extends JpaRepository<Review, Long> {
     List<Review> findByReviewer(User reviewer);
 //diala
-    List<Review> findByTargetIdAndTargetType(Long targetId, ReviewTargetType targetType);
+    //List<Review> findByTargetIdAndTargetType(Long targetId, ReviewTargetType targetType);
 //
 }

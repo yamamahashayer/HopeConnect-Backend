@@ -1,7 +1,5 @@
 package com.example.HopeConnect.Models;
 
-import com.example.HopeConnect.Enumes.ReviewTargetType;
-import com.fasterxml.jackson.databind.BeanProperty;
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
@@ -11,17 +9,15 @@ public class Review {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    private Long targetId;
+
 
     @ManyToOne
     @JoinColumn(name = "reviewer_id")
     private User reviewer;
-//diala
-    //private Long orphanageId;
-    //
     private int rating;
     private String comment;
     private LocalDate reviewDate;
+    private  long orphanageId;
 
     public Long getId() {
         return id;
@@ -63,24 +59,12 @@ public class Review {
         this.reviewer = reviewer;
     }
 
-    public Long getTargetId() {
-        return targetId;
+
+    public long getOrphanageId() {
+        return orphanageId;
     }
 
-    public void setTargetId(Long targetId) {
-        this.targetId = targetId;
+    public void setOrphanageId(Long orphanageId) {
+        this.orphanageId = orphanageId;
     }
-
-//diala
-@Enumerated(EnumType.STRING)
-private ReviewTargetType targetType;
-
-    public ReviewTargetType getTargetType() {
-        return targetType;
-    }
-
-    public void setTargetType(ReviewTargetType targetType) {
-        this.targetType = targetType;
-    }
-    //
 }
