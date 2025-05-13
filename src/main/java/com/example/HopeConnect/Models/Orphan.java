@@ -43,8 +43,13 @@ public class Orphan {
 
     @ManyToOne
     @JoinColumn(name = "orphanage_id", nullable = false)
-    @JsonBackReference  // This will help to prevent circular references in JSON serialization
+    @JsonBackReference
     private Orphanage orphanage;
+
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private OrphanProject orphanProject;
+
 
     @Column(name = "created_at", updatable = false)
     private LocalDate createdAt = LocalDate.now();
@@ -87,4 +92,20 @@ public class Orphan {
 
     public LocalDate getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDate createdAt) { this.createdAt = createdAt; }
+
+    //diala
+    @Column(name = "orphanage_id", insertable = false, updatable = false)
+    private Long orphanageId;
+
+    public Long getOrphanageId() {
+        return orphanageId;
+    }
+
+    public OrphanProject getOrphanProject() {
+        return orphanProject;
+    }
+
+    public void setOrphanProject(OrphanProject orphanProject) {
+        this.orphanProject = orphanProject;
+    }
 }

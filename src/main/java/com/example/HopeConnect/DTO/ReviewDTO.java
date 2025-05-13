@@ -10,7 +10,9 @@ public class ReviewDTO {
     private String reviewerName;
     private String reviewerType;
     private String reviewerEmail;
-    private Long orphanageId;
+     private Long orphanageId;
+    private String orphanageName;
+
 
     // ✅ Getters and Setters
     public Long getId() {
@@ -83,5 +85,14 @@ public class ReviewDTO {
 
     public void setOrphanageId(Long orphanageId) {
         this.orphanageId = orphanageId;
+    }
+
+
+    public String getOrphanageName() {
+        return orphanageName;
+    }
+
+    public void setOrphanageName(String orphanageName) {
+        this.orphanageName = orphanageName;
     }
 }
