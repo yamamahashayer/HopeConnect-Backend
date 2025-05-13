@@ -6,6 +6,7 @@ import lombok.*;
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
+import java.util.List;
 
 @Entity
 @Table(name = "orphan_projects")
@@ -61,6 +62,10 @@ public class OrphanProject {
     private LocalDateTime createdAt;
 
     private LocalDateTime updatedAt;
+
+
+    @OneToMany(mappedBy = "orphanProject")
+    private List<Orphan> orphans;
 
     @PrePersist
     protected void onCreate() {

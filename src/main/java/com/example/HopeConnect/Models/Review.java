@@ -1,5 +1,6 @@
 package com.example.HopeConnect.Models;
 
+import com.example.HopeConnect.Enumes.ReviewTargetType;
 import com.fasterxml.jackson.databind.BeanProperty;
 import jakarta.persistence.*;
 
@@ -15,8 +16,9 @@ public class Review {
     @ManyToOne
     @JoinColumn(name = "reviewer_id")
     private User reviewer;
-
-    private Long orphanageId;
+//diala
+    //private Long orphanageId;
+    //
     private int rating;
     private String comment;
     private LocalDate reviewDate;
@@ -69,6 +71,16 @@ public class Review {
         this.targetId = targetId;
     }
 
+//diala
+@Enumerated(EnumType.STRING)
+private ReviewTargetType targetType;
 
-    // Getters and Setters
+    public ReviewTargetType getTargetType() {
+        return targetType;
+    }
+
+    public void setTargetType(ReviewTargetType targetType) {
+        this.targetType = targetType;
+    }
+    //
 }

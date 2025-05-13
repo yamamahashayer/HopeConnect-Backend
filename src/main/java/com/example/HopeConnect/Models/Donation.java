@@ -20,6 +20,12 @@ public class Donation {
     @ManyToOne
     @JoinColumn(name = "donor_id", nullable = false)
     private Donor donor;
+//diala
+@ManyToOne
+@JoinColumn(name = "orphan_id", insertable = false, updatable = false)
+private Orphan orphan;
+    @ManyToOne
+    private Orphanage orphanage;
 
     @Column(name = "orphan_id")
     private Long orphanId;
@@ -74,4 +80,17 @@ public class Donation {
     public void setDonationType(DonationType donationType) { this.donationType = donationType; }
     public void setPaymentStatus(PaymentStatus paymentStatus) { this.paymentStatus = paymentStatus; }
     public void setDonationDate(Date donationDate) { this.donationDate = donationDate; }
+
+    //diala
+    public Orphan getOrphan() {
+        return orphan;
+    }
+    public Orphanage getOrphanage() {
+        return orphanage;
+    }
+
+    public void setOrphanage(Orphanage orphanage) {
+        this.orphanage = orphanage;
+    }
+
 }

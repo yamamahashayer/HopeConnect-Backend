@@ -14,13 +14,13 @@ import java.util.Optional;
 @Service
 public class DonationService {
     @Autowired
-    private DonationRepository donationRepository;
+    private static DonationRepository donationRepository;
 
     public List<Donation> getAllDonations() {
         return donationRepository.findAll();
     }
 
-    public Donation getDonationById(Long id) {
+    public static Donation getDonationById(Long id) {
         return donationRepository.findById(id).orElse(null);
     }
     @Autowired
@@ -39,10 +39,10 @@ public class DonationService {
 
         Donation saved = donationRepository.save(donation);
 
-        // الحصول على البريد الإلكتروني للمتبرع
+
         String email = saved.getDonor().getUser().getEmail();
 
-        // إرسال الإشعار
+
 
 
         notificationService.sendEmailNotification(
@@ -58,11 +58,11 @@ public class DonationService {
     /*public Donation createDonation(Donation donation) {
         Donation saved = donationRepository.save(donation);
 
-        // استخراج البريد الإلكتروني واسم المستخدم من العلاقة بين Donation -> Donor -> User
+        Donation -> Donor -> User
         User user = saved.getDonor().getUser();
         String email = user.getEmail();
        // System.out.println(" Sending email to: " + email);
-        // إرسال الإيميل
+
 
         try{notificationService.sendEmailNotification(
 
@@ -77,7 +77,7 @@ public class DonationService {
 
         }
 
-        // إرسال إشعار داخل النظام
+
         notificationService.createNotification(
                 user.getId(),
                 NotificationType.DONATION,
@@ -89,7 +89,7 @@ public class DonationService {
     */
 
     public Donation createDonation(Donation donation) {
-        // 1. حفظ التبرع
+
         Donation saved = donationRepository.save(donation);
 
         Donor donor = donorRepository.findByUserId(saved.getDonor().getUser().getId())
@@ -145,7 +145,7 @@ public class DonationService {
         if (existingDonationOpt.isPresent()) {
             Donation existingDonation = existingDonationOpt.get();
 
-            // Ensure fields are updated if provided in the request
+
             if (updatedDonation.getAmount() != null) {
                 existingDonation.setAmount(updatedDonation.getAmount());
             }
@@ -162,10 +162,10 @@ public class DonationService {
                 existingDonation.setDonationDate(updatedDonation.getDonationDate());
             }
 
-            // Save and return updated donation
+
             return donationRepository.save(existingDonation);
         } else {
-            return null;  // Donation not found
+            return null;
         }
     }
 
@@ -174,6 +174,9 @@ public class DonationService {
             donationRepository.delete(donation);
             return true;
         }).orElse(false);
+    }
+    public List<Donation> getDonationsByUserId(Long userId) {
+        return donationRepository.findByDonorUserId(userId);
     }
 
 
