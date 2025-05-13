@@ -10,7 +10,9 @@ public class ReviewDTO {
     private String reviewerName;
     private String reviewerType;
     private String reviewerEmail;
-    private Long orphanageId;
+     private Long orphanageId;
+   //private Long targetId;
+    private String targetType; // "ORPHANAGE", "DONATION", ...
 
     // ✅ Getters and Setters
     public Long getId() {
@@ -84,4 +86,20 @@ public class ReviewDTO {
     public void setOrphanageId(Long orphanageId) {
         this.orphanageId = orphanageId;
     }
+
+    public String getTargetType() {
+        return targetType;
+    }
+
+    public void setTargetType(String targetType) {
+        this.targetType = targetType;
+    }
+//    public Long getTargetId() {
+//        return targetId;
+//    }
+//
+//    public void setTargetId(Long targetId) {
+//        this.targetId = targetId;
+//    }
+
 }
