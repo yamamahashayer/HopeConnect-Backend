@@ -53,7 +53,9 @@ public class OrphanageService {
         return orphanageRepository.findByManager(manager.get()).map(this::convertToDTO);
     }
 
-
+    public Optional<Orphanage> findById(Long id) {
+        return orphanageRepository.findById(id);
+    }
 
     public OrphanageDTO createOrphanage(OrphanageDTO orphanageDTO, Long managerId) {
         Optional<Orphanage> existingOrphanage = orphanageRepository.findByEmail(orphanageDTO.getEmail());

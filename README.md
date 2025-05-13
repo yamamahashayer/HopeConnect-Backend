@@ -91,7 +91,7 @@ mvn spring-boot:run
 <a name="contact"></a>
 ## 📱 Contact
 - Yamamah Hashayer - [yamamahashayer@gmail.com]
-- Diala Shami 
+- Diala Shami - [shamidyala@gmail.com]
 - Tasneem Jawabrah 
 
 <p align="center">
