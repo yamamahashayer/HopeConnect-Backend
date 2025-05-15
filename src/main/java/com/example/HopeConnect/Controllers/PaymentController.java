@@ -38,7 +38,6 @@ public class PaymentController {
             long amount = paymentRequest.getAmount();
             Long sponsorActivityId = paymentRequest.getSponsorActivityId();
 
-            // نجيب الـ SponsorActivity من الداتا بيس
             Optional<SponsorActivity> sponsorActivityOptional = sponsorActivityRepository.findById(sponsorActivityId);
             if (!sponsorActivityOptional.isPresent()) {
                 return "Invalid sponsorActivityId";
