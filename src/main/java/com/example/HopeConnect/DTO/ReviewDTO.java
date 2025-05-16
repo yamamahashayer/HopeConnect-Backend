@@ -1,6 +1,8 @@
 package com.example.HopeConnect.DTO;
 
-import java.time.LocalDate;
+import com.fasterxml.jackson.annotation.JsonInclude;
+
+@JsonInclude(JsonInclude.Include.NON_NULL)
 public class ReviewDTO {
     private Long id;
     private String comment;
@@ -10,6 +12,8 @@ public class ReviewDTO {
     private String reviewerName;
     private String reviewerType;
     private String reviewerEmail;
+
+
      private Long orphanageId;
     private String orphanageName;
 
@@ -23,65 +27,47 @@ public class ReviewDTO {
         this.id = id;
     }
 
-    public String getComment() {
-        return comment;
-    }
 
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
+    private Long orphanageId;
+    private Long orphanId;
+    private Long projectId;
 
-    public int getRating() {
-        return rating;
-    }
+    // Getters and Setters
 
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public String getReviewDate() {
-        return reviewDate;
-    }
+    public String getComment() { return comment; }
+    public void setComment(String comment) { this.comment = comment; }
 
-    public void setReviewDate(String reviewDate) {
-        this.reviewDate = reviewDate;
-    }
+    public int getRating() { return rating; }
+    public void setRating(int rating) { this.rating = rating; }
 
-    public Long getReviewerId() {
-        return reviewerId;
-    }
+    public String getReviewDate() { return reviewDate; }
+    public void setReviewDate(String reviewDate) { this.reviewDate = reviewDate; }
 
-    public void setReviewerId(Long reviewerId) {
-        this.reviewerId = reviewerId;
-    }
+    public Long getReviewerId() { return reviewerId; }
+    public void setReviewerId(Long reviewerId) { this.reviewerId = reviewerId; }
 
-    public String getReviewerName() {
-        return reviewerName;
-    }
+    public String getReviewerName() { return reviewerName; }
+    public void setReviewerName(String reviewerName) { this.reviewerName = reviewerName; }
 
-    public void setReviewerName(String reviewerName) {
-        this.reviewerName = reviewerName;
-    }
+    public String getReviewerType() { return reviewerType; }
+    public void setReviewerType(String reviewerType) { this.reviewerType = reviewerType; }
 
-    public String getReviewerType() {
-        return reviewerType;
-    }
+    public String getReviewerEmail() { return reviewerEmail; }
+    public void setReviewerEmail(String reviewerEmail) { this.reviewerEmail = reviewerEmail; }
 
-    public void setReviewerType(String reviewerType) {
-        this.reviewerType = reviewerType;
-    }
+    public Long getOrphanageId() { return orphanageId; }
+    public void setOrphanageId(Long orphanageId) { this.orphanageId = orphanageId; }
 
-    public String getReviewerEmail() {
-        return reviewerEmail;
-    }
+    public Long getOrphanId() { return orphanId; }
+    public void setOrphanId(Long orphanId) { this.orphanId = orphanId; }
 
-    public void setReviewerEmail(String reviewerEmail) {
-        this.reviewerEmail = reviewerEmail;
-    }
 
-    public Long getOrphanageId() {
-        return orphanageId;
-    }
+    public Long getProjectId() { return projectId; }
+    public void setProjectId(Long projectId) { this.projectId = projectId; }
+}
 
     public void setOrphanageId(Long orphanageId) {
         this.orphanageId = orphanageId;
@@ -96,3 +82,4 @@ public class ReviewDTO {
         this.orphanageName = orphanageName;
     }
 }
+

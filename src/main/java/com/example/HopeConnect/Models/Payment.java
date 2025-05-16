@@ -1,10 +1,6 @@
 package com.example.HopeConnect.Models;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.GeneratedValue;
-import jakarta.persistence.GenerationType;
-import jakarta.persistence.Id;
-
+import jakarta.persistence.*;
 
 
 @Entity
@@ -18,6 +14,10 @@ public class Payment {
     private String paymentStatus;
     private String stripeSessionId;
     private String customerEmail;
+    @ManyToOne
+    @JoinColumn(name = "sponsor_activity_id", nullable = false)  // نربطه بالعمود
+    private SponsorActivity sponsorActivity;
+
 
     public String getCustomerEmail() {
         return customerEmail;
@@ -57,5 +57,12 @@ public class Payment {
 
     public void setStripeSessionId(String stripeSessionId) {
         this.stripeSessionId = stripeSessionId;
+    }
+    public SponsorActivity getSponsorActivity() {
+        return sponsorActivity;
+    }
+
+    public void setSponsorActivity(SponsorActivity sponsorActivity) {
+        this.sponsorActivity = sponsorActivity;
     }
 }

@@ -25,8 +25,8 @@ public class StripeCheckoutService {
 
         SessionCreateParams params = SessionCreateParams.builder()
                 .setMode(SessionCreateParams.Mode.PAYMENT)
-                .setSuccessUrl("http://localhost:8090/api/payment/payment-success?session_id={CHECKOUT_SESSION_ID}")
-                .setCancelUrl("http://localhost:8090/api/payment/payment-cancel")
+                .setSuccessUrl("http://localhost:8099/api/payment/payment-success?session_id={CHECKOUT_SESSION_ID}")
+                .setCancelUrl("http://localhost:8099/api/payment/payment-cancel")
                 .setBillingAddressCollection(SessionCreateParams.BillingAddressCollection.AUTO)
                 .addLineItem(
                         SessionCreateParams.LineItem.builder()
