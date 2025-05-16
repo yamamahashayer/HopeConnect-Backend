@@ -2,16 +2,24 @@ package com.example.HopeConnect.Models;
 
 import com.example.HopeConnect.Enumes.OrphanageStatus;
 import jakarta.persistence.*;
+import lombok.*;
 import java.time.LocalDateTime;
+import java.util.ArrayList;
+import java.util.List;
 import java.util.Set;
 
 @Entity
+@Table(name = "orphanage")
+@Getter
+@Setter
+@NoArgsConstructor
+@AllArgsConstructor
+@Builder
 public class Orphanage {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-
 
     private String name;
     private String address;
@@ -32,8 +40,21 @@ public class Orphanage {
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
-    // Constructors
-    public Orphanage() {}
+    @OneToMany(mappedBy = "orphanage", cascade = CascadeType.ALL, orphanRemoval = true)
+    private List<OrphanProject> orphanProjects = new ArrayList<>();
+
+
+    @PrePersist
+    protected void onCreate() {
+        createdAt = LocalDateTime.now();
+    }
+
+    @PreUpdate
+    protected void onUpdate() {
+        updatedAt = LocalDateTime.now();
+    }
+
+
 
     // Getters and Setters
     public Long getId() {
