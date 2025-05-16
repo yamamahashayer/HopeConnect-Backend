@@ -2,10 +2,13 @@ package com.example.HopeConnect.Controllers;
 
 import com.example.HopeConnect.Models.Payment;
 import com.example.HopeConnect.Models.PaymentRequest;
+import com.example.HopeConnect.Models.SponsorActivity;
 import com.example.HopeConnect.Repositories.PaymentRepository;
+import com.example.HopeConnect.Repositories.SponsorActivityRepository;
 import com.example.HopeConnect.Services.StripeCheckoutService;
 import com.stripe.Stripe;
 import com.stripe.model.checkout.Session;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.web.bind.annotation.*;
 
@@ -17,6 +20,9 @@ public class PaymentController {
 
     private final StripeCheckoutService stripeCheckoutService;
     private final PaymentRepository paymentRepository;
+    @Autowired
+    private SponsorActivityRepository sponsorActivityRepository;  // Inject repo
+
 
     @Value("${stripe.api.key}")
     private String stripeApiKey;
@@ -30,21 +36,33 @@ public class PaymentController {
     public String createCheckoutSession(@RequestBody PaymentRequest paymentRequest) {
         try {
             long amount = paymentRequest.getAmount();
+            Long sponsorActivityId = paymentRequest.getSponsorActivityId();
+
+            Optional<SponsorActivity> sponsorActivityOptional = sponsorActivityRepository.findById(sponsorActivityId);
+            if (!sponsorActivityOptional.isPresent()) {
+                return "Invalid sponsorActivityId";
+            }
+
+            SponsorActivity sponsorActivity = sponsorActivityOptional.get();
 
             Payment payment = new Payment();
             payment.setAmount(amount);
             payment.setPaymentStatus("pending");
+            payment.setSponsorActivity(sponsorActivity);  // اربطه
+
             paymentRepository.save(payment);
 
             long amountInCents = amount * 100;
             String checkoutUrl = stripeCheckoutService.createCheckoutSession(amountInCents, payment);
 
             return checkoutUrl;
+
         } catch (Exception e) {
             e.printStackTrace();
             return "Error creating checkout session";
         }
     }
+
 
 
     @GetMapping("/payment-success")

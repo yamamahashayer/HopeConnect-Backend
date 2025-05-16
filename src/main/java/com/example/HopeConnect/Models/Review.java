@@ -1,9 +1,10 @@
 package com.example.HopeConnect.Models;
 
+
 import jakarta.persistence.*;
 
 import java.time.LocalDate;
-// Review.java
+
 @Entity
 public class Review {
     @Id
@@ -12,13 +13,18 @@ public class Review {
 
 
     @ManyToOne
-    @JoinColumn(name = "reviewer_id")
     private User reviewer;
+
+
+    private Long orphanId; // ID of orphan (optional)
+    private Long projectId; // ID of project (optional)
+
     private int rating;
     private String comment;
     private LocalDate reviewDate;
-    private  long orphanageId;
+    private long orphanageId;
 
+    // Getters and Setters
     public Long getId() {
         return id;
     }
@@ -27,20 +33,20 @@ public class Review {
         this.id = id;
     }
 
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
     public String getComment() {
         return comment;
     }
 
     public void setComment(String comment) {
         this.comment = comment;
+    }
+
+    public int getRating() {
+        return rating;
+    }
+
+    public void setRating(int rating) {
+        this.rating = rating;
     }
 
     public LocalDate getReviewDate() {
@@ -60,11 +66,31 @@ public class Review {
     }
 
 
+
+
+    public Long getOrphanId() {
+        return orphanId;
+    }
+
+    public void setOrphanId(Long orphanId) {
+        this.orphanId = orphanId;
+    }
+
+    public Long getProjectId() {
+        return projectId;
+    }
+
+    public void setProjectId(Long projectId) {
+        this.projectId = projectId;
+
+    }
+
     public long getOrphanageId() {
         return orphanageId;
     }
 
-    public void setOrphanageId(Long orphanageId) {
+    public void setOrphanageId (Long orphanageId){
         this.orphanageId = orphanageId;
+
     }
 }
