@@ -19,7 +19,9 @@ public class Task {
     @JoinColumn(name = "donation_id")
     private Donation donation;
 
-    private Long volunteerId;
+    @ManyToOne
+    @JoinColumn(name = "volunteer_id")
+    private Volunteer volunteer;
 
     private Double pickupLat;
     private Double pickupLng;
@@ -50,8 +52,8 @@ public class Task {
     public Donation getDonation() { return donation; }
     public void setDonation(Donation donation) { this.donation = donation; }
 
-    public Long getVolunteerId() { return volunteerId; }
-    public void setVolunteerId(Long volunteerId) { this.volunteerId = volunteerId; }
+    public Volunteer getVolunteer() { return volunteer; }
+    public void setVolunteer(Volunteer volunteer) { this.volunteer = volunteer; }
 
     public Double getPickupLat() { return pickupLat; }
     public void setPickupLat(Double pickupLat) { this.pickupLat = pickupLat; }
