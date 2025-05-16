@@ -12,8 +12,6 @@ public class Review {
     private Long id;
 
 
-
-
     @ManyToOne
     private User reviewer;
 
@@ -24,7 +22,7 @@ public class Review {
     private int rating;
     private String comment;
     private LocalDate reviewDate;
-    private  long orphanageId;
+    private long orphanageId;
 
     // Getters and Setters
     public Long getId() {
@@ -68,9 +66,6 @@ public class Review {
     }
 
 
-    public long getOrphanageId() {
-        return orphanageId;
-    }
 
 
     public Long getOrphanId() {
@@ -88,7 +83,13 @@ public class Review {
     public void setProjectId(Long projectId) {
         this.projectId = projectId;
 
-    public void setOrphanageId(Long orphanageId) {
+    }
+
+    public long getOrphanageId() {
+        return orphanageId;
+    }
+
+    public void setOrphanageId (Long orphanageId){
         this.orphanageId = orphanageId;
 
     }

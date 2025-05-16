@@ -16,7 +16,6 @@ import java.util.stream.Collectors;
 
 @Service
 public class ReviewService {
-
     @Autowired
     private ReviewRepository reviewRepository;
 
@@ -37,10 +36,10 @@ public class ReviewService {
     @Autowired
     private OrphanageService orphanageService;
 
-
-
     @Autowired
     private SponsorActivitiesService sponsorActivitiesService;
+
+
 
     public List<ReviewDTO> getAllReviews() {
         List<Review> reviews = reviewRepository.findAll();
@@ -59,6 +58,7 @@ public class ReviewService {
     public List<ReviewDTO> getUserReviewsByEmail(String email) {
         User user = userRepository.findByEmail(email)
                 .orElseThrow(() -> new IllegalArgumentException("User with this email not found."));
+
         List<Review> userReviews = reviewRepository.findByReviewer(user);
         return userReviews.stream()
                 .map(this::convertToDTO)
@@ -73,13 +73,12 @@ public class ReviewService {
                 .orElseThrow(() -> new IllegalArgumentException("User with this email not found."));
 
 
-
         switch (reviewer.getUserType()) {
             case VOLUNTEER:
                 validateVolunteerReview(reviewer, reviewDTO.getOrphanageId());
                 break;
             case SPONSOR:
-               validateSponsorReview(reviewer, reviewDTO.getOrphanageId());
+                validateSponsorReview(reviewer, reviewDTO.getOrphanageId());
                 break;
             case DONOR:
                 validateDonorReview(reviewer, reviewDTO.getOrphanageId());
@@ -89,7 +88,6 @@ public class ReviewService {
                 throw new IllegalArgumentException("Admins and Orphanage Managers cannot leave reviews.");
             default:
                 throw new IllegalArgumentException("Invalid user type.");
-
         }
 
 
@@ -101,17 +99,8 @@ public class ReviewService {
         if (reviewDTO.getReviewerEmail() == null || reviewDTO.getReviewerEmail().isEmpty()) {
             throw new IllegalArgumentException("Reviewer email must not be null or empty.");
         }
-
-        // يجب أن يحدد هدف واحد فقط
-        int targetsSpecified = 0;
-        if (reviewDTO.getOrphanageId() != null) targetsSpecified++;
-        if (reviewDTO.getOrphanId() != null) targetsSpecified++;
-        if (reviewDTO.getProjectId() != null) targetsSpecified++;
-
-        if (targetsSpecified == 0) {
-            throw new IllegalArgumentException("You must specify one target to review (orphanageId, orphanId, or projectId).");
-        } else if (targetsSpecified > 1) {
-            throw new IllegalArgumentException("You can only review one target at a time.");
+        if (reviewDTO.getOrphanageId() == null) {
+            throw new IllegalArgumentException("Orphanage ID must not be null.");
         }
 
     }
@@ -131,58 +120,49 @@ public class ReviewService {
         }
     }
 
+    private void validateDonorReview(User reviewer, Long orphanageId) {
+        System.out.println("Requested orphanage ID: " + orphanageId);
+
+        boolean hasDonated = donationService.getDonationsByUserId(reviewer.getId()).stream()
+                .anyMatch(donation -> {
+                    System.out.println("Checking donation: " + donation.getId());
+
+                    if (donation.getOrphanage() != null) {
+                        System.out.println("Direct orphanage ID: " + donation.getOrphanage().getId());
+                        if (donation.getOrphanage().getId().equals(orphanageId)) {
+                            return true;
+                        }
+                    }
+
+                    if (donation.getOrphan() != null) {
+                        Orphan orphan = donation.getOrphan();
+                        System.out.println("Donation linked to orphan ID: " + orphan.getId());
+                        if (orphan.getOrphanage() != null) {
+                            System.out.println("Indirect orphanage ID: " + orphan.getOrphanage().getId());
+                            return orphan.getOrphanage().getId().equals(orphanageId);
+                        } else {
+                            System.out.println("Orphan has no orphanage assigned.");
+                        }
+                    }
+
+                    return false;
+                });
+
+        if (!hasDonated) {
+            throw new IllegalArgumentException("You must have donated to this orphanage to leave a review.");
+        }
+    }
 
     private void validateSponsorReview(User reviewer, Long orphanageId) {
         boolean hasActivity = sponsorActivitiesService.getActivitiesBySponsorId(reviewer.getId()).stream()
                 .anyMatch(activity -> activity.getOrphanage().getId().equals(orphanageId));
 
-   private void validateDonorReview(User reviewer, Long orphanageId) {
-       System.out.println("Requested orphanage ID: " + orphanageId);
-
-       boolean hasDonated = donationService.getDonationsByUserId(reviewer.getId()).stream()
-               .anyMatch(donation -> {
-                   System.out.println("Checking donation: " + donation.getId());
-
-                   if (donation.getOrphanage() != null) {
-                       System.out.println("Direct orphanage ID: " + donation.getOrphanage().getId());
-                       if (donation.getOrphanage().getId().equals(orphanageId)) {
-                           return true;
-                       }
-                   }
-
-                   if (donation.getOrphan() != null) {
-                       Orphan orphan = donation.getOrphan();
-                       System.out.println("Donation linked to orphan ID: " + orphan.getId());
-                       if (orphan.getOrphanage() != null) {
-                           System.out.println("Indirect orphanage ID: " + orphan.getOrphanage().getId());
-                           return orphan.getOrphanage().getId().equals(orphanageId);
-                       } else {
-                           System.out.println("Orphan has no orphanage assigned.");
-                       }
-                   }
-
-                   return false;
-               });
-
-       if (!hasDonated) {
-           throw new IllegalArgumentException("You must have donated to this orphanage to leave a review.");
-       }
-   }
-
-
-
-
-   /* private void validateSponsorReview(User reviewer, Long orphanageId) {
-
-        boolean hasActivity = sponsorActivitiesService.getActivitiesBySponsorId(reviewer.getId()).stream()
-                .anyMatch(activity -> activity.getOrphanage().getId().equals(orphanageId));  // تعديل هنا
-
-
         if (!hasActivity) {
             throw new IllegalArgumentException("You must have supported this orphanage to leave a review.");
         }
-
     }
+
+
 
 
     private Review createAndSaveReview(ReviewDTO reviewDTO, User reviewer) {
@@ -191,21 +171,6 @@ public class ReviewService {
         review.setRating(reviewDTO.getRating());
         review.setComment(reviewDTO.getComment());
         review.setReviewer(reviewer);
-
-        review.setReviewDate(LocalDate.now());
-
-        // حفظ الهدف الصحيح فقط
-        if (reviewDTO.getOrphanageId() != null) {
-            review.setTargetId(reviewDTO.getOrphanageId());
-        }
-        if (reviewDTO.getOrphanId() != null) {
-            review.setOrphanId(reviewDTO.getOrphanId());
-        }
-        if (reviewDTO.getProjectId() != null) {
-            review.setProjectId(reviewDTO.getProjectId());
-        }
-
-
         review.setOrphanageId(reviewDTO.getOrphanageId());
         review.setReviewDate(LocalDate.now());
 
@@ -216,7 +181,6 @@ public class ReviewService {
         }
 
         // Save the review
-
         return reviewRepository.save(review);
     }
 
@@ -228,31 +192,23 @@ public class ReviewService {
         dto.setRating(review.getRating());
         dto.setComment(review.getComment());
         dto.setReviewerId(review.getReviewer().getId());
-
         dto.setOrphanageId(review.getOrphanageId());
-
         dto.setReviewDate(review.getReviewDate().toString());
+
         dto.setReviewerName(review.getReviewer().getName());
         dto.setReviewerType(review.getReviewer().getUserType().name());
         dto.setReviewerEmail(review.getReviewer().getEmail());
 
+        String orphanageName = getOrphanageNameById(review.getOrphanageId());
+        dto.setOrphanageName(orphanageName);
 
-        if (review.getTargetId() != null) {
-            dto.setOrphanageId(review.getTargetId());
-        }
+
         if (review.getOrphanId() != null) {
             dto.setOrphanId(review.getOrphanId());
         }
         if (review.getProjectId() != null) {
             dto.setProjectId(review.getProjectId());
         }
-
-        return dto;
-    }
-}
-
-        String orphanageName = getOrphanageNameById(review.getOrphanageId());
-        dto.setOrphanageName(orphanageName);
 
         return dto;
     }
@@ -264,4 +220,3 @@ public class ReviewService {
     }
 
 }
-
