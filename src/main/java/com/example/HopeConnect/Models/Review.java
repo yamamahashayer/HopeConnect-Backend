@@ -11,18 +11,20 @@ public class Review {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
-    private String comment;
-    private int rating;
 
-    private LocalDate reviewDate;
+
 
     @ManyToOne
     private User reviewer;
 
-    private Long targetId; // ID of orphanage
 
     private Long orphanId; // ID of orphan (optional)
     private Long projectId; // ID of project (optional)
+
+    private int rating;
+    private String comment;
+    private LocalDate reviewDate;
+    private  long orphanageId;
 
     // Getters and Setters
     public Long getId() {
@@ -65,13 +67,11 @@ public class Review {
         this.reviewer = reviewer;
     }
 
-    public Long getTargetId() {
-        return targetId;
+
+    public long getOrphanageId() {
+        return orphanageId;
     }
 
-    public void setTargetId(Long targetId) {
-        this.targetId = targetId;
-    }
 
     public Long getOrphanId() {
         return orphanId;
@@ -87,5 +87,9 @@ public class Review {
 
     public void setProjectId(Long projectId) {
         this.projectId = projectId;
+
+    public void setOrphanageId(Long orphanageId) {
+        this.orphanageId = orphanageId;
+
     }
 }

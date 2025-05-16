@@ -43,12 +43,19 @@ public class Orphan {
 
     @ManyToOne
     @JoinColumn(name = "orphanage_id", nullable = false)
+
     @JsonBackReference  // Prevent circular references in JSON serialization
+
     private Orphanage orphanage;
     @ManyToOne
     @JoinColumn(name = "sponsor_id", nullable = true)
     @JsonBackReference
     private Sponsor sponsor;
+
+
+    @ManyToOne
+    @JoinColumn(name = "project_id")
+    private OrphanProject orphanProject;
 
 
     @Column(name = "created_at", updatable = false)
@@ -95,4 +102,22 @@ public class Orphan {
 
     public LocalDate getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDate createdAt) { this.createdAt = createdAt; }
+
+
+    //diala
+    @Column(name = "orphanage_id", insertable = false, updatable = false)
+    private Long orphanageId;
+
+    public Long getOrphanageId() {
+        return orphanageId;
+    }
+
+    public OrphanProject getOrphanProject() {
+        return orphanProject;
+    }
+
+    public void setOrphanProject(OrphanProject orphanProject) {
+        this.orphanProject = orphanProject;
+    }
 }
+

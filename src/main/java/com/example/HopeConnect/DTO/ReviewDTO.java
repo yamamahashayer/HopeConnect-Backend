@@ -13,6 +13,21 @@ public class ReviewDTO {
     private String reviewerType;
     private String reviewerEmail;
 
+
+     private Long orphanageId;
+    private String orphanageName;
+
+
+    // ✅ Getters and Setters
+    public Long getId() {
+        return id;
+    }
+
+    public void setId(Long id) {
+        this.id = id;
+    }
+
+
     private Long orphanageId;
     private Long orphanId;
     private Long projectId;
@@ -49,6 +64,22 @@ public class ReviewDTO {
     public Long getOrphanId() { return orphanId; }
     public void setOrphanId(Long orphanId) { this.orphanId = orphanId; }
 
+
     public Long getProjectId() { return projectId; }
     public void setProjectId(Long projectId) { this.projectId = projectId; }
 }
+
+    public void setOrphanageId(Long orphanageId) {
+        this.orphanageId = orphanageId;
+    }
+
+
+    public String getOrphanageName() {
+        return orphanageName;
+    }
+
+    public void setOrphanageName(String orphanageName) {
+        this.orphanageName = orphanageName;
+    }
+}
+
