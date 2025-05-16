@@ -1,9 +1,14 @@
 package com.example.HopeConnect.Models;
 
 import jakarta.persistence.*;
+import org.springframework.data.annotation.CreatedDate;
+import org.springframework.data.annotation.LastModifiedDate;
+import org.springframework.data.jpa.domain.support.AuditingEntityListener;
+
 import java.time.LocalDateTime;
 
 @Entity
+@EntityListeners(AuditingEntityListener.class)
 public class Task {
 
     @Id
@@ -14,7 +19,9 @@ public class Task {
     @JoinColumn(name = "donation_id")
     private Donation donation;
 
-    private Long volunteerId;
+    @ManyToOne
+    @JoinColumn(name = "volunteer_id")
+    private Volunteer volunteer;
 
     private Double pickupLat;
     private Double pickupLng;
@@ -26,81 +33,49 @@ public class Task {
 
     private LocalDateTime scheduledTime;
 
+    @CreatedDate
+    @Column(updatable = false)
+    private LocalDateTime createdAt;
+
+    @LastModifiedDate
+    private LocalDateTime updatedAt;
+
     public enum Status {
         assigned, in_progress, completed
     }
 
     // ======== Getters and Setters ========
 
-    public Long getId() {
-        return id;
-    }
+    public Long getId() { return id; }
+    public void setId(Long id) { this.id = id; }
 
-    public void setId(Long id) {
-        this.id = id;
-    }
+    public Donation getDonation() { return donation; }
+    public void setDonation(Donation donation) { this.donation = donation; }
 
-    public Donation getDonation() {
-        return donation;
-    }
+    public Volunteer getVolunteer() { return volunteer; }
+    public void setVolunteer(Volunteer volunteer) { this.volunteer = volunteer; }
 
-    public void setDonation(Donation donation) {
-        this.donation = donation;
-    }
+    public Double getPickupLat() { return pickupLat; }
+    public void setPickupLat(Double pickupLat) { this.pickupLat = pickupLat; }
 
-    public Long getVolunteerId() {
-        return volunteerId;
-    }
+    public Double getPickupLng() { return pickupLng; }
+    public void setPickupLng(Double pickupLng) { this.pickupLng = pickupLng; }
 
-    public void setVolunteerId(Long volunteerId) {
-        this.volunteerId = volunteerId;
-    }
+    public Double getDropoffLat() { return dropoffLat; }
+    public void setDropoffLat(Double dropoffLat) { this.dropoffLat = dropoffLat; }
 
-    public Double getPickupLat() {
-        return pickupLat;
-    }
+    public Double getDropoffLng() { return dropoffLng; }
+    public void setDropoffLng(Double dropoffLng) { this.dropoffLng = dropoffLng; }
 
-    public void setPickupLat(Double pickupLat) {
-        this.pickupLat = pickupLat;
-    }
+    public Status getStatus() { return status; }
+    public void setStatus(Status status) { this.status = status; }
 
-    public Double getPickupLng() {
-        return pickupLng;
-    }
+    public LocalDateTime getScheduledTime() { return scheduledTime; }
+    public void setScheduledTime(LocalDateTime scheduledTime) { this.scheduledTime = scheduledTime; }
 
-    public void setPickupLng(Double pickupLng) {
-        this.pickupLng = pickupLng;
-    }
+    public LocalDateTime getCreatedAt() { return createdAt; }
+    public void setCreatedAt(LocalDateTime createdAt) { this.createdAt = createdAt; }
 
-    public Double getDropoffLat() {
-        return dropoffLat;
-    }
-
-    public void setDropoffLat(Double dropoffLat) {
-        this.dropoffLat = dropoffLat;
-    }
-
-    public Double getDropoffLng() {
-        return dropoffLng;
-    }
-
-    public void setDropoffLng(Double dropoffLng) {
-        this.dropoffLng = dropoffLng;
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setStatus(Status status) {
-        this.status = status;
-    }
-
-    public LocalDateTime getScheduledTime() {
-        return scheduledTime;
-    }
-
-    public void setScheduledTime(LocalDateTime scheduledTime) {
-        this.scheduledTime = scheduledTime;
-    }
+    public LocalDateTime getUpdatedAt() { return updatedAt; }
+    public void setUpdatedAt(LocalDateTime updatedAt) { this.updatedAt = updatedAt; }
 }

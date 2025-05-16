@@ -18,17 +18,15 @@ public class UserController {
     @Autowired
     private UserServices userService;
 
-    // للحصول على جميع المستخدمين
     @GetMapping
     public ResponseEntity<List<User>> getAllUsers() {
         List<User> users = userService.getAllUsers();
         if (users.isEmpty()) {
-            return ResponseEntity.noContent().build(); // إذا لم تكن هناك بيانات
+            return ResponseEntity.noContent().build();
         }
-        return ResponseEntity.ok(users); // إرجاع جميع المستخدمين
+        return ResponseEntity.ok(users);
     }
 
-    // للحصول على مستخدم واحد بناءً على الـ id
     @GetMapping("/{id}")
     public ResponseEntity<User> getUserById(@PathVariable Long id) {
         Optional<User> user = userService.getUserById(id);
