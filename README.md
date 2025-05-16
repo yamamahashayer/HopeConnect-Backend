@@ -82,7 +82,8 @@ mvn spring-boot:run
 
 <a name="API"></a>
 ## 📝 API Documentation
-- 🌐 Swagger UI:
+Access the complete API documentation for HopeConnect here: [HopeConnect API Documentation](https://documenter.getpostman.com/view/42761338/2sB2qWG4BW#74dba0e9-37bc-4ec6-bc34-50e94448f65d)
+
 
 <a name="demo"></a>
 ## 📸 Demo
