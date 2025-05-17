@@ -16,15 +16,14 @@ public class Review {
     private User reviewer;
 
 
-    private Long orphanId; // ID of orphan (optional)
-    private Long projectId; // ID of project (optional)
+    private Long orphanId;
+    private Long projectId;
 
     private int rating;
     private String comment;
     private LocalDate reviewDate;
     private long orphanageId;
 
-    // Getters and Setters
     public Long getId() {
         return id;
     }
