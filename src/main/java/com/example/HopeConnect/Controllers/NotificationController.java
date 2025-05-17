@@ -86,8 +86,7 @@ public class NotificationController {
             return ResponseEntity.badRequest().build();
         }
     }
-
-    @PutMapping("/mark-as-read/{id}")
+  /* @PutMapping("/mark-as-read/{id}")
     public ResponseEntity<?> markNotificationAsRead(@PathVariable Long id) {
         try {
             notificationService.markAsRead(id);
@@ -96,6 +95,16 @@ public class NotificationController {
             return ResponseEntity.notFound().build();
         }
     }
+*/
+  @PutMapping("/mark-as-read/{id}")
+  public ResponseEntity<?> markNotificationAsRead(@PathVariable Long id) {
+      try {
+          notificationService.markAsRead(id);
+          return ResponseEntity.ok().build();
+      } catch (Exception e) {
+          return ResponseEntity.status(404).body("Error: " + e.getMessage());
+      }
+  }
 
     @PostMapping
     public ResponseEntity<Notification> createNotification(@RequestBody Notification notification) {
