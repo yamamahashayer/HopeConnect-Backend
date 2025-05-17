@@ -12,7 +12,7 @@ import java.util.Optional;
 
 @RestController
 @RequestMapping("/api/orphan-projects")
-//@RequestMapping("orphanprojects")
+
 public class OrphanProjectController {
 
     @Autowired
@@ -45,7 +45,9 @@ public class OrphanProjectController {
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
+
             if (!service.getProjectById(id).isPresent()) {
+
             return ResponseEntity.notFound().build();
         }
         service.deleteProject(id);
