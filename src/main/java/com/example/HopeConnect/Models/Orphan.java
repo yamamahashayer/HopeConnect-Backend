@@ -42,9 +42,10 @@ public class Orphan {
     private OrphanStatus status = OrphanStatus.AVAILABLE;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "orphanage_id", nullable = false)
 
-    @JsonBackReference  // Prevent circular references in JSON serialization
+
 
     private Orphanage orphanage;
     @ManyToOne
@@ -54,6 +55,7 @@ public class Orphan {
 
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "project_id")
     private OrphanProject orphanProject;
 

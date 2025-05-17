@@ -3,13 +3,17 @@ package com.example.HopeConnect.Models;
 
 
 
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.util.Date;
 
 
 @Entity
 @Table(name = "donors")
+
+
 public class Donor {
+    @JsonIgnore
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
