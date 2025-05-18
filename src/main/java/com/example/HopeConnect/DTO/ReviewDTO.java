@@ -14,8 +14,10 @@ public class ReviewDTO {
     private String reviewerEmail;
 
 
+
      private Long orphanageId;
     private String orphanageName;
+
 
     private Long orphanId;
     private Long projectId;
@@ -51,9 +53,9 @@ public class ReviewDTO {
     public Long getOrphanId() { return orphanId; }
     public void setOrphanId(Long orphanId) { this.orphanId = orphanId; }
 
-
     public Long getProjectId() { return projectId; }
     public void setProjectId(Long projectId) { this.projectId = projectId; }
+
 
 
     public void setOrphanageId(Long orphanageId) {
@@ -69,4 +71,5 @@ public class ReviewDTO {
         this.orphanageName = orphanageName;
     }
 }
+
 
