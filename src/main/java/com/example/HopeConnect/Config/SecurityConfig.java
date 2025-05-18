@@ -30,34 +30,25 @@ public class SecurityConfig {
                 .sessionManagement(session -> session.sessionCreationPolicy(SessionCreationPolicy.STATELESS))
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
-                        .requestMatchers(
-                                "/auth/login","/api/donations/**", "/auth/signup","/api/reviews/**","api/notifications/**"
-                        ).permitAll()
+                                .requestMatchers(
+                                        "/auth/login", "/auth/signup","/api/orphan-projects/**","/api/reviews/**","api/notifications/**"
+                                ).permitAll()
 
-                        .requestMatchers("/volunteers/**","/volunteer-activities/**","/admin/**").access((authentication, context) -> {
-                            Authentication authResult = authentication.get();
-                            String userType = (String) authResult.getPrincipal();
-                            return new AuthorizationDecision(userType.equals("VOLUNTEER") || userType.equals("ADMIN"));
-                        })
+                                .requestMatchers("/volunteers/**","/volunteer-activities/**","/admin/**").access((authentication, context) -> {
+                                    Authentication authResult = authentication.get();
+                                    String userType = (String) authResult.getPrincipal();
+                                    return new AuthorizationDecision(userType.equals("VOLUNTEER") || userType.equals("ADMIN"));
+                                })
 
-                        .requestMatchers("/admin/**","/users/**").access((authentication, context) -> {
-                            Authentication authResult = authentication.get();
-                            String userType = (String) authResult.getPrincipal();
-                            return new AuthorizationDecision(userType.equals("ADMIN"));
-                        })
+                                .requestMatchers("/admin/**","/users/**").access((authentication, context) -> {
+                                    Authentication authResult = authentication.get();
+                                    String userType = (String) authResult.getPrincipal();
+                                    return new AuthorizationDecision(userType.equals("ADMIN"));
+                                })
 
-                        .requestMatchers("/admin/**","/api/orphans/**").access((authentication, context) -> {
-                            Authentication authResult = authentication.get();
-                            String userType = (String) authResult.getPrincipal();
-                            return new AuthorizationDecision(userType.equals("ADMIN"));
-                        })
-                        .requestMatchers("/admin/**","/api/orphan-projects/**").access((authentication, context) -> {
-                            Authentication authResult = authentication.get();
-                            String userType = (String) authResult.getPrincipal();
-                            return new AuthorizationDecision(userType.equals("ADMIN"));
-                        })
 
-                        .requestMatchers("/sponsors/**","/api/sponsor-activities/**","/admin/**").access((authentication, context) -> {
+
+                        .requestMatchers("/sponsors/**","/admin/**").access((authentication, context) -> {
                             String userType = (String) authentication.get().getPrincipal();
                             return new AuthorizationDecision(userType.equals("SPONSOR")||userType.equals("ADMIN"));
                         })
@@ -77,7 +68,7 @@ public class SecurityConfig {
 
 
 
-                        .anyRequest().authenticated()
+                                .anyRequest().authenticated()
                 )
                 .build();
     }
