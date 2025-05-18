@@ -157,12 +157,12 @@ public class VolunteerService {
         }
     }
 
-
-
-
-
-
-
+    public List<VolunteerDTO> getAllVolunteers() {
+        return volunteerRepository.findAll().stream()
+                .filter(v -> v.getUser() != null)
+                .map(this::convertToDTO)
+                .toList();
+    }
     public VolunteerDTO convertToDTO(Volunteer volunteer) {
         User user = volunteer.getUser();
 
@@ -184,12 +184,7 @@ public class VolunteerService {
                 volunteer.getRegisteredAt()
         );
     }
-    public List<VolunteerDTO> getAllVolunteers() {
-        return volunteerRepository.findAll().stream()
-                .filter(v -> v.getUser() != null)
-                .map(this::convertToDTO)
-                .toList();
-    }
+
 
 
 

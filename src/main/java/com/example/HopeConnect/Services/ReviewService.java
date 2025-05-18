@@ -27,6 +27,9 @@ public class ReviewService {
 
     @Autowired
     private UserRepository userRepository;
+    @Autowired
+    private DonationService donationService;
+
 
 
     @Autowired
@@ -210,7 +213,7 @@ public class ReviewService {
         dto.setComment(review.getComment());
         dto.setReviewerId(review.getReviewer().getId());
 
-        dto.setOrphanageId(review.getOrphanageId());
+        dto.setOrphanageId(review.getOrphanage().getId());
 
         dto.setReviewDate(review.getReviewDate().toString());
 
@@ -223,7 +226,7 @@ public class ReviewService {
         }
         if (review.getOrphan() != null) {
 
-        String orphanageName = getOrphanageNameById(review.getOrphanageId());
+        String orphanageName = getOrphanageNameById(review.getOrphanage().getId());
         dto.setOrphanageName(orphanageName);
 
         }

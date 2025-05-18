@@ -32,17 +32,9 @@ public class Review {
     @JoinColumn(name = "project_id")
     private OrphanProject project;
 
-    // Getters and Setters
-    public Long getId() { return id; }
-    public void setId(Long id) { this.id = id; }
 
-    private Long orphanId;
-    private Long projectId;
 
-    private int rating;
-    private String comment;
-    private LocalDate reviewDate;
-    private long orphanageId;
+
 
     public Long getId() {
         return id;
@@ -52,37 +44,6 @@ public class Review {
         this.id = id;
     }
 
-    public String getComment() {
-        return comment;
-    }
-
-    public void setComment(String comment) {
-        this.comment = comment;
-    }
-
-    public int getRating() {
-        return rating;
-    }
-
-    public void setRating(int rating) {
-        this.rating = rating;
-    }
-
-    public LocalDate getReviewDate() {
-        return reviewDate;
-    }
-
-    public void setReviewDate(LocalDate reviewDate) {
-        this.reviewDate = reviewDate;
-    }
-
-    public User getReviewer() {
-        return reviewer;
-    }
-
-    public void setReviewer(User reviewer) {
-        this.reviewer = reviewer;
-    }
 
 
     public String getComment() { return comment; }
@@ -102,16 +63,15 @@ public class Review {
     public Orphan getOrphan() { return orphan; }
     public void setOrphan(Orphan orphan) { this.orphan = orphan; }
 
+
+
+
+
+    public OrphanProject getProject() {
+        return project;
     }
 
-    public long getOrphanageId() {
-        return orphanageId;
+    public void setProject(OrphanProject project) {
+        this.project = project;
     }
-
-    public void setOrphanageId (Long orphanageId){
-        this.orphanageId = orphanageId;
-
-
-    public OrphanProject getProject() { return project; }
-    public void setProject(OrphanProject project) { this.project = project; }
 }
