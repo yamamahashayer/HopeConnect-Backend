@@ -41,7 +41,7 @@ public class OrphanController {
         Optional<Orphan> existingOrphan = orphanService.getOrphanById(id);
 
         if (existingOrphan.isPresent()) {
-            // تحديث الـ Orphan الموجود
+
             Orphan updatedOrphan = existingOrphan.get();
 
             updatedOrphan.setName(orphan.getName());
@@ -54,12 +54,12 @@ public class OrphanController {
             updatedOrphan.setStatus(orphan.getStatus());
             updatedOrphan.setOrphanage(orphan.getOrphanage());
 
-            // حفظ التحديثات
+
             orphanService.saveOrphan(updatedOrphan);
 
-            return ResponseEntity.ok(updatedOrphan); // إرجاع الـ Orphan المعدل مع حالة 200
+            return ResponseEntity.ok(updatedOrphan);
         } else {
-            return ResponseEntity.notFound().build(); // إرجاع حالة 404 إذا لم يتم العثور على الـ Orphan
+            return ResponseEntity.notFound().build();
         }
     }
 

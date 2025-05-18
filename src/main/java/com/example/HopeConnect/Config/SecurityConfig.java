@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                "/auth/login", "/auth/signup","/api/reviews/**","api/notifications/**"
+                                "/auth/login","/api/donations/**", "/auth/signup","/api/reviews/**","api/notifications/**"
                         ).permitAll()
 
                         .requestMatchers("/volunteers/**","/volunteer-activities/**","/admin/**").access((authentication, context) -> {
