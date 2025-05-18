@@ -1,6 +1,7 @@
 package com.example.HopeConnect.Models;
 
 import com.example.HopeConnect.Enumes.OrphanageStatus;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.time.LocalDateTime;
@@ -34,6 +35,8 @@ public class Orphanage {
     private OrphanageStatus status;
 
     @ManyToOne
+    @JsonManagedReference
+
     @JoinColumn(name = "manager_id")
     private User manager;
 
@@ -41,7 +44,9 @@ public class Orphanage {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "orphanage", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("orphanage-project")
     private List<OrphanProject> orphanProjects = new ArrayList<>();
+
 
 
     @PrePersist
