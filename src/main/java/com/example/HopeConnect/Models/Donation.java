@@ -1,5 +1,7 @@
 package com.example.HopeConnect.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIgnore;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
@@ -13,18 +15,23 @@ public class Donation {
 
 
     @ManyToOne
+
     @JoinColumn(name = "emergency_campaign_id", nullable = true)
     private EmergencyCampaign emergencyCampaign;
 
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "donor_id", nullable = false)
+    @JsonIgnore
     private Donor donor;
 //diala
 @ManyToOne
+@JsonBackReference
 @JoinColumn(name = "orphan_id", insertable = false, updatable = false)
 private Orphan orphan;
     @ManyToOne
+    @JsonBackReference
     private Orphanage orphanage;
 
     @Column(name = "orphan_id")

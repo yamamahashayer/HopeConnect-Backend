@@ -63,7 +63,7 @@ public class EmergencyCampaignController {
     public EmergencyCampaign createCampaign(@RequestBody EmergencyCampaign campaign) throws IOException {
         EmergencyCampaign saved = repository.save(campaign);
        // return repository.save(campaign);
-        List<com.example.HopeConnect.Models.User> donors = userRepository.findByRole("DONOR");
+        List<com.example.HopeConnect.Models.User> donors = userRepository.findByUserType("DONOR");
 
         String subject = "🚨 Emergency Campaign 🚨 : " + campaign.getTitle();
         String body = "A new emergency campaign has been created:\n\n"

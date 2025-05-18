@@ -2,7 +2,6 @@ package com.example.HopeConnect.Models;
 
 import jakarta.persistence.*;
 import lombok.*;
-
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -28,9 +27,10 @@ public class OrphanProject {
         this.id = id;
     }
 
-    @ManyToOne
-    @JoinColumn(name = "orphanage_id", referencedColumnName = "id")
+    @ManyToOne(fetch = FetchType.LAZY)
+    @JoinColumn(name = "orphanage_id", referencedColumnName = "id", nullable = false)
     private Orphanage orphanage;
+
 
 
     @Column(nullable = false, length = 255)
@@ -70,8 +70,7 @@ public class OrphanProject {
 
     private LocalDateTime updatedAt;
 
-
-    @OneToMany(mappedBy = "orphanProject")
+    @OneToMany(mappedBy = "orphanProject", cascade = CascadeType.ALL, orphanRemoval = true)
     private List<Orphan> orphans;
 
     @PrePersist
@@ -83,9 +82,6 @@ public class OrphanProject {
     protected void onUpdate() {
         updatedAt = LocalDateTime.now();
     }
-
-
-
 
     public enum DonationType {
         ONE_TIME, MONTHLY
