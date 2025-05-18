@@ -11,7 +11,7 @@ public class SponsorActivity {
     private Long id;
 
     @ManyToOne(optional = false)
-    private User sponsor;  // الراعي (إجباري)
+    private Sponsor sponsor;  // الراعي (إجباري)
 
     @ManyToOne(optional = true)
     private Orphanage orphanage;  // دار الأيتام (اختياري)
@@ -32,8 +32,8 @@ public class SponsorActivity {
     public Long getId() { return id; }
     public void setId(Long id) { this.id = id; }
 
-    public User getSponsor() { return sponsor; }
-    public void setSponsor(User sponsor) { this.sponsor = sponsor; }
+    public Sponsor getSponsor() { return  sponsor; }
+    public void setSponsor( Sponsor sponsor) { this.sponsor = sponsor; }
 
     public Orphanage getOrphanage() { return orphanage; }
     public void setOrphanage(Orphanage orphanage) { this.orphanage = orphanage; }

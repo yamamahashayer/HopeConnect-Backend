@@ -13,6 +13,9 @@ public class OrphanService {
 
     @Autowired
     private OrphanRepository orphanRepository;
+    public Optional<Orphan> findById(Long id) {
+        return orphanRepository.findById(id);
+    }
 
     // الحصول على جميع الأيتام
     public List<Orphan> getAllOrphans() {

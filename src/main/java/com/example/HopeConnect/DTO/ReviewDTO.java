@@ -12,7 +12,16 @@ public class ReviewDTO {
     private String reviewerName;
     private String reviewerType;
     private String reviewerEmail;
+    private Long sponsorId;
 
+
+    public Long getSponsorId() {
+        return sponsorId;
+    }
+
+    public void setSponsorId(Long sponsorId) {
+        this.sponsorId = sponsorId;
+    }
 
 
      private Long orphanageId;

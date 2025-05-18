@@ -32,6 +32,9 @@ public class SponsorService {
     public void deleteSponsor(Long id) {
         sponsorRepository.deleteById(id);
     }
+    public Optional<Sponsor> findById(Long id) {
+        return sponsorRepository.findById(id);
+    }
 
 
 
