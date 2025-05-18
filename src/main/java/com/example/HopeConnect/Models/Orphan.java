@@ -3,8 +3,8 @@ package com.example.HopeConnect.Models;
 import com.example.HopeConnect.Enumes.Gender;
 import com.example.HopeConnect.Enumes.OrphanStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
-import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.Period;
 
@@ -49,10 +49,8 @@ public class Orphan {
 
     @ManyToOne
     @JsonBackReference("sponsor-orphans")
-    @JoinColumn(name = "sponsor_id", nullable = true)
+    @JoinColumn(name = "sponsor_id")
     private Sponsor sponsor;
-
-
 
     @ManyToOne
     @JsonBackReference("project-orphans")
@@ -62,7 +60,9 @@ public class Orphan {
     @Column(name = "created_at", updatable = false)
     private LocalDate createdAt = LocalDate.now();
 
-    // Calculating age automatically when accessed
+    @Column(name = "orphanage_id", insertable = false, updatable = false)
+    private Long orphanageId;
+
     public int getAge() {
         return (dateOfBirth != null) ? Period.between(dateOfBirth, LocalDate.now()).getYears() : 0;
     }
@@ -101,23 +101,11 @@ public class Orphan {
     public Sponsor getSponsor() { return sponsor; }
     public void setSponsor(Sponsor sponsor) { this.sponsor = sponsor; }
 
+    public OrphanProject getOrphanProject() { return orphanProject; }
+    public void setOrphanProject(OrphanProject orphanProject) { this.orphanProject = orphanProject; }
+
     public LocalDate getCreatedAt() { return createdAt; }
     public void setCreatedAt(LocalDate createdAt) { this.createdAt = createdAt; }
 
-
-    //diala
-    @Column(name = "orphanage_id", insertable = false, updatable = false)
-    private Long orphanageId;
-
-    public Long getOrphanageId() {
-        return orphanageId;
-    }
-
-    public OrphanProject getOrphanProject() {
-        return orphanProject;
-    }
-
-    public void setOrphanProject(OrphanProject orphanProject) {
-        this.orphanProject = orphanProject;
-    }
+    public Long getOrphanageId() { return orphanageId; }
 }

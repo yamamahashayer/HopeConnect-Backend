@@ -11,7 +11,7 @@ import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/orphan-projects")
+@RequestMapping("/api/orphanprojects")
 
 public class OrphanProjectController {
 

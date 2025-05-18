@@ -4,6 +4,7 @@ import com.fasterxml.jackson.annotation.JsonBackReference;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
+
 import java.math.BigDecimal;
 import java.time.LocalDate;
 import java.time.LocalDateTime;
@@ -23,12 +24,9 @@ public class OrphanProject {
     private Long id;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    @JsonBackReference("orphanage-project")
-    @JoinColumn(name = "orphanage_id", referencedColumnName = "id", nullable = false)
+    @JsonBackReference("orphanageproject")
+    @JoinColumn(name = "orphanage_id", nullable = false)
     private Orphanage orphanage;
-
-
-
 
     @Column(nullable = false, length = 255)
     private String name;
@@ -70,6 +68,7 @@ public class OrphanProject {
     @OneToMany(mappedBy = "orphanProject", cascade = CascadeType.ALL, orphanRemoval = true)
     @JsonManagedReference("project-orphans")
     private List<Orphan> orphans;
+
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();
