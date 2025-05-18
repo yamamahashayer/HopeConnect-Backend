@@ -1,5 +1,6 @@
 package com.example.HopeConnect.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import lombok.*;
 
@@ -22,6 +23,7 @@ public class OrphanProject {
     private Long id;
 
     @ManyToOne
+    @JsonBackReference
     @JoinColumn(name = "orphanage_id", referencedColumnName = "id")
     private Orphanage orphanage;
 
@@ -65,6 +67,7 @@ public class OrphanProject {
 
 
     @OneToMany(mappedBy = "orphanProject")
+    @JsonBackReference
     private List<Orphan> orphans;
 
     @PrePersist
