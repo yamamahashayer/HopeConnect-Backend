@@ -3,6 +3,7 @@ package com.example.HopeConnect.Models;
 import com.example.HopeConnect.Enumes.Gender;
 import com.example.HopeConnect.Enumes.OrphanStatus;
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.time.LocalDate;
 import java.time.Period;
@@ -42,23 +43,21 @@ public class Orphan {
     private OrphanStatus status = OrphanStatus.AVAILABLE;
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("orphanage-orphans")
     @JoinColumn(name = "orphanage_id", nullable = false)
-
-
-
     private Orphanage orphanage;
+
     @ManyToOne
+    @JsonBackReference("sponsor-orphans")
     @JoinColumn(name = "sponsor_id", nullable = true)
-    @JsonBackReference
     private Sponsor sponsor;
 
 
+
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("project-orphans")
     @JoinColumn(name = "project_id")
     private OrphanProject orphanProject;
-
 
     @Column(name = "created_at", updatable = false)
     private LocalDate createdAt = LocalDate.now();
@@ -122,4 +121,3 @@ public class Orphan {
         this.orphanProject = orphanProject;
     }
 }
-

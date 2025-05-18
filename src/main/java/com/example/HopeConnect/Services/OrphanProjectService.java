@@ -29,4 +29,7 @@ public class OrphanProjectService {
     public void deleteProject(Long id) {
         repository.deleteById(Math.toIntExact(id));
     }
+    public Optional<OrphanProject> findById(Long id) {
+        return repository.findById(Math.toIntExact(id));
+    }
 }

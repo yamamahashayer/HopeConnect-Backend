@@ -2,6 +2,15 @@ package com.example.HopeConnect.Models;
 public class PaymentRequest {
     private long amount;
     private Long sponsorActivityId;
+    private Long donationId;
+
+    public Long getDonationId() {
+        return donationId;
+    }
+
+    public void setDonationId(Long donationId) {
+        this.donationId = donationId;
+    }
 
 
     public long getAmount() {

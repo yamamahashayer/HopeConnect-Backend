@@ -17,6 +17,17 @@ public class Payment {
     @ManyToOne
     @JoinColumn(name = "sponsor_activity_id", nullable = false)  // نربطه بالعمود
     private SponsorActivity sponsorActivity;
+    @ManyToOne
+    @JoinColumn(name = "donation_id", nullable = true)  // nullable حسب إذا كان الحقل اختياري أو لا
+    private Donation donation;
+
+    public Donation getDonation() {
+        return donation;
+    }
+
+    public void setDonation(Donation donation) {
+        this.donation = donation;
+    }
 
 
     public String getCustomerEmail() {
