@@ -1,5 +1,7 @@
 package com.example.HopeConnect.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import lombok.*;
 import java.math.BigDecimal;
@@ -19,17 +21,12 @@ public class OrphanProject {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
-    public Long getId() {
-        return id;
-    }
-
-    public void setId(Long id) {
-        this.id = id;
-    }
 
     @ManyToOne(fetch = FetchType.LAZY)
+    @JsonBackReference("orphanage-project")
     @JoinColumn(name = "orphanage_id", referencedColumnName = "id", nullable = false)
     private Orphanage orphanage;
+
 
 
 
@@ -71,8 +68,8 @@ public class OrphanProject {
     private LocalDateTime updatedAt;
 
     @OneToMany(mappedBy = "orphanProject", cascade = CascadeType.ALL, orphanRemoval = true)
+    @JsonManagedReference("project-orphans")
     private List<Orphan> orphans;
-
     @PrePersist
     protected void onCreate() {
         createdAt = LocalDateTime.now();

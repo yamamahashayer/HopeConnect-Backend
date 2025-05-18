@@ -36,7 +36,7 @@ public class Sponsor {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "sponsor")
-    @JsonManagedReference
+    @JsonManagedReference("sponsor-orphans")
     private List<Orphan> orphans;
 
 

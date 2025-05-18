@@ -12,8 +12,10 @@ public class ReviewDTO {
     private String reviewerName;
     private String reviewerType;
     private String reviewerEmail;
+    // أضف هذه الخاصية:
     private Long sponsorId;
 
+    // باقي getters and setters...
 
     public Long getSponsorId() {
         return sponsorId;
@@ -24,7 +26,7 @@ public class ReviewDTO {
     }
 
 
-     private Long orphanageId;
+    private Long orphanageId;
     private String orphanageName;
 
 
@@ -80,5 +82,3 @@ public class ReviewDTO {
         this.orphanageName = orphanageName;
     }
 }
-
-

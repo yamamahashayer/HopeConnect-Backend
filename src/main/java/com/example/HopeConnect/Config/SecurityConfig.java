@@ -31,7 +31,7 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                                 .requestMatchers(
-                                        "/auth/login", "/auth/signup","/api/orphan-projects/**","/api/reviews/**"
+                                        "/auth/login", "/auth/signup","/api/orphan-projects/**","/api/reviews/**","api/notifications/**"
                                 ).permitAll()
 
                                 .requestMatchers("/volunteers/**","/volunteer-activities/**","/admin/**").access((authentication, context) -> {
@@ -48,16 +48,16 @@ public class SecurityConfig {
 
 
 
-//                        .requestMatchers("/sponsors/**","/admin/**").access((authentication, context) -> {
-//                            String userType = (String) authentication.get().getPrincipal();
-//                            return new AuthorizationDecision(userType.equals("SPONSOR"));
-//                        })
-//
-//
-//                        .requestMatchers("/donors/**","/admin/**").access((authentication, context) -> {
-//                            String userType = (String) authentication.get().getPrincipal();
-//                            return new AuthorizationDecision(userType.equals("DONOR"));
-//                        })
+                        .requestMatchers("/sponsors/**","/api/sponsor-activities/**","/admin/**").access((authentication, context) -> {
+                            String userType = (String) authentication.get().getPrincipal();
+                            return new AuthorizationDecision(userType.equals("SPONSOR")||userType.equals("ADMIN"));
+                        })
+
+
+                        .requestMatchers("/donors/**","/admin/**").access((authentication, context) -> {
+                            String userType = (String) authentication.get().getPrincipal();
+                            return new AuthorizationDecision(userType.equals("DONOR")||userType.equals("ADMIN"));
+                        })
 
 
                         .requestMatchers("/orphanages/**","/admin/**").access((authentication, context) -> {
