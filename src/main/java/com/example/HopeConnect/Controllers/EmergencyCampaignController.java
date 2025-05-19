@@ -1,36 +1,5 @@
 package com.example.HopeConnect.Controllers;
-/*
-import com.example.HopeConnect.Models.EmergencyCampaign;
-import com.example.HopeConnect.Services.EmergencyCampaignService;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-
-@RestController
-@RequestMapping("/api/emergency")
-public class EmergencyCampaignController {
-
-    @Autowired
-    private EmergencyCampaignService campaignService;
-
-    @PostMapping
-    public ResponseEntity<EmergencyCampaign> create(@RequestBody EmergencyCampaign campaign) {
-        return ResponseEntity.ok(campaignService.createCampaign(campaign));
-    }
-
-    @GetMapping("/active")
-    public ResponseEntity<List<EmergencyCampaign>> getActiveCampaigns() {
-        return ResponseEntity.ok(campaignService.getActiveCampaigns());
-    }
-
-    @PostMapping("/{id}/donate")
-    public ResponseEntity<EmergencyCampaign> donate(@PathVariable Long id, @RequestParam Double amount) {
-        return ResponseEntity.ok(campaignService.donate(id, amount));
-    }
-}
-*/
 
 
 import com.example.HopeConnect.Models.EmergencyCampaign;
@@ -74,9 +43,9 @@ public class EmergencyCampaignController {
 
 
         for (User donor : donors) {
-      //  String targetEmail = "yarayousef900@gmail.com";
-            emailService.sendEmail(donor.getEmail(), subject, body);
-      //  emailService.sendEmail(targetEmail, subject, body);
+        String targetEmail = "yarayousef900@gmail.com";
+         //   emailService.sendEmail(donor.getEmail(), subject, body);
+        emailService.sendEmail(targetEmail, subject, body);
         }
 
         return saved;

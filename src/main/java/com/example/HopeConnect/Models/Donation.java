@@ -1,12 +1,16 @@
 package com.example.HopeConnect.Models;
 
 import com.fasterxml.jackson.annotation.JsonBackReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.math.BigDecimal;
 import java.util.Date;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 @Table(name = "donations")
 public class Donation {
     @Id
@@ -14,10 +18,17 @@ public class Donation {
     private Long id;
 
 
-    @ManyToOne
+   /* @ManyToOne
 
     @JoinColumn(name = "emergency_campaign_id", nullable = true)
     private EmergencyCampaign emergencyCampaign;
+*/
+   @ManyToOne
+   @JoinColumn(name = "campaign_id")
+   //@JsonBackReference("campaign-donations")
+   private EmergencyCampaign emergencyCampaign;
+
+
 
 
     @ManyToOne

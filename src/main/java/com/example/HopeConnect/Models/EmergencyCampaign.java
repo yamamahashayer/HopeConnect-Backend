@@ -1,15 +1,32 @@
 package com.example.HopeConnect.Models;
 
+//import com.fasterxml.jackson.annotation.JsonBackReference;
+//import com.fasterxml.jackson.annotation.JsonManagedReference;
+import com.fasterxml.jackson.annotation.JsonIdentityInfo;
+import com.fasterxml.jackson.annotation.ObjectIdGenerators;
 import jakarta.persistence.*;
 import java.time.LocalDate;
+import java.util.List;
 
 @Entity
+@JsonIdentityInfo(generator = ObjectIdGenerators.PropertyGenerator.class, property = "id")
+
 @Table(name = "emergency_campaigns")
+
 public class EmergencyCampaign {
 
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+
+    @OneToMany(mappedBy = "emergencyCampaign")
+   // @JsonManagedReference("campaign-donations")
+    private List<Donation> donations;
+
+
+
+
+
 
     @Column(nullable = false)
     private String title;
