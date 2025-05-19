@@ -13,11 +13,6 @@ public class OrphanProjectService {
 
     @Autowired
     private OrphanProjectRepository repository;
-    public Optional<OrphanProject> findById(Long id) {
-        return repository.findById(Math.toIntExact(id));
-    }
-
-
 
     public List<OrphanProject> getAllProjects() {
         return repository.findAll();

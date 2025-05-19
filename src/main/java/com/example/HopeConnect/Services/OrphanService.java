@@ -53,8 +53,6 @@ public class OrphanService {
 
         return updatedOrphan;
     }*/
-  public Optional<Orphan> findById(Long id) {
-      return orphanRepository.findById(id);
-  }
+
 
 }

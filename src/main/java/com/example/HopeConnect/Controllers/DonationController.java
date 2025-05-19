@@ -1,9 +1,12 @@
 package com.example.HopeConnect.Controllers;
 
+import com.example.HopeConnect.Errors.ErrorResponse;
 import com.example.HopeConnect.Models.Donation;
 import com.example.HopeConnect.Models.Donor;
 import com.example.HopeConnect.Services.DonationService;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.http.HttpStatus;
+import org.springframework.http.MediaType;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 import java.util.List;
@@ -25,11 +28,18 @@ public class DonationController {
         return donation != null ? ResponseEntity.ok(donation) : ResponseEntity.notFound().build();
     }
 
-    @PostMapping
-    public Donation createDonation(@RequestBody Donation donation) {
-
-        return donationService.createDonation(donation);
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createDonation(@RequestBody Donation donation) {
+        try {
+            Donation createdDonation = donationService.createDonation(donation);
+            return ResponseEntity.status(HttpStatus.CREATED).body(createdDonation);
+        } catch (RuntimeException e) {
+            return ResponseEntity.status(HttpStatus.BAD_REQUEST)
+                    .body(new ErrorResponse("Error: " + e.getMessage()));
+        }
     }
+
+
 
     @PutMapping("/{id}")
     public ResponseEntity<Donation> updateDonation(@PathVariable Long id, @RequestBody Donation updatedDonation) {
