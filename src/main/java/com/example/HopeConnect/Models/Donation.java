@@ -19,19 +19,18 @@ public class Donation {
     @JoinColumn(name = "emergency_campaign_id", nullable = true)
     private EmergencyCampaign emergencyCampaign;
 
+    @ManyToOne
+    @JsonBackReference("donation-donor")
+    @JoinColumn(name = "donor_id", nullable = false)
+    private Donor donor;
 
     @ManyToOne
-    @JsonBackReference
-    @JoinColumn(name = "donor_id", nullable = false)
-    @JsonIgnore
-    private Donor donor;
-//diala
-@ManyToOne
-@JsonBackReference
-@JoinColumn(name = "orphan_id", insertable = false, updatable = false)
-private Orphan orphan;
+    @JsonBackReference("donation-orphan")
+    @JoinColumn(name = "orphan_id", insertable = false, updatable = false)
+    private Orphan orphan;
+
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("donation-orphanage")
     private Orphanage orphanage;
 
     @Column(name = "orphan_id")
