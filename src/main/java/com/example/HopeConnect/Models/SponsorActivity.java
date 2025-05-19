@@ -11,19 +11,19 @@ public class SponsorActivity {
     private Long id;
 
     @ManyToOne(optional = false)
-    private Sponsor sponsor;  // الراعي (إجباري)
+    private Sponsor sponsor;
 
     @ManyToOne(optional = true)
-    private Orphanage orphanage;  // دار الأيتام (اختياري)
+    private Orphanage orphanage;
 
     @ManyToOne(optional = true)
-    private Orphan orphan;  // يتيم (اختياري)
+    private Orphan orphan;
 
     @ManyToOne(optional = true)
-    private OrphanProject project;  // مشروع (اختياري)
+    private OrphanProject project;
 
     @Enumerated(EnumType.STRING)
-    private ActivityType activityType;  // نوع النشاط (إجباري)
+    private ActivityType activityType;
 
     private String activityDescription;
 

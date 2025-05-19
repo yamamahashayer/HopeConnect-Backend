@@ -15,10 +15,10 @@ public class Payment {
     private String stripeSessionId;
     private String customerEmail;
     @ManyToOne
-    @JoinColumn(name = "sponsor_activity_id", nullable = false)  // نربطه بالعمود
+    @JoinColumn(name = "sponsor_activity_id", nullable = false)
     private SponsorActivity sponsorActivity;
     @ManyToOne
-    @JoinColumn(name = "donation_id", nullable = true)  // nullable حسب إذا كان الحقل اختياري أو لا
+    @JoinColumn(name = "donation_id", nullable = true)
     private Donation donation;
 
     public Donation getDonation() {

@@ -42,14 +42,13 @@ public class OrphanProjectController {
         if (!service.getProjectById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        project.setId(Long.valueOf(id));
         return ResponseEntity.ok(service.saveProject(project));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
 
-            if (!service.getProjectById(id).isPresent()) {
+        if (!service.getProjectById(id).isPresent()) {
 
             return ResponseEntity.notFound().build();
         }

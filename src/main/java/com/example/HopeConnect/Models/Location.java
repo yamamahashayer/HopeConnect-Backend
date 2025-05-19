@@ -1,5 +1,6 @@
 package com.example.HopeConnect.Models;
 
+import com.fasterxml.jackson.annotation.JsonBackReference;
 import jakarta.persistence.*;
 import org.springframework.data.annotation.CreatedDate;
 import org.springframework.data.annotation.LastModifiedDate;
@@ -23,8 +24,8 @@ public class Location {
 
     @ManyToOne
     @JoinColumn(name = "donation_id")
+    @JsonBackReference("donation-location")
     private Donation donation;
-
     @CreatedDate
     @Column(updatable = false)
     private LocalDateTime createdAt;
