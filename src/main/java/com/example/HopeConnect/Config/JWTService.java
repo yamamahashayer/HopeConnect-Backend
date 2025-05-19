@@ -17,7 +17,7 @@ public class JWTService {
     private static final Key SECRET_KEY = Keys.secretKeyFor(SignatureAlgorithm.HS256);
     private static final long EXPIRATION_TIME = 1000 * 60 * 60 * 10;
 
-    // توليد التوكن
+
     public String generateToken(String email, String userType) {
         Map<String, Object> claims = new HashMap<>();
         claims.put("userType", userType);

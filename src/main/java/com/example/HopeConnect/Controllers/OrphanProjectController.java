@@ -6,13 +6,17 @@ import com.example.HopeConnect.Services.OrphanProjectService;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
+import org.springframework.http.MediaType;
+import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.web.bind.annotation.*;
+import org.springframework.http.ResponseEntity;
 
 import java.util.List;
 import java.util.Optional;
 
 @RestController
-@RequestMapping("/api/orphan-projects")
-//@RequestMapping("orphanprojects")
+@RequestMapping("/api/orphanprojects")
+
 public class OrphanProjectController {
 
     @Autowired
@@ -29,23 +33,23 @@ public class OrphanProjectController {
         return project.map(ResponseEntity::ok).orElseGet(() -> ResponseEntity.notFound().build());
     }
 
-    @PostMapping
-    public OrphanProject createProject(@RequestBody OrphanProject project) {
-        return service.saveProject(project);
+    @PostMapping(consumes = MediaType.APPLICATION_JSON_VALUE, produces = MediaType.APPLICATION_JSON_VALUE)
+    public ResponseEntity<?> createProject(@RequestBody OrphanProject project) {
+        return ResponseEntity.ok(service.saveProject(project));
     }
-
     @PutMapping("/{id}")
     public ResponseEntity<OrphanProject> updateProject(@PathVariable Long id, @RequestBody OrphanProject project) {
         if (!service.getProjectById(id).isPresent()) {
             return ResponseEntity.notFound().build();
         }
-        project.setId(Long.valueOf(id));
         return ResponseEntity.ok(service.saveProject(project));
     }
 
     @DeleteMapping("/{id}")
     public ResponseEntity<Void> deleteProject(@PathVariable Long id) {
-            if (!service.getProjectById(id).isPresent()) {
+
+        if (!service.getProjectById(id).isPresent()) {
+
             return ResponseEntity.notFound().build();
         }
         service.deleteProject(id);

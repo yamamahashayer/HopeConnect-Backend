@@ -4,8 +4,10 @@ package com.example.HopeConnect.Models;
 
 
 import com.fasterxml.jackson.annotation.JsonIgnore;
+import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
 import java.util.Date;
+import java.util.List;
 
 
 @Entity
@@ -17,6 +19,11 @@ public class Donor {
     @Id
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
+    //diala
+    @OneToMany(mappedBy = "donor")
+    @JsonManagedReference("donation-donor")
+    private List<Donation> donations;
+//diala
 
     @OneToOne
     @JoinColumn(name = "user_id", nullable = false)

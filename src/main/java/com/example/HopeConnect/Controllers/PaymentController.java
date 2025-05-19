@@ -1,8 +1,10 @@
 package com.example.HopeConnect.Controllers;
 
+import com.example.HopeConnect.Models.Donation;
 import com.example.HopeConnect.Models.Payment;
 import com.example.HopeConnect.Models.PaymentRequest;
 import com.example.HopeConnect.Models.SponsorActivity;
+import com.example.HopeConnect.Repositories.DonationRepository;
 import com.example.HopeConnect.Repositories.PaymentRepository;
 import com.example.HopeConnect.Repositories.SponsorActivityRepository;
 import com.example.HopeConnect.Services.StripeCheckoutService;
@@ -22,6 +24,8 @@ public class PaymentController {
     private final PaymentRepository paymentRepository;
     @Autowired
     private SponsorActivityRepository sponsorActivityRepository;  // Inject repo
+    @Autowired
+    private DonationRepository donationRepository;
 
 
     @Value("${stripe.api.key}")
@@ -37,6 +41,8 @@ public class PaymentController {
         try {
             long amount = paymentRequest.getAmount();
             Long sponsorActivityId = paymentRequest.getSponsorActivityId();
+            Long donationId = paymentRequest.getDonationId();  // استقبل donationId
+
 
             Optional<SponsorActivity> sponsorActivityOptional = sponsorActivityRepository.findById(sponsorActivityId);
             if (!sponsorActivityOptional.isPresent()) {
@@ -49,6 +55,14 @@ public class PaymentController {
             payment.setAmount(amount);
             payment.setPaymentStatus("pending");
             payment.setSponsorActivity(sponsorActivity);  // اربطه
+            if (donationId != null) {
+                Optional<Donation> donationOptional = donationRepository.findById(donationId);
+                if (donationOptional.isPresent()) {
+                    payment.setDonation(donationOptional.get());
+                } else {
+                    return "Invalid donationId";
+                }
+            }
 
             paymentRepository.save(payment);
 

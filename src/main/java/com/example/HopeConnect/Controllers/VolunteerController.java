@@ -104,10 +104,8 @@ public class VolunteerController {
     @DeleteMapping("/delete-all")
     public ResponseEntity<?> deleteAllVolunteers() {
         try {
-            // أولاً حذف كل النشاطات المرتبطة
             volunteerActivitiesRepository.deleteAll();
 
-            // بعد ذلك حذف المتطوعين
             volunteerRepository.deleteAll();
 
             return ResponseEntity.ok("All volunteers and their activities have been deleted successfully.");
@@ -134,11 +132,11 @@ public class VolunteerController {
                 return ResponseEntity.status(HttpStatus.BAD_REQUEST).body("Error: User is already a volunteer.");
             }
 
-            // ✅ تحويل نوع المستخدم إلى VOLUNTEER
+
             user.setUserType(UserType.VOLUNTEER);
             userRepository.save(user);
 
-            // إنشاء متطوع جديد
+
             Volunteer volunteer = new Volunteer();
             volunteer.setUser(user);
             volunteer.setSkills("Not specified");

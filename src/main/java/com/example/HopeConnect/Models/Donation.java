@@ -21,17 +21,21 @@ public class Donation {
 
 
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("donation-donor")
     @JoinColumn(name = "donor_id", nullable = false)
-    @JsonIgnore
     private Donor donor;
-//diala
-@ManyToOne
-@JsonBackReference
-@JoinColumn(name = "orphan_id", insertable = false, updatable = false)
-private Orphan orphan;
+    // @JsonIgnore
+
+    //diala
     @ManyToOne
-    @JsonBackReference
+    @JsonBackReference("donation-orphan")
+    @JoinColumn(name = "orphan_id", insertable = false, updatable = false)
+    private Orphan orphan;
+
+
+    @ManyToOne
+    @JsonBackReference("donation-orphanage")
+    @JoinColumn(name = "orphanage_id")
     private Orphanage orphanage;
 
     @Column(name = "orphan_id")
@@ -98,6 +102,13 @@ private Orphan orphan;
 
     public void setOrphanage(Orphanage orphanage) {
         this.orphanage = orphanage;
+    }
+    public EmergencyCampaign getEmergencyCampaign() {
+        return emergencyCampaign;
+    }
+
+    public void setEmergencyCampaign(EmergencyCampaign emergencyCampaign) {
+        this.emergencyCampaign = emergencyCampaign;
     }
 
 }

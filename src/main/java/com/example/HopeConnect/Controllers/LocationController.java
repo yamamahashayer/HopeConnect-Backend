@@ -3,6 +3,7 @@ package com.example.HopeConnect.Controllers;
 import com.example.HopeConnect.Models.Location;
 import com.example.HopeConnect.Repositories.LocationRepository;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.security.access.prepost.PreAuthorize;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;

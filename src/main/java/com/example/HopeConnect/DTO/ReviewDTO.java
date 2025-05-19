@@ -12,10 +12,23 @@ public class ReviewDTO {
     private String reviewerName;
     private String reviewerType;
     private String reviewerEmail;
+    // أضف هذه الخاصية:
+    private Long sponsorId;
+
+    // باقي getters and setters...
+
+    public Long getSponsorId() {
+        return sponsorId;
+    }
+
+    public void setSponsorId(Long sponsorId) {
+        this.sponsorId = sponsorId;
+    }
 
 
-     private Long orphanageId;
+    private Long orphanageId;
     private String orphanageName;
+
 
     private Long orphanId;
     private Long projectId;
@@ -51,9 +64,9 @@ public class ReviewDTO {
     public Long getOrphanId() { return orphanId; }
     public void setOrphanId(Long orphanId) { this.orphanId = orphanId; }
 
-
     public Long getProjectId() { return projectId; }
     public void setProjectId(Long projectId) { this.projectId = projectId; }
+
 
 
     public void setOrphanageId(Long orphanageId) {
@@ -69,4 +82,3 @@ public class ReviewDTO {
         this.orphanageName = orphanageName;
     }
 }
-

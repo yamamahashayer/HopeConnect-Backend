@@ -3,6 +3,7 @@ package com.example.HopeConnect.Models;
 import com.example.HopeConnect.Enumes.SponsorStatus;
 import com.fasterxml.jackson.annotation.JsonManagedReference;
 import jakarta.persistence.*;
+
 import java.time.LocalDate;
 import java.time.LocalDateTime;
 import java.util.List;
@@ -36,9 +37,8 @@ public class Sponsor {
     private LocalDateTime createdAt = LocalDateTime.now();
 
     @OneToMany(mappedBy = "sponsor")
-    @JsonManagedReference
+    @JsonManagedReference("sponsor-orphans")
     private List<Orphan> orphans;
-
 
     // Getters and Setters
     public Long getId() { return id; }
