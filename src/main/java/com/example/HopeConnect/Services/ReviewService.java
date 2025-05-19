@@ -143,7 +143,7 @@ public class ReviewService {
     private void validateDonorReview(User reviewer, Long orphanageId) {
         boolean hasDonated = donationService.getDonationsByUserId(reviewer.getId()).stream()
                 .anyMatch(donation ->
-                        (donation.getOrphanage() != null && donation.getOrphanage().getId().equals(orphanageId)) ||
+                        (donation.getOrphanage() != null && donation.getOrphanage().equals(orphanageId)) ||
                                 (donation.getOrphan() != null &&
                                         donation.getOrphan().getOrphanage() != null &&
                                         donation.getOrphan().getOrphanage().getId().equals(orphanageId))

@@ -38,6 +38,12 @@ public class Orphanage {
     @JoinColumn(name = "manager_id")
     private User manager;
 
+    //diala
+    @OneToMany(mappedBy = "orphanage")
+    @JsonManagedReference("donation-orphanage")
+    private List<Donation> donations;
+
+    //diala
     private LocalDateTime createdAt;
     private LocalDateTime updatedAt;
 
