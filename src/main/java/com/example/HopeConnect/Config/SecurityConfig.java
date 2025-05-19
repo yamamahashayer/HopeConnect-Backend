@@ -48,7 +48,7 @@ public class SecurityConfig {
 
 
 
-                        .requestMatchers("/sponsors/**","/admin/**").access((authentication, context) -> {
+                        .requestMatchers("/sponsors/**","/api/sponsor-activities/**","/admin/**").access((authentication, context) -> {
                             String userType = (String) authentication.get().getPrincipal();
                             return new AuthorizationDecision(userType.equals("SPONSOR")||userType.equals("ADMIN"));
                         })

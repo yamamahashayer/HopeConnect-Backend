@@ -35,12 +35,16 @@ public class ReviewService {
     private OrphanageService orphanageService;
 
     @Autowired
-    private OrphanService orphanService;          // <-- أضفت هذا
+    private OrphanService orphanService;
+
     @Autowired
-    private OrphanProjectService projectService;  // <-- أضفت هذا
+    private OrphanProjectService projectService;
 
     @Autowired
     private SponsorActivitiesService sponsorActivitiesService;
+
+    @Autowired
+    private SponsorService sponsorService;  // أضفتها
 
     public List<ReviewDTO> getAllReviews() {
         List<Review> reviews = reviewRepository.findAll();
@@ -69,20 +73,29 @@ public class ReviewService {
     public ReviewDTO createReview(ReviewDTO reviewDTO) {
         validateReviewDTO(reviewDTO);
 
+        // إذا كان الراعي (Sponsor) يرسل المراجعة: نتعامل مع Sponsor ككائن كامل
+        if (reviewDTO.getSponsorId() != null) {
+            Sponsor sponsor = sponsorService.findById(reviewDTO.getSponsorId())
+                    .orElseThrow(() -> new IllegalArgumentException("Sponsor with this ID not found."));
+
+            validateSponsorReview(
+                    sponsor,
+                    reviewDTO.getOrphanageId(),
+                    reviewDTO.getOrphanId(),
+                    reviewDTO.getProjectId()
+            );
+
+            Review review = createAndSaveReviewForSponsor(reviewDTO, sponsor);
+            return convertToDTO(review);
+        }
+
+        // باقي أنواع المستخدمين (Volunteer, Donor, Admin, etc)
         User reviewer = userServices.findByEmail(reviewDTO.getReviewerEmail())
                 .orElseThrow(() -> new IllegalArgumentException("User with this email not found."));
 
         switch (reviewer.getUserType()) {
             case VOLUNTEER:
                 validateVolunteerReview(reviewer, reviewDTO.getOrphanageId());
-                break;
-            case SPONSOR:
-                validateSponsorReview(
-                        reviewer,
-                        reviewDTO.getOrphanageId(),
-                        reviewDTO.getOrphanId(),
-                        reviewDTO.getProjectId()
-                );
                 break;
             case DONOR:
                 validateDonorReview(reviewer, reviewDTO.getOrphanageId());
@@ -99,8 +112,8 @@ public class ReviewService {
     }
 
     private void validateReviewDTO(ReviewDTO reviewDTO) {
-        if (reviewDTO.getReviewerEmail() == null || reviewDTO.getReviewerEmail().isEmpty()) {
-            throw new IllegalArgumentException("Reviewer email must not be null or empty.");
+        if ((reviewDTO.getReviewerEmail() == null || reviewDTO.getReviewerEmail().isEmpty()) && reviewDTO.getSponsorId() == null) {
+            throw new IllegalArgumentException("Either reviewer email or sponsor ID must be provided.");
         }
 
         int targetsSpecified = 0;
@@ -141,8 +154,8 @@ public class ReviewService {
         }
     }
 
-    private void validateSponsorReview(User reviewer, Long orphanageId, Long orphanId, Long projectId) {
-        List<SponsorActivity> activities = sponsorActivitiesService.getActivitiesBySponsorId(reviewer.getId());
+    private void validateSponsorReview(Sponsor sponsor, Long orphanageId, Long orphanId, Long projectId) {
+        List<SponsorActivity> activities = sponsorActivitiesService.getActivitiesBySponsorId(sponsor.getId());
 
         boolean hasValidActivity = activities.stream().anyMatch(activity ->
                 (orphanageId != null && activity.getOrphanage() != null && activity.getOrphanage().getId().equals(orphanageId)) ||
@@ -153,6 +166,32 @@ public class ReviewService {
         if (!hasValidActivity) {
             throw new IllegalArgumentException("You must have supported this orphanage, orphan, or project to leave a review.");
         }
+    }
+
+    private Review createAndSaveReviewForSponsor(ReviewDTO reviewDTO, Sponsor sponsor) {
+        Review review = new Review();
+        review.setRating(reviewDTO.getRating());
+        review.setComment(reviewDTO.getComment());
+        review.setReviewer(sponsor.getUser());  // الراعي مرتبط بكائن User داخلياً
+        review.setReviewDate(LocalDate.now());
+
+        if (reviewDTO.getOrphanageId() != null) {
+            Orphanage orphanage = orphanageService.findById(reviewDTO.getOrphanageId())
+                    .orElseThrow(() -> new IllegalArgumentException("Orphanage with ID " + reviewDTO.getOrphanageId() + " does not exist."));
+            review.setOrphanage(orphanage);
+        }
+        if (reviewDTO.getOrphanId() != null) {
+            Orphan orphan = orphanService.findById(reviewDTO.getOrphanId())
+                    .orElseThrow(() -> new IllegalArgumentException("Orphan with ID " + reviewDTO.getOrphanId() + " does not exist."));
+            review.setOrphan(orphan);
+        }
+        if (reviewDTO.getProjectId() != null) {
+            OrphanProject project = projectService.findById(reviewDTO.getProjectId())
+                    .orElseThrow(() -> new IllegalArgumentException("Project with ID " + reviewDTO.getProjectId() + " does not exist."));
+            review.setProject(project);
+        }
+
+        return reviewRepository.save(review);
     }
 
     private Review createAndSaveReview(ReviewDTO reviewDTO, User reviewer) {
@@ -206,10 +245,8 @@ public class ReviewService {
 
         if (review.getProject() != null) {
             dto.setProjectId(review.getProject().getId());
-
         }
 
         return dto;
     }
-
 }
