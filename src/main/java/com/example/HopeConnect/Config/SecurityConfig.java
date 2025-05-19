@@ -31,7 +31,8 @@ public class SecurityConfig {
                 .addFilterBefore(jwtAuthenticationFilter, UsernamePasswordAuthenticationFilter.class)
                 .authorizeHttpRequests(auth -> auth
                         .requestMatchers(
-                                     "/api/emergency/**","/auth/login", "/auth/signup","/api/reviews/**","api/notifications/**"
+                                "/api/emergency/**",   "/auth/login", "/auth/signup","/api/reviews/**","api/notifications/**",
+                                "/api/emergency-campaigns/**"
                         ).permitAll()
 
                         .requestMatchers("/volunteers/**","/volunteer-activities/**","/admin/**").access((authentication, context) -> {
@@ -84,6 +85,10 @@ public class SecurityConfig {
                             String userType = (String) authentication.get().getPrincipal();
                             return new AuthorizationDecision(userType.equals("ORPHANAGE_MANAGER")|| userType.equals("ADMIN"));
                         })
+                       /* .requestMatchers("/api/emergency/**").access((authentication, context) -> {
+                            String userType = (String) authentication.get().getPrincipal();
+                            return new AuthorizationDecision( userType.equals("ADMIN"));
+                        })*/
                         .anyRequest().authenticated()
                 )
                 .build();

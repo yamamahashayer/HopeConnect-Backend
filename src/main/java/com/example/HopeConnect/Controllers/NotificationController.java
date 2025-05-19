@@ -1,51 +1,5 @@
 package com.example.HopeConnect.Controllers;
-/*
-import com.example.HopeConnect.Enumes.NotificationType;
-import com.example.HopeConnect.Models.Notification;
-import com.example.HopeConnect.Models.User;
-import com.example.HopeConnect.Services.NotificationService;
-import com.example.HopeConnect.Services.UserServices;
-import lombok.RequiredArgsConstructor;
-import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.http.ResponseEntity;
-import org.springframework.web.bind.annotation.*;
 
-import java.util.List;
-import java.util.Optional;
-
-
-@RestController
-@RequestMapping("/api/notifications")
-@RequiredArgsConstructor
-public class NotificationController {
-
-    private final NotificationService notificationService;
-
-    @GetMapping("/{userId}")
-    public ResponseEntity<List<Notification>> getNotifications(
-
-            @PathVariable Long userId,
-            @RequestParam(defaultValue = "false") boolean unreadOnly) {
-        List<Notification> notifs = notificationService.getNotifications(userId, unreadOnly);
-        return ResponseEntity.ok(notifs);
-    }
-
-    @PostMapping("/{userId}")
-    public ResponseEntity<Notification> createNotification(
-            @PathVariable Long userId,
-            @RequestParam NotificationType type,
-            @RequestParam String message) {
-        Notification notif = notificationService.createNotification(userId, type, message);
-        return ResponseEntity.ok(notif);
-    }
-
-    @PutMapping("/mark-as-read/{notificationId}")
-    public ResponseEntity<Void> markAsRead(@PathVariable Long notificationId) {
-        notificationService.markAsRead(notificationId);
-        return ResponseEntity.ok().build();
-    }
-}*/
-/// /////////////////////////////
 
 
 import com.example.HopeConnect.Models.Notification;
@@ -75,18 +29,21 @@ public class NotificationController {
             @PathVariable Long userId,
             @RequestParam(required = false) Boolean isRead
     ) {
-        try {
-            Optional<User> user = userService.getUserById(userId);
-            List<Notification> notifications = (isRead == null) ?
-                    notificationService.getNotificationsByOwner(user) :
-                    notificationService.getNotificationsByOwnerAndReadStatus(user, isRead);
+        Optional<User> userOpt = userService.getUserById(userId);
 
-            return ResponseEntity.ok(notifications);
-        } catch (Exception e) {
-            return ResponseEntity.badRequest().build();
+        if (userOpt.isEmpty()) {
+            return ResponseEntity.status(404).body(null);
         }
+
+        User user = userOpt.get();
+        List<Notification> notifications = (isRead == null) ?
+                notificationService.getNotificationsByOwner(Optional.of(user)) :
+                notificationService.getNotificationsByOwnerAndReadStatus(Optional.of(user), isRead);
+
+        return ResponseEntity.ok(notifications);
     }
-  /* @PutMapping("/mark-as-read/{id}")
+
+    /* @PutMapping("/mark-as-read/{id}")
     public ResponseEntity<?> markNotificationAsRead(@PathVariable Long id) {
         try {
             notificationService.markAsRead(id);
